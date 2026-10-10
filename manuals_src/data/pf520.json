@@ -1,0 +1,2570 @@
+{
+ "id": "pf520",
+ "maker": "Allen-Bradley (Rockwell Automation)",
+ "title": "PowerFlex 520-series (523/525)",
+ "models": "PowerFlex 523, PowerFlex 525",
+ "doc": {
+  "name": "PowerFlex 520-series User Manual",
+  "number": "520-UM001O-EN-E",
+  "date": "September 2025",
+  "url": "https://www.rockwellautomation.com/en-us/support/documentation/technical/drives/low-voltage-compact-ac-drives.html"
+ },
+ "faults": [
+  {
+   "code": "F002",
+   "name": "Auxiliary input",
+   "kind": "fault",
+   "meaning": "An external trip signal wired to a digital input set as Aux Fault has opened, so the drive stopped on purpose.",
+   "checks": [
+    "Check the remote/external trip wiring and the device feeding that input",
+    "If the fault is not expected, review the digital input programming (t062, t063, t065-t068 set to 12 Aux Fault) and any comms-driven trip"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F003",
+   "name": "Power loss",
+   "kind": "fault",
+   "meaning": "The drive saw a single-phase supply condition while carrying a heavy load.",
+   "checks": [
+    "Look for low voltage or interruptions on the incoming AC supply",
+    "Check the input fuses",
+    "Reduce the load"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F004",
+   "name": "Undervoltage",
+   "kind": "fault",
+   "meaning": "The DC bus fell below its minimum level, usually because the supply sagged or dropped out.",
+   "checks": [
+    "Monitor the incoming AC line for low voltage or short interruptions"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F005",
+   "name": "Overvoltage",
+   "kind": "fault",
+   "meaning": "The DC bus rose above its maximum level, from a high supply, line transients or motor regeneration.",
+   "checks": [
+    "Monitor the AC line for high voltage or transients",
+    "If the motor regenerates, lengthen the decel time or fit a dynamic brake resistor option"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F006",
+   "name": "Motor stalled",
+   "kind": "fault",
+   "meaning": "The drive could not accelerate or decelerate the motor, typically because it sat in current limit too long.",
+   "checks": [
+    "Increase accel time (P041, A442, A444, A446) or reduce the load so output current stays below the current limit (A484, A485)",
+    "Check for an overhauling load"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F007",
+   "name": "Motor overload",
+   "kind": "fault",
+   "meaning": "The internal electronic overload protection tripped because the motor drew excessive current for too long.",
+   "checks": [
+    "Reduce the load so output current stays below the motor overload current (P033)",
+    "Verify the boost setting A530"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F008",
+   "name": "Heatsink overtemperature",
+   "kind": "fault",
+   "meaning": "The heatsink/power module temperature exceeded its limit.",
+   "checks": [
+    "Check for blocked or dirty heatsink fins and confirm ambient temperature is within rating",
+    "Check the cooling fan"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F009",
+   "name": "Control module overtemperature",
+   "kind": "fault",
+   "meaning": "The control module temperature exceeded its limit.",
+   "checks": [
+    "Check ambient temperature",
+    "Check for airflow obstruction",
+    "Check for dirt or debris",
+    "Check the fan"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F012",
+   "name": "Hardware overcurrent",
+   "kind": "fault",
+   "meaning": "Drive output current exceeded the hardware current limit.",
+   "checks": [
+    "Check programming",
+    "Check for excess load, wrong boost setting (A530), or DC brake voltage set too high, and other causes of excess current"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F013",
+   "name": "Ground fault",
+   "kind": "fault",
+   "meaning": "A current path to earth was detected at one or more drive output terminals.",
+   "checks": [
+    "Check the motor and external wiring from the output terminals for a grounded condition"
+   ],
+   "page": 161,
+   "note": "Type 1 fault that auto-restart may clear once, ignoring A541"
+  },
+  {
+   "code": "F015",
+   "name": "Load loss",
+   "kind": "fault",
+   "meaning": "Output torque current stayed below the A490 level for longer than A491 time, so the load appears to be lost (e.g. broken belt or coupling).",
+   "checks": [
+    "Verify the connection between motor and load",
+    "Verify the level (A490) and time (A491) settings"
+   ],
+   "page": 161,
+   "note": "PowerFlex 525 only"
+  },
+  {
+   "code": "F021",
+   "name": "Output phase loss",
+   "kind": "fault",
+   "meaning": "Loss of an output phase was detected (only when the function is enabled with A557).",
+   "checks": [
+    "Verify the motor wiring",
+    "Verify the motor"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F029",
+   "name": "Analog input loss",
+   "kind": "fault",
+   "meaning": "An analog input configured to fault on signal loss has lost its signal.",
+   "checks": [
+    "Check for broken or loose connections at the inputs",
+    "Check parameters t094 / t097 (signal-loss action)"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F033",
+   "name": "Auto restart tries exceeded",
+   "kind": "fault",
+   "meaning": "The drive tried to reset a fault and resume running the number of times set in A541 and did not succeed.",
+   "checks": [
+    "Correct the cause of the underlying fault and clear it manually"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F038",
+   "name": "Phase U to ground",
+   "kind": "fault",
+   "meaning": "A ground fault was detected on motor phase U between the drive and the motor.",
+   "checks": [
+    "Check the wiring between drive and motor",
+    "Check the motor for a grounded phase",
+    "Replace the drive if the fault cannot be cleared"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F039",
+   "name": "Phase V to ground",
+   "kind": "fault",
+   "meaning": "A ground fault was detected on motor phase V between the drive and the motor.",
+   "checks": [
+    "Check the wiring between drive and motor",
+    "Check the motor for a grounded phase",
+    "Replace the drive if the fault cannot be cleared"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F040",
+   "name": "Phase W to ground",
+   "kind": "fault",
+   "meaning": "A ground fault was detected on motor phase W between the drive and the motor.",
+   "checks": [
+    "Check the wiring between drive and motor",
+    "Check the motor for a grounded phase",
+    "Replace the drive if the fault cannot be cleared"
+   ],
+   "page": 161
+  },
+  {
+   "code": "F041",
+   "name": "Phase UV short",
+   "kind": "fault",
+   "meaning": "Excessive current was detected between two output terminals (UV), indicating a short.",
+   "checks": [
+    "Check the motor and drive output terminal wiring for a short",
+    "Replace the drive if the fault cannot be cleared"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F042",
+   "name": "Phase UW short",
+   "kind": "fault",
+   "meaning": "Excessive current was detected between two output terminals (UW), indicating a short.",
+   "checks": [
+    "Check the motor and drive output terminal wiring for a short",
+    "Replace the drive if the fault cannot be cleared"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F043",
+   "name": "Phase VW short",
+   "kind": "fault",
+   "meaning": "Excessive current was detected between two output terminals (VW), indicating a short.",
+   "checks": [
+    "Check the motor and drive output terminal wiring for a short",
+    "Replace the drive if the fault cannot be cleared"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F048",
+   "name": "Parameters defaulted",
+   "kind": "fault",
+   "meaning": "The drive was told to write factory default values to EEPROM.",
+   "checks": [
+    "Clear the fault or cycle power",
+    "Re-program the drive parameters as needed"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F059",
+   "name": "Safety open",
+   "kind": "fault",
+   "meaning": "Both safety inputs (Safety 1 and Safety 2) are de-energised, and t105 is set to fault in that state.",
+   "checks": [
+    "Check the safety input signals",
+    "If safety is not used, verify and tighten the jumper across terminals S1, S2 and S+"
+   ],
+   "page": 162,
+   "note": "PowerFlex 525 only"
+  },
+  {
+   "code": "F063",
+   "name": "Software overcurrent (shear pin)",
+   "kind": "fault",
+   "meaning": "Current stayed above the shear pin level (A486/A488) for longer than the shear pin time (A487/A489).",
+   "checks": [
+    "Verify the connection between motor and load",
+    "Verify the level and time settings"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F064",
+   "name": "Drive overload",
+   "kind": "fault",
+   "meaning": "The drive's own overload rating was exceeded.",
+   "checks": [
+    "Reduce the load or extend the accel time"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F070",
+   "name": "Power unit",
+   "kind": "fault",
+   "meaning": "A failure was detected in the drive power section.",
+   "checks": [
+    "Check that the maximum ambient temperature has not been exceeded",
+    "Cycle power",
+    "Replace the drive if the fault cannot be cleared"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F071",
+   "name": "DSI network loss",
+   "kind": "fault",
+   "meaning": "Control over the Modbus/DSI (RS-485) link was interrupted.",
+   "checks": [
+    "Cycle power",
+    "Check the communications cabling",
+    "Check the Modbus/DSI settings and status"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F072",
+   "name": "Option card network loss",
+   "kind": "fault",
+   "meaning": "Control through the remote network of the optional network card was interrupted.",
+   "checks": [
+    "Cycle power",
+    "Check the communications cabling",
+    "Check the network adapter settings",
+    "Check the external network status"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F073",
+   "name": "Embedded EtherNet/IP network loss",
+   "kind": "fault",
+   "meaning": "Control through the embedded EtherNet/IP adapter was interrupted.",
+   "checks": [
+    "Cycle power",
+    "Check the communications cabling",
+    "Check the EtherNet/IP settings",
+    "Check the external network status"
+   ],
+   "page": 162,
+   "note": "PowerFlex 525 only"
+  },
+  {
+   "code": "F080",
+   "name": "Autotune failure",
+   "kind": "fault",
+   "meaning": "The autotune routine was cancelled by the user or did not complete successfully.",
+   "checks": [
+    "Restart the procedure",
+    "Cycle power"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F081",
+   "name": "DSI communication loss",
+   "kind": "fault",
+   "meaning": "Communication between the drive and the Modbus/DSI master was interrupted.",
+   "checks": [
+    "Cycle power",
+    "Check the communications cabling",
+    "Check the Modbus/DSI settings and status",
+    "Modify the response with C125 (Comm Loss Action)",
+    "Connecting I/O terminals C1 and C2 to ground may improve noise immunity",
+    "Replace the wiring, Modbus master device or control module"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F082",
+   "name": "Option card communication loss",
+   "kind": "fault",
+   "meaning": "Communication between the drive and the network option card was interrupted.",
+   "checks": [
+    "Cycle power",
+    "Reinstall the option card in the drive",
+    "Modify the response with C125 (Comm Loss Action)",
+    "Replace the wiring, port expander, option card or control module"
+   ],
+   "page": 162
+  },
+  {
+   "code": "F083",
+   "name": "Embedded EtherNet/IP communication loss",
+   "kind": "fault",
+   "meaning": "Internal communication between the drive and the embedded EtherNet/IP adapter was interrupted.",
+   "checks": [
+    "Cycle power",
+    "Check the EtherNet/IP settings",
+    "Check the drive's Ethernet settings and diagnostic parameters",
+    "Modify the response with C125 (Comm Loss Action)",
+    "Replace the wiring, Ethernet switch or control module"
+   ],
+   "page": 162,
+   "note": "PowerFlex 525 only"
+  },
+  {
+   "code": "F091",
+   "name": "Encoder loss",
+   "kind": "fault",
+   "meaning": "One of the two encoder channel signals is missing (differential encoder required).",
+   "checks": [
+    "Check the wiring",
+    "If P047/P049/P051 = 16 Positioning and A535 = 5 Quad Check, swap the encoder channel inputs or any two motor leads",
+    "Replace the encoder"
+   ],
+   "page": 163,
+   "note": "PowerFlex 525 only"
+  },
+  {
+   "code": "F094",
+   "name": "Function loss",
+   "kind": "fault",
+   "meaning": "The Freeze-Fire (Function Loss) input is inactive, i.e. the input to the programmed terminal is open.",
+   "checks": [
+    "Close the input to the terminal and cycle power"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F100",
+   "name": "Parameter checksum error",
+   "kind": "fault",
+   "meaning": "The drive's non-volatile parameter storage is corrupted.",
+   "checks": [
+    "Set P053 (Reset To Defaults) to 2 Factory Rset"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F101",
+   "name": "External storage error",
+   "kind": "fault",
+   "meaning": "External non-volatile storage has failed.",
+   "checks": [
+    "Set P053 (Reset To Defaults) to 2 Factory Rset"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F105",
+   "name": "Control module connect error",
+   "kind": "fault",
+   "meaning": "The control module was disconnected while the drive was powered.",
+   "checks": [
+    "Clear the fault and verify all parameter settings",
+    "Never remove or install the control module with power applied"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F106",
+   "name": "Incompatible control/power module",
+   "kind": "fault",
+   "meaning": "The PowerFlex 525 control module does not support a power module with 0.25 HP rating.",
+   "checks": [
+    "Change to a different power module",
+    "Change to a PowerFlex 523 control module"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F107",
+   "name": "Replaced control/power module",
+   "kind": "fault",
+   "meaning": "The control module could not recognise the power module (hardware failure).",
+   "checks": [
+    "Change to a different power module",
+    "Replace the control module if changing the power module does not help"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F109",
+   "name": "Control/power module mismatch",
+   "kind": "fault",
+   "meaning": "The control module was mounted on a different drive type of power module.",
+   "checks": [
+    "Set P053 (Reset To Defaults) to 3 Power Reset"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F110",
+   "name": "Keypad membrane",
+   "kind": "fault",
+   "meaning": "The keypad membrane has failed or is disconnected.",
+   "checks": [
+    "Cycle power",
+    "Replace the control module if the fault cannot be cleared"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F111",
+   "name": "Safety hardware",
+   "kind": "fault",
+   "meaning": "A malfunction in the safety input enable hardware; one of the safety inputs is not enabled.",
+   "checks": [
+    "Cycle power",
+    "Check the safety input signals; if safety is not used, verify and tighten the jumper across terminals S1, S2 and S+",
+    "Verify the safety hardware; replace the control module if the fault cannot be cleared"
+   ],
+   "page": 163,
+   "note": "PowerFlex 525 only"
+  },
+  {
+   "code": "F114",
+   "name": "Microprocessor failure",
+   "kind": "fault",
+   "meaning": "Microprocessor failure.",
+   "checks": [
+    "Cycle power",
+    "Verify grounding requirements (see General Grounding Requirements in the manual)",
+    "Replace the control module if the fault cannot be cleared"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F122",
+   "name": "I/O board failure",
+   "kind": "fault",
+   "meaning": "A failure was detected in the drive control and I/O section.",
+   "checks": [
+    "Cycle power",
+    "Replace the drive or control module if the fault cannot be cleared"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F125",
+   "name": "Flash update required",
+   "kind": "fault",
+   "meaning": "The drive firmware is corrupt, mismatched or incompatible with the hardware.",
+   "checks": [
+    "Perform a firmware flash update to load a valid set of firmware"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F126",
+   "name": "Non-recoverable error",
+   "kind": "fault",
+   "meaning": "A non-recoverable firmware or hardware error was detected; the drive stopped and reset itself.",
+   "checks": [
+    "Clear the fault or cycle power",
+    "Replace the drive or control module if the fault cannot be cleared"
+   ],
+   "page": 163
+  },
+  {
+   "code": "F127",
+   "name": "DSI flash update required",
+   "kind": "fault",
+   "meaning": "A critical firmware problem was detected and the drive is running backup firmware that supports only DSI communications.",
+   "checks": [
+    "Perform a firmware flash update over DSI communications to load a valid set of firmware"
+   ],
+   "page": 163
+  }
+ ],
+ "params": [
+  {
+   "id": "b001",
+   "name": "Output Freq",
+   "range": "0.00 to [Maximum Freq]",
+   "default": "Read only",
+   "desc": "Live output frequency at the motor terminals, not including slip. First thing to look at when checking whether the drive is really running.",
+   "page": 78
+  },
+  {
+   "id": "b002",
+   "name": "Commanded Freq",
+   "range": "0.00 to [Maximum Freq]",
+   "default": "Read only",
+   "desc": "The speed command the drive currently holds, shown even when stopped. If it is 0 while you expect a speed, the reference source is the problem.",
+   "page": 78
+  },
+  {
+   "id": "b003",
+   "name": "Output Current",
+   "range": "0.00 to (Drive Rated Amps x 2)",
+   "default": "Read only",
+   "desc": "Motor current in amps. Compare with P033 and the current limits when diagnosing overloads and stalls.",
+   "page": 78
+  },
+  {
+   "id": "b004",
+   "name": "Output Voltage",
+   "range": "0.0 to Drive Rated Volts",
+   "default": "Read only",
+   "desc": "Voltage the drive is applying to the motor terminals.",
+   "page": 78
+  },
+  {
+   "id": "b005",
+   "name": "DC Bus Voltage",
+   "range": "0 to 1200V DC",
+   "default": "Read only",
+   "desc": "Filtered DC bus level. Useful for chasing F004 undervoltage and F005 overvoltage events.",
+   "page": 78
+  },
+  {
+   "id": "b006",
+   "name": "Drive Status",
+   "range": "00000 to 11111",
+   "default": "Read only",
+   "desc": "Bit-style readout of running, forward, accelerating, decelerating and (525) safety-active states.",
+   "page": 78
+  },
+  {
+   "id": "b007",
+   "name": "Fault 1 Code",
+   "range": "F0 to F127",
+   "default": "Read only",
+   "desc": "Fault history entry; Fault 1 is the most recent. Repeated identical faults are logged once.",
+   "page": 79
+  },
+  {
+   "id": "b008",
+   "name": "Fault 2 Code",
+   "range": "F0 to F127",
+   "default": "Read only",
+   "desc": "Older fault history entry (the lower the number, the more recent the fault).",
+   "page": 79
+  },
+  {
+   "id": "b009",
+   "name": "Fault 3 Code",
+   "range": "F0 to F127",
+   "default": "Read only",
+   "desc": "Older fault history entry (the lower the number, the more recent the fault).",
+   "page": 79
+  },
+  {
+   "id": "b010",
+   "name": "Process Display",
+   "range": "0 to 9999.00",
+   "default": "Read only",
+   "desc": "Output frequency scaled by A481 and A482 so the display can show a process value such as line speed.",
+   "page": 79
+  },
+  {
+   "id": "b012",
+   "name": "Control Source",
+   "range": "0000 to 2165",
+   "default": "Read only",
+   "desc": "Shows which source is currently supplying the start command and the frequency command. Check it first when the drive ignores your start or speed signals.",
+   "page": 80
+  },
+  {
+   "id": "b013",
+   "name": "Contrl In Status",
+   "range": "0000 to 1111",
+   "default": "Read only",
+   "desc": "Open/closed state of terminals 01-03 and the brake transistor, regardless of which source is actually in control.",
+   "page": 80
+  },
+  {
+   "id": "b014",
+   "name": "Dig In Status",
+   "range": "0000 to 1111",
+   "default": "Read only",
+   "desc": "Open/closed state of the programmable digital inputs (terminals 05-08; 07 and 08 only on the 525). Quick way to confirm field wiring.",
+   "page": 81
+  },
+  {
+   "id": "b015",
+   "name": "Output RPM",
+   "range": "0 to 24000 rpm",
+   "default": "Read only",
+   "desc": "Output frequency converted to rpm using the pole count in P035.",
+   "page": 81
+  },
+  {
+   "id": "b016",
+   "name": "Output Speed",
+   "range": "0.0 to 100.0%",
+   "default": "Read only",
+   "desc": "Output frequency as a percentage of P044.",
+   "page": 81
+  },
+  {
+   "id": "b017",
+   "name": "Output Power",
+   "range": "0.00 to (Drive Rated Power x 2)",
+   "default": "Read only",
+   "desc": "Power being delivered to the motor, in kW.",
+   "page": 81
+  },
+  {
+   "id": "b019",
+   "name": "Elapsed Run time",
+   "range": "0 to 65535 x 10 hr",
+   "default": "Read only",
+   "desc": "Total hours the drive has been outputting power, counted in 10-hour steps.",
+   "page": 81
+  },
+  {
+   "id": "b027",
+   "name": "Drive Temp",
+   "range": "0 to 120 C",
+   "default": "Read only",
+   "desc": "Heatsink/power module temperature. Use when investigating F008.",
+   "page": 83
+  },
+  {
+   "id": "b028",
+   "name": "Control Temp",
+   "range": "0 to 120 C",
+   "default": "Read only",
+   "desc": "Control module temperature. Use when investigating F009.",
+   "page": 83
+  },
+  {
+   "id": "b029",
+   "name": "Control SW Ver",
+   "range": "0.000 to 65.535",
+   "default": "Read only",
+   "desc": "Firmware revision of the drive; note it when asking for support or checking which parameters your unit has.",
+   "page": 83
+  },
+  {
+   "id": "P030",
+   "name": "Language",
+   "range": "1 to 15 (1 English, 2 Francais, 3 Espanol, 4 Italiano, 5 Deutsch, 6 Japanese, 7 Portugues, 8 Chinese, 11 Korean, 12 Polish, 14 Turkish, 15 Czech)",
+   "default": "1 (English)",
+   "desc": "Display language. Needs a reset or power cycle to take effect; not touched by parameter reset.",
+   "page": 84
+  },
+  {
+   "id": "P031",
+   "name": "Motor NP Volts",
+   "range": "10V (230V drives), 20V (460V), 25V (600V) to Drive Rated Volts",
+   "default": "Drive Rated Volts",
+   "desc": "Motor nameplate voltage. Drive must be stopped to change it; the V/Hz curve is built from it.",
+   "page": 84
+  },
+  {
+   "id": "P032",
+   "name": "Motor NP Hertz",
+   "range": "15 to 500 Hz",
+   "default": "60 Hz",
+   "desc": "Motor nameplate frequency (base frequency). Set it to 50 Hz for typical European motors.",
+   "page": 84
+  },
+  {
+   "id": "P033",
+   "name": "Motor OL Current",
+   "range": "0.0 to (Drive Rated Amps x 2)",
+   "default": "Drive Rated Amps",
+   "desc": "Overload current reference for the electronic motor thermal model (set to the nameplate amps). The drive trips F007 when this is exceeded long enough.",
+   "page": 84
+  },
+  {
+   "id": "P034",
+   "name": "Motor NP FLA",
+   "range": "0.1 to (Drive Rated Amps x 2)",
+   "default": "Based on Drive Rating",
+   "desc": "Motor full-load amps from the nameplate; used by autotune and motor control.",
+   "page": 85
+  },
+  {
+   "id": "P035",
+   "name": "Motor NP Poles",
+   "range": "2 to 40",
+   "default": "4",
+   "desc": "Number of motor poles; used to display rpm.",
+   "page": 85
+  },
+  {
+   "id": "P036",
+   "name": "Motor NP RPM",
+   "range": "0 to 24000 rpm",
+   "default": "1750 rpm",
+   "desc": "Nameplate rpm, from which rated slip is worked out. Enter it accurately; if the motor runs at the wrong speed, check this and P032.",
+   "page": 85
+  },
+  {
+   "id": "P037",
+   "name": "Motor NP Power",
+   "range": "0.00 to Drive Rated Power",
+   "default": "Drive Rated Power",
+   "desc": "Motor nameplate power, used by the permanent-magnet motor regulator (525 only).",
+   "page": 85
+  },
+  {
+   "id": "P038",
+   "name": "Voltage Class",
+   "range": "2 (Low Voltage 480V), 3 (High Voltage 600V)",
+   "default": "3 (High Voltage)",
+   "desc": "Selects the voltage class on 600V drives. Stop the drive before changing.",
+   "page": 85
+  },
+  {
+   "id": "P039",
+   "name": "Torque Perf Mode",
+   "range": "0 V/Hz, 1 SVC, 2 Economize, 3 Vector, 4 PM Control, 5 SynRM",
+   "default": "1 (SVC)",
+   "desc": "Motor control mode. V/Hz is the simple fallback; Vector, PM and SynRM modes are 525-only and depend on firmware level.",
+   "page": 85
+  },
+  {
+   "id": "P040",
+   "name": "Autotune",
+   "range": "0 Ready/Idle, 1 Static Tune, 2 Rotate Tune",
+   "default": "0 (Ready/Idle)",
+   "desc": "Runs a motor measurement routine after you give a start command. Enter all motor data first; static tune measures stator resistance, rotate tune also measures flux current and should be done with the load uncoupled. Failure gives F080.",
+   "page": 86
+  },
+  {
+   "id": "P041",
+   "name": "Accel Time 1",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Seconds to ramp from 0 Hz to Maximum Freq. Lengthen if the drive hits current limit or trips on acceleration.",
+   "page": 86
+  },
+  {
+   "id": "P042",
+   "name": "Decel Time 1",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Seconds to ramp from Maximum Freq to 0 Hz. Lengthen to avoid F005 overvoltage from regeneration.",
+   "page": 86
+  },
+  {
+   "id": "P043",
+   "name": "Minimum Freq",
+   "range": "0.00 to 500.00 Hz",
+   "default": "0.00 Hz",
+   "desc": "Lowest frequency the drive will output while running.",
+   "page": 87
+  },
+  {
+   "id": "P044",
+   "name": "Maximum Freq",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Highest output frequency; also the reference for accel/decel rates. Must be above Minimum Freq.",
+   "page": 87
+  },
+  {
+   "id": "P045",
+   "name": "Stop Mode",
+   "range": "0 Ramp CF, 1 Coast CF, 2 DC Brake CF, 3 DC BrkAuto CF, 4 Ramp, 5 Coast, 6 DC Brake, 7 DC BrakeAuto, 8 Ramp+EM B CF, 9 Ramp+EM Brk, 10 PointStp CF, 11 PointStop",
+   "default": "0 (Ramp, CF)",
+   "desc": "How the drive stops. Options marked CF also let the Stop key clear a fault; EM-brake and PointStop variants are for brake and fixed-distance stopping.",
+   "page": 87
+  },
+  {
+   "id": "P046",
+   "name": "Start Source 1",
+   "range": "1 Keypad, 2 DigIn TrmBlk, 3 Serial/DSI, 4 Network Opt, 5 EtherNet/IP",
+   "default": "1 (Keypad)",
+   "desc": "Primary source of the Run command. If the drive does not start from the terminals, this is the first setting to check.",
+   "page": 88
+  },
+  {
+   "id": "P047",
+   "name": "Speed Reference1",
+   "range": "1 Drive Pot, 2 Keypad Freq, 3 Serial/DSI, 4 Network Opt, 5 0-10V Input, 6 4-20mA Input, 7 Preset Freq, 8 Anlg In Mult, 9 MOP, 10 Pulse Input, 11 PID1 Output, 12 PID2 Output, 13 Step Logic, 14 Encoder, 15 EtherNet/IP, 16 Positioning",
+   "default": "1 (Drive Pot)",
+   "desc": "Primary source of the speed command (several options are 525-only).",
+   "page": 88
+  },
+  {
+   "id": "P048",
+   "name": "Start Source 2",
+   "range": "1 Keypad, 2 DigIn TrmBlk, 3 Serial/DSI, 4 Network Opt, 5 EtherNet/IP",
+   "default": "2 (DigIn TrmBlk)",
+   "desc": "Alternate start source, selected by a digital input.",
+   "page": 88
+  },
+  {
+   "id": "P049",
+   "name": "Speed Reference2",
+   "range": "Same options as P047",
+   "default": "5 (0-10V Input)",
+   "desc": "Alternate speed reference, selected by a digital input.",
+   "page": 88
+  },
+  {
+   "id": "P050",
+   "name": "Start Source 3",
+   "range": "1 Keypad, 2 DigIn TrmBlk, 3 Serial/DSI, 4 Network Opt, 5 EtherNet/IP",
+   "default": "3 (Serial/DSI) on PowerFlex 523; 5 (EtherNet/IP) on PowerFlex 525",
+   "desc": "Third start source, normally the communications source.",
+   "page": 88
+  },
+  {
+   "id": "P051",
+   "name": "Speed Reference3",
+   "range": "Same options as P047",
+   "default": "3 (Serial/DSI) on PowerFlex 523; 15 (EtherNet/IP) on PowerFlex 525",
+   "desc": "Third speed reference, normally the communications source.",
+   "page": 88
+  },
+  {
+   "id": "P052",
+   "name": "Average kWh Cost",
+   "range": "0.00 to 655.35",
+   "default": "0.00",
+   "desc": "Energy price per kWh used for the cost-savings readout.",
+   "page": 88
+  },
+  {
+   "id": "P053",
+   "name": "Reset To Defalts",
+   "range": "0 Ready/Idle, 1 Param Reset, 2 Factory Rset, 3 Power Reset, 4 Module Reset",
+   "default": "0 (Ready/Idle)",
+   "desc": "Restores parameters. 1 keeps language, custom group and comms settings; 2 is a full factory reset; 3 resets only power-related parameters (use after swapping power modules); 4 just power-cycles. Stop the drive first.",
+   "page": 89
+  },
+  {
+   "id": "P054",
+   "name": "Display Param",
+   "range": "0 Keypad Disp, 1 Output Freq",
+   "default": "0 (Keypad Disp)",
+   "desc": "Chooses what the display shows at power-up.",
+   "page": 89
+  },
+  {
+   "id": "t062",
+   "name": "DigIn TermBlk 02",
+   "range": "0 to 52 (0 Not Used, 1 Speed Ref 2, 2 Speed Ref 3, 3 Start Src 2, 4 Start Src 3, 5 Spd+Strt 2, 6 Spd+Strt 3, 7 Preset Freq, 8 Jog, 9 Jog Forward, 10 Jog Reverse, 11 Acc/Dec Sel2, 12 Aux Fault, 13 Clear Fault, 14 RampStop CF, 15 CoastStop CF, 16 DCInjStop CF, 17 MOP Up, 18 MOP Down, 19 Timer Start, 20 Counter In, 21 Reset Timer, 22 Reset Countr, 23 Rset Tim&Cnt, 24 Logic In 1, 25 Logic In 2, 26 Current Lmt2, 27 Anlg Invert, 28 EM Brk Rlse, 29 Acc/Dec Sel3, 30 Precharge En, 31 Inertia Dcel, 32 Sync Enable, 33 Traverse Dis, 34 Home Limit, 35 Find Home, 36 Hold Step, 37 Pos Redefine, 38 Force DC, 39 Damper Input, 40 Purge, 41 Freeze-Fire, 42 SW Enable, 43 SherPin1 Dis; 48 and 49 apply to this terminal only)",
+   "default": "48 (2-Wire FWD)",
+   "desc": "Function of terminal 02. Default is run forward in 2-wire mode; choose 3-Wire Start for a start/stop pushbutton arrangement.",
+   "page": 90
+  },
+  {
+   "id": "t063",
+   "name": "DigIn TermBlk 03",
+   "range": "0 to 52 (50 2-Wire REV and 51 3-Wire Dir apply to this terminal only; otherwise as t062)",
+   "default": "50 (2-Wire REV)",
+   "desc": "Function of terminal 03. Default is run reverse in 2-wire mode.",
+   "page": 90
+  },
+  {
+   "id": "t065",
+   "name": "DigIn TermBlk 05",
+   "range": "0 to 52 (as t062 general list)",
+   "default": "7 (Preset Freq)",
+   "desc": "Function of terminal 05; defaults to a preset-frequency select input.",
+   "page": 90
+  },
+  {
+   "id": "t066",
+   "name": "DigIn TermBlk 06",
+   "range": "0 to 52 (as t062 general list)",
+   "default": "7 (Preset Freq)",
+   "desc": "Function of terminal 06; defaults to a preset-frequency select input.",
+   "page": 90
+  },
+  {
+   "id": "t067",
+   "name": "DigIn TermBlk 07",
+   "range": "0 to 52 (as t062 general list)",
+   "default": "5 (Spd + Strt 2)",
+   "desc": "Function of terminal 07 (PowerFlex 525 only). Also the pulse-train input terminal on the 525.",
+   "page": 90
+  },
+  {
+   "id": "t068",
+   "name": "DigIn TermBlk 08",
+   "range": "0 to 52 (as t062 general list)",
+   "default": "9 (Jog Forward)",
+   "desc": "Function of terminal 08 (PowerFlex 525 only).",
+   "page": 90
+  },
+  {
+   "id": "t064",
+   "name": "2-Wire Mode",
+   "range": "0 Edge Trigger, 1 Level Sense, 2 Hi-Spd Edge, 3 Momentary",
+   "default": "0 (Edge Trigger)",
+   "desc": "How 2-wire run inputs behave. Level Sense lets the drive restart as soon as stop is released while run is still held, so use it with care.",
+   "page": 92
+  },
+  {
+   "id": "t069",
+   "name": "Opto Out1 Sel",
+   "range": "0 to 31 (0 Ready/Fault, 1 At Frequency, 2 MotorRunning, 3 Reverse, 4 Motor Overld, 5 Ramp Reg, 6 Above Freq, 7 Above Cur, 8 Above DCVolt, 9 Retries Exst, 10 Above Anlg V, 11 Above PF Ang, 12 Anlg In Loss, 13 ParamControl, 14 NonRec Fault, 15 EM Brk Cntrl, 16 Thermal OL, 17 Amb OverTemp, 18 Local Active, 19 Comm Loss, 20-24 logic/StepLogic, 25 Timer Out, 26 Counter Out, 27 At Position, 28 At Home, 29 Safe-Off, 30 SafeTqPermit, 31 AutoRst Ctdn)",
+   "default": "2 (MotorRunning)",
+   "desc": "Condition that switches optocoupler output 1 (PowerFlex 525 only).",
+   "page": 93
+  },
+  {
+   "id": "t072",
+   "name": "Opto Out2 Sel",
+   "range": "0 to 31 (same list as t069)",
+   "default": "1 (At Frequency)",
+   "desc": "Condition that switches optocoupler output 2 (PowerFlex 525 only).",
+   "page": 93
+  },
+  {
+   "id": "t070",
+   "name": "Opto Out1 Level",
+   "range": "0.0 to 9999.0",
+   "default": "0.0",
+   "desc": "Threshold for opto output 1 when the selected function compares against a level (frequency, current %, voltage, etc.).",
+   "page": 94
+  },
+  {
+   "id": "t073",
+   "name": "Opto Out2 Level",
+   "range": "0.0 to 9999.0",
+   "default": "0.0",
+   "desc": "Threshold for opto output 2 when its function uses a level.",
+   "page": 94
+  },
+  {
+   "id": "t075",
+   "name": "Opto Out Logic",
+   "range": "0 to 3",
+   "default": "0",
+   "desc": "Sets whether each opto output acts normally open or normally closed.",
+   "page": 94
+  },
+  {
+   "id": "t076",
+   "name": "Relay Out1 Sel",
+   "range": "0 to 31 (same list as t069)",
+   "default": "0 (Ready/Fault)",
+   "desc": "Condition that switches relay 1 (terminals R1, R2, R3). Default signals ready/fault, handy as a fault contact to a PLC.",
+   "page": 95
+  },
+  {
+   "id": "t081",
+   "name": "Relay Out2 Sel",
+   "range": "0 to 31 (same list as t069)",
+   "default": "2 (MotorRunning)",
+   "desc": "Condition that switches relay 2 (PowerFlex 525 only).",
+   "page": 95
+  },
+  {
+   "id": "t077",
+   "name": "Relay Out1 Level",
+   "range": "0.0 to 9999.0",
+   "default": "0.0",
+   "desc": "Threshold for relay 1 when its function compares against a level.",
+   "page": 96
+  },
+  {
+   "id": "t082",
+   "name": "Relay Out2 Level",
+   "range": "0.0 to 9999.0",
+   "default": "0.0",
+   "desc": "Threshold for relay 2 when its function uses a level.",
+   "page": 96
+  },
+  {
+   "id": "t079",
+   "name": "Relay 1 On Time",
+   "range": "0.0 to 600.0 s",
+   "default": "0.0 s",
+   "desc": "Delay before relay 1 energises after its condition is met.",
+   "page": 96
+  },
+  {
+   "id": "t080",
+   "name": "Relay 1 Off Time",
+   "range": "0.0 to 600.0 s",
+   "default": "0.0 s",
+   "desc": "Delay before relay 1 de-energises after its condition clears.",
+   "page": 96
+  },
+  {
+   "id": "t086",
+   "name": "EM Brk Off Delay",
+   "range": "0.00 to 10.00 s",
+   "default": "2.00 s",
+   "desc": "With EM brake stop mode, time the drive holds minimum frequency after the brake is released before ramping up.",
+   "page": 97
+  },
+  {
+   "id": "t087",
+   "name": "EM Brk On Delay",
+   "range": "0.00 to 10.00 s",
+   "default": "2.00 s",
+   "desc": "With EM brake stop mode, time the drive holds minimum frequency before the brake is applied at stop.",
+   "page": 97
+  },
+  {
+   "id": "t088",
+   "name": "Analog Out Sel",
+   "range": "0 to 23 (0-10V, 0-20mA and 4-20mA ranges for frequency, current, voltage, power, torque, test data, setpoint, DC bus)",
+   "default": "0 (OutFreq 0-10)",
+   "desc": "Chooses what the analog output signal represents and its electrical range.",
+   "page": 98
+  },
+  {
+   "id": "t089",
+   "name": "Analog Out High",
+   "range": "0 to 800%",
+   "default": "100%",
+   "desc": "Scales the analog output at full-scale source value.",
+   "page": 98
+  },
+  {
+   "id": "t090",
+   "name": "Anlg Out Setpt",
+   "range": "0.0 to 100.0%",
+   "default": "0.0%",
+   "desc": "Fixed output level used when the analog output is set to a setpoint option; handy for testing a meter or PLC input.",
+   "page": 98
+  },
+  {
+   "id": "t091",
+   "name": "Anlg In 0-10V Lo",
+   "range": "0.0 to 200.0%",
+   "default": "0.0%",
+   "desc": "Percentage of 10V that corresponds to Minimum Freq. Set above t092 to invert the input.",
+   "page": 99
+  },
+  {
+   "id": "t092",
+   "name": "Anlg In 0-10V Hi",
+   "range": "0.0 to 200.0%",
+   "default": "100.0%",
+   "desc": "Percentage of 10V that corresponds to Maximum Freq.",
+   "page": 99
+  },
+  {
+   "id": "t093",
+   "name": "10V Bipolar Enbl",
+   "range": "0 Uni-Polar In, 1 Bi-Polar In",
+   "default": "0 (Uni-Polar In)",
+   "desc": "Enables +/-10V input where the voltage polarity sets direction (525 only).",
+   "page": 99
+  },
+  {
+   "id": "t094",
+   "name": "Anlg In V Loss",
+   "range": "0 Disabled, 1 Fault (F29), 2 Stop, 3 Zero Ref, 4 Min Freq Ref, 5 Max Freq Ref, 6 Key Freq Ref, 7 MOP Freq Ref, 8 Continu Last",
+   "default": "0 (Disabled)",
+   "desc": "What to do when the 0-10V signal drops below 1V. Choose Fault to get F029.",
+   "page": 99
+  },
+  {
+   "id": "t095",
+   "name": "Anlg In4-20mA Lo",
+   "range": "0.0 to 200.0%",
+   "default": "0.0%",
+   "desc": "Percentage of the 4-20 mA range that corresponds to Minimum Freq.",
+   "page": 99
+  },
+  {
+   "id": "t096",
+   "name": "Anlg In4-20mA Hi",
+   "range": "0.0 to 200.0%",
+   "default": "100.0%",
+   "desc": "Percentage of the 4-20 mA range that corresponds to Maximum Freq.",
+   "page": 100
+  },
+  {
+   "id": "t097",
+   "name": "Anlg In mA Loss",
+   "range": "0 Disabled, 1 Fault (F29), 2 Stop, 3 Zero Ref, 4 Min Freq Ref, 5 Max Freq Ref, 6 Key Freq Ref, 7 MOP Freq Ref, 8 Continu Last",
+   "default": "0 (Disabled)",
+   "desc": "What to do when the 4-20 mA signal falls below 2 mA (broken-loop detection).",
+   "page": 100
+  },
+  {
+   "id": "t098",
+   "name": "Anlg Loss Delay",
+   "range": "0.0 to 20.0 s",
+   "default": "0.0 s",
+   "desc": "Grace period after power-up during which signal loss is ignored.",
+   "page": 100
+  },
+  {
+   "id": "t099",
+   "name": "Analog In Filter",
+   "range": "0 to 14",
+   "default": "0",
+   "desc": "Extra filtering on analog inputs; each step roughly doubles the filtering and slows response.",
+   "page": 100
+  },
+  {
+   "id": "t100",
+   "name": "Sleep-Wake Sel",
+   "range": "0 Disabled, 1 0-10V Input, 2 4-20mA Input, 3 Command Freq",
+   "default": "0 (Disabled)",
+   "desc": "Enables sleep mode, which ramps the drive to zero when the chosen signal stays low, and wakes it again. Can cause unexpected starts.",
+   "page": 100
+  },
+  {
+   "id": "t101",
+   "name": "Sleep Level",
+   "range": "0.0 to 100.0%",
+   "default": "10.0%",
+   "desc": "Signal level below which the drive goes to sleep.",
+   "page": 101
+  },
+  {
+   "id": "t102",
+   "name": "Sleep Time",
+   "range": "0.0 to 600.0 s",
+   "default": "0.0 s",
+   "desc": "How long the signal must stay below the sleep level before sleeping.",
+   "page": 101
+  },
+  {
+   "id": "t103",
+   "name": "Wake Level",
+   "range": "0.0 to 100.0%",
+   "default": "15.0%",
+   "desc": "Signal level above which the drive wakes.",
+   "page": 101
+  },
+  {
+   "id": "t104",
+   "name": "Wake Time",
+   "range": "0.0 to 600.0 s",
+   "default": "0.0 s",
+   "desc": "How long the signal must stay above the wake level before waking.",
+   "page": 101
+  },
+  {
+   "id": "t105",
+   "name": "Safety Open En",
+   "range": "0 FaultEnable, 1 FaultDisable",
+   "default": "0 (FaultEnable)",
+   "desc": "Whether the drive faults (F059) when both safety inputs are de-energised (525 only).",
+   "page": 101
+  },
+  {
+   "id": "t106",
+   "name": "SafetyFlt RstCfg",
+   "range": "0 PwrCycleRset, 1 FltClr Reset",
+   "default": "0 (PwrCycleRset)",
+   "desc": "Whether F111 needs a power cycle or can be cleared with a normal fault reset (525, newer firmware).",
+   "page": 101
+  },
+  {
+   "id": "C121",
+   "name": "Comm Write Mode",
+   "range": "0 Save, 1 RAM only",
+   "default": "0 (Save)",
+   "desc": "Whether values written over comms go to permanent memory or only RAM. Keep at Save if Automatic Drive Configuration is used.",
+   "page": 102
+  },
+  {
+   "id": "C122",
+   "name": "Cmd Stat Select",
+   "range": "0 Velocity, 1 Position",
+   "default": "0 (Velocity)",
+   "desc": "Chooses the velocity or position bit layout of the network command/status words (525 only).",
+   "page": 102
+  },
+  {
+   "id": "C123",
+   "name": "RS485 Data Rate",
+   "range": "0 1200, 1 2400, 2 4800, 3 9600, 4 19200, 5 38400 bps",
+   "default": "3 (9600)",
+   "desc": "Baud rate for the RS-485 (Modbus/DSI) port. Takes effect after reset or power cycle.",
+   "page": 102
+  },
+  {
+   "id": "C124",
+   "name": "RS485 Node Addr",
+   "range": "1 to 247",
+   "default": "100",
+   "desc": "Modbus slave address of the drive on the RS-485 port. Takes effect after reset or power cycle.",
+   "page": 102
+  },
+  {
+   "id": "C125",
+   "name": "Comm Loss Action",
+   "range": "0 Fault, 1 Coast Stop, 2 Stop, 3 Continu Last",
+   "default": "0 (Fault)",
+   "desc": "Response to lost RS-485 communication. Fault gives F081; Continue Last keeps running at the last speed, so use with care.",
+   "page": 102
+  },
+  {
+   "id": "C126",
+   "name": "Comm Loss Time",
+   "range": "0.1 to 60.0 s",
+   "default": "5.0 s",
+   "desc": "How long RS-485 communication may be lost before the C125 action is taken.",
+   "page": 102
+  },
+  {
+   "id": "C127",
+   "name": "RS485 Format",
+   "range": "0 RTU 8-N-1, 1 RTU 8-E-1, 2 RTU 8-O-1, 3 RTU 8-N-2, 4 RTU 8-E-2, 5 RTU 8-O-2",
+   "default": "0 (RTU 8-N-1)",
+   "desc": "Modbus RTU data bits/parity/stop bits. Must match the master; reset or power cycle needed.",
+   "page": 103
+  },
+  {
+   "id": "C128",
+   "name": "EN Addr Sel",
+   "range": "1 Parameters, 2 BOOTP",
+   "default": "2 (BOOTP)",
+   "desc": "Selects whether the embedded Ethernet address comes from the C129-C140 parameters or a BOOTP server. Set to 1 to use fixed addresses. Reset or power cycle needed.",
+   "page": 103
+  },
+  {
+   "id": "C129",
+   "name": "EN IP Addr Cfg 1",
+   "range": "0 to 255",
+   "default": "0 (byte 1 of the IP address; manual's example shows 192.168.1.62)",
+   "desc": "Byte 1 of the static IP address; used only when C128 = Parameters.",
+   "page": 103
+  },
+  {
+   "id": "C130",
+   "name": "EN IP Addr Cfg 2",
+   "range": "0 to 255",
+   "default": "0 (byte 2 of the IP address; manual's example shows 192.168.1.62)",
+   "desc": "Byte 2 of the static IP address; used only when C128 = Parameters.",
+   "page": 103
+  },
+  {
+   "id": "C131",
+   "name": "EN IP Addr Cfg 3",
+   "range": "0 to 255",
+   "default": "0 (byte 3 of the IP address; manual's example shows 192.168.1.62)",
+   "desc": "Byte 3 of the static IP address; used only when C128 = Parameters.",
+   "page": 103
+  },
+  {
+   "id": "C132",
+   "name": "EN IP Addr Cfg 4",
+   "range": "0 to 255",
+   "default": "0 (byte 4 of the IP address; manual's example shows 192.168.1.62)",
+   "desc": "Byte 4 of the static IP address; used only when C128 = Parameters.",
+   "page": 103
+  },
+  {
+   "id": "C133",
+   "name": "EN Subnet Cfg 1",
+   "range": "0 to 255",
+   "default": "0 (byte 1 of the subnet mask; manual's example shows 255.255.255.0)",
+   "desc": "Byte 1 of the subnet mask; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C134",
+   "name": "EN Subnet Cfg 2",
+   "range": "0 to 255",
+   "default": "0 (byte 2 of the subnet mask; manual's example shows 255.255.255.0)",
+   "desc": "Byte 2 of the subnet mask; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C135",
+   "name": "EN Subnet Cfg 3",
+   "range": "0 to 255",
+   "default": "0 (byte 3 of the subnet mask; manual's example shows 255.255.255.0)",
+   "desc": "Byte 3 of the subnet mask; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C136",
+   "name": "EN Subnet Cfg 4",
+   "range": "0 to 255",
+   "default": "0 (byte 4 of the subnet mask; manual's example shows 255.255.255.0)",
+   "desc": "Byte 4 of the subnet mask; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C137",
+   "name": "EN Gateway Cfg 1",
+   "range": "0 to 255",
+   "default": "0 (byte 1 of the gateway; manual's example shows 192.168.1.1)",
+   "desc": "Byte 1 of the gateway address; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C138",
+   "name": "EN Gateway Cfg 2",
+   "range": "0 to 255",
+   "default": "0 (byte 2 of the gateway; manual's example shows 192.168.1.1)",
+   "desc": "Byte 2 of the gateway address; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C139",
+   "name": "EN Gateway Cfg 3",
+   "range": "0 to 255",
+   "default": "0 (byte 3 of the gateway; manual's example shows 192.168.1.1)",
+   "desc": "Byte 3 of the gateway address; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C140",
+   "name": "EN Gateway Cfg 4",
+   "range": "0 to 255",
+   "default": "0 (byte 4 of the gateway; manual's example shows 192.168.1.1)",
+   "desc": "Byte 4 of the gateway address; used only when C128 = Parameters.",
+   "page": 104
+  },
+  {
+   "id": "C141",
+   "name": "EN Rate Cfg",
+   "range": "0 Auto detect, 1 10Mbps Full, 2 10Mbps Half, 3 100Mbps Full, 4 100Mbps Half",
+   "default": "0 (Auto detect)",
+   "desc": "Ethernet speed/duplex for the embedded port. Leave on auto unless the switch port is hard-set. Needs reset or power cycle.",
+   "page": 104
+  },
+  {
+   "id": "C143",
+   "name": "EN Comm Flt Actn",
+   "range": "0 Fault, 1 Stop, 2 Zero Data, 3 Hold Last, 4 Send Flt Cfg",
+   "default": "0 (Fault)",
+   "desc": "What the drive does if EtherNet/IP communication is lost. Fault gives F073/F083; other options keep the drive running, so verify safe behaviour at commissioning.",
+   "page": 105
+  },
+  {
+   "id": "C144",
+   "name": "EN Idle Flt Actn",
+   "range": "0 Fault, 1 Stop, 2 Zero Data, 3 Hold Last, 4 Send Flt Cfg",
+   "default": "0 (Fault)",
+   "desc": "What the drive does when the PLC goes to program mode (scanner idle). Same options as C143.",
+   "page": 105
+  },
+  {
+   "id": "C145",
+   "name": "EN Flt Cfg Logic",
+   "range": "0000 to FFFF",
+   "default": "0000",
+   "desc": "Logic command word sent to the drive when C143 or C144 is Send Flt Cfg.",
+   "page": 105
+  },
+  {
+   "id": "C146",
+   "name": "EN Flt Cfg Ref",
+   "range": "0 to 50000",
+   "default": "0",
+   "desc": "Speed reference sent to the drive when C143 or C144 is Send Flt Cfg.",
+   "page": 106
+  },
+  {
+   "id": "C147",
+   "name": "EN Flt Cfg DL 1",
+   "range": "0 to 65535",
+   "default": "0",
+   "desc": "Datalink 1 value sent to the drive on a fault-configured communication fault or idle.",
+   "page": 106
+  },
+  {
+   "id": "C148",
+   "name": "EN Flt Cfg DL 2",
+   "range": "0 to 65535",
+   "default": "0",
+   "desc": "Datalink 2 value sent to the drive on a fault-configured communication fault or idle.",
+   "page": 106
+  },
+  {
+   "id": "C149",
+   "name": "EN Flt Cfg DL 3",
+   "range": "0 to 65535",
+   "default": "0",
+   "desc": "Datalink 3 value sent to the drive on a fault-configured communication fault or idle.",
+   "page": 106
+  },
+  {
+   "id": "C150",
+   "name": "EN Flt Cfg DL 4",
+   "range": "0 to 65535",
+   "default": "0",
+   "desc": "Datalink 4 value sent to the drive on a fault-configured communication fault or idle.",
+   "page": 106
+  },
+  {
+   "id": "C153",
+   "name": "EN Data In 1",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number written by EtherNet/IP Datalink input 1 from the PLC. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C154",
+   "name": "EN Data In 2",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number written by EtherNet/IP Datalink input 2 from the PLC. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C155",
+   "name": "EN Data In 3",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number written by EtherNet/IP Datalink input 3 from the PLC. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C156",
+   "name": "EN Data In 4",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number written by EtherNet/IP Datalink input 4 from the PLC. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C157",
+   "name": "EN Data Out 1",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number read back to the PLC through EtherNet/IP Datalink output 1. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C158",
+   "name": "EN Data Out 2",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number read back to the PLC through EtherNet/IP Datalink output 2. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C159",
+   "name": "EN Data Out 3",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number read back to the PLC through EtherNet/IP Datalink output 3. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C160",
+   "name": "EN Data Out 4",
+   "range": "0 to 800",
+   "default": "0",
+   "desc": "Parameter number read back to the PLC through EtherNet/IP Datalink output 4. Cannot be changed while an I/O connection is open.",
+   "page": 106
+  },
+  {
+   "id": "C169",
+   "name": "MultiDrv Sel",
+   "range": "0 Disabled, 1 Network Opt, 2 EtherNet/IP",
+   "default": "0 (Disabled)",
+   "desc": "Enables multi-drive mode, with this drive as master and up to four slaves daisy-chained on RS-485. Reset or power cycle needed.",
+   "page": 107
+  },
+  {
+   "id": "C175",
+   "name": "DSI I/O Cfg",
+   "range": "0 Drive 0, 1 Drive 0-1, 2 Drive 0-2, 3 Drive 0-3, 4 Drive 0-4",
+   "default": "0 (Drive 0)",
+   "desc": "Which drives take part in the multi-drive set-up.",
+   "page": 107
+  },
+  {
+   "id": "d360",
+   "name": "Analog In 0-10V",
+   "range": "0.0 to 100.0%",
+   "default": "Read only",
+   "desc": "Live 0-10V analog input as a percentage; compare with a meter to verify the signal.",
+   "page": 111
+  },
+  {
+   "id": "d361",
+   "name": "Analog In 4-20mA",
+   "range": "0.0 to 100.0%",
+   "default": "Read only",
+   "desc": "Live 4-20 mA analog input as a percentage.",
+   "page": 111
+  },
+  {
+   "id": "d362",
+   "name": "Elapsed Time-hr",
+   "range": "0 to 32767 hr",
+   "default": "Read only",
+   "desc": "Run-time hours counter, resettable via A555.",
+   "page": 111
+  },
+  {
+   "id": "d364",
+   "name": "Counter Status",
+   "range": "0 to 65535",
+   "default": "Read only",
+   "desc": "Count accumulated by the internal counter function.",
+   "page": 111
+  },
+  {
+   "id": "d369",
+   "name": "Motor OL Level",
+   "range": "0.0 to 150.0%",
+   "default": "Read only",
+   "desc": "How full the motor thermal overload counter is; at 100% an F007 trip is imminent.",
+   "page": 112
+  },
+  {
+   "id": "d375",
+   "name": "Slip Hz Meter",
+   "range": "0.0 to 25.0 Hz",
+   "default": "Read only",
+   "desc": "Present slip compensation applied.",
+   "page": 112
+  },
+  {
+   "id": "d382",
+   "name": "Torque Current",
+   "range": "0.00 to (Drive Rated Amps x 2)",
+   "default": "Read only",
+   "desc": "Torque-producing portion of motor current.",
+   "page": 113
+  },
+  {
+   "id": "d394",
+   "name": "Dig Out Status",
+   "range": "0 to 15",
+   "default": "Read only",
+   "desc": "State of relay and opto outputs; check it to confirm what the drive is commanding to a PLC.",
+   "page": 115
+  },
+  {
+   "id": "A410",
+   "name": "Preset Freq 0",
+   "range": "0.00 to 500.00 Hz",
+   "default": "0.00 Hz",
+   "desc": "Fixed speed 0 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A411",
+   "name": "Preset Freq 1",
+   "range": "0.00 to 500.00 Hz",
+   "default": "5.00 Hz",
+   "desc": "Fixed speed 1 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A412",
+   "name": "Preset Freq 2",
+   "range": "0.00 to 500.00 Hz",
+   "default": "10.00 Hz",
+   "desc": "Fixed speed 2 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A413",
+   "name": "Preset Freq 3",
+   "range": "0.00 to 500.00 Hz",
+   "default": "20.00 Hz",
+   "desc": "Fixed speed 3 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A414",
+   "name": "Preset Freq 4",
+   "range": "0.00 to 500.00 Hz",
+   "default": "30.00 Hz",
+   "desc": "Fixed speed 4 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A415",
+   "name": "Preset Freq 5",
+   "range": "0.00 to 500.00 Hz",
+   "default": "40.00 Hz",
+   "desc": "Fixed speed 5 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A416",
+   "name": "Preset Freq 6",
+   "range": "0.00 to 500.00 Hz",
+   "default": "50.00 Hz",
+   "desc": "Fixed speed 6 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A417",
+   "name": "Preset Freq 7",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 7 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A418",
+   "name": "Preset Freq 8",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 8 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A419",
+   "name": "Preset Freq 9",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 9 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A420",
+   "name": "Preset Freq 10",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 10 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A421",
+   "name": "Preset Freq 11",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 11 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A422",
+   "name": "Preset Freq 12",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 12 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A423",
+   "name": "Preset Freq 13",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 13 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A424",
+   "name": "Preset Freq 14",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 14 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A425",
+   "name": "Preset Freq 15",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Fixed speed 15 selected by the preset-frequency digital inputs. Preset 0 is only used if a speed reference is set to Preset Freq.",
+   "page": 116
+  },
+  {
+   "id": "A426",
+   "name": "Keypad Freq",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Speed command used when a speed reference is set to Keypad Freq; also changed with the keypad arrows.",
+   "page": 117
+  },
+  {
+   "id": "A427",
+   "name": "MOP Freq",
+   "range": "0.00 to 500.00 Hz",
+   "default": "60.00 Hz",
+   "desc": "Speed command held by the motor-operated-potentiometer function (MOP up/down inputs).",
+   "page": 117
+  },
+  {
+   "id": "A428",
+   "name": "MOP Reset Sel",
+   "range": "0 Zero MOP Ref, 1 Save MOP Ref",
+   "default": "1 (Save MOP Ref)",
+   "desc": "Whether the MOP frequency is kept or zeroed at power-down.",
+   "page": 117
+  },
+  {
+   "id": "A430",
+   "name": "MOP Time",
+   "range": "0.1 to 600.0 s",
+   "default": "10.0 s",
+   "desc": "How fast the MOP speed changes while up/down is held.",
+   "page": 117
+  },
+  {
+   "id": "A431",
+   "name": "Jog Frequency",
+   "range": "0.00 to [Maximum Freq]",
+   "default": "10.00 Hz",
+   "desc": "Speed used for jog commands.",
+   "page": 117
+  },
+  {
+   "id": "A432",
+   "name": "Jog Accel/Decel",
+   "range": "0.01 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Ramp time used while jogging.",
+   "page": 117
+  },
+  {
+   "id": "A433",
+   "name": "Purge Frequency",
+   "range": "0.00 to 500.00 Hz",
+   "default": "5.00 Hz",
+   "desc": "Fixed speed used by the Purge digital input function.",
+   "page": 118
+  },
+  {
+   "id": "A434",
+   "name": "DC Brake Time",
+   "range": "0.0 to 99.9 s",
+   "default": "0.0 s",
+   "desc": "Duration of DC injection braking at stop.",
+   "page": 118
+  },
+  {
+   "id": "A435",
+   "name": "DC Brake Level",
+   "range": "0.00 to (Drive Rated Amps x 1.80)",
+   "default": "Drive Rated Amps x 0.05",
+   "desc": "DC braking current. Do not use with synchronous motors; mechanical brake needed where a hazard exists.",
+   "page": 118
+  },
+  {
+   "id": "A436",
+   "name": "DC Brk Time@Strt",
+   "range": "0.0 to 99.9 s",
+   "default": "0.0 s",
+   "desc": "DC current applied for this long after a start command, before ramping (pre-magnetise or hold).",
+   "page": 118
+  },
+  {
+   "id": "A437",
+   "name": "DB Resistor Sel",
+   "range": "0 Disabled, 1 Norml RA Res, 2 NoProtection, 3-99 duty cycle %",
+   "default": "0 (Disabled)",
+   "desc": "Enables an external dynamic-brake resistor and sets the protection level. When on, the bus regulator A550 is ignored.",
+   "page": 119
+  },
+  {
+   "id": "A438",
+   "name": "DB Threshold",
+   "range": "10.0 to 110.0%",
+   "default": "100.0%",
+   "desc": "DC bus level at which the brake resistor switches in. Values below about 90% are rarely needed and can overheat the resistor.",
+   "page": 119
+  },
+  {
+   "id": "A439",
+   "name": "S Curve %",
+   "range": "0 to 100%",
+   "default": "0%",
+   "desc": "Rounds the start and end of accel/decel ramps for smoother motion.",
+   "page": 119
+  },
+  {
+   "id": "A440",
+   "name": "PWM Frequency",
+   "range": "2.0 to 16.0 kHz",
+   "default": "4.0 kHz",
+   "desc": "Carrier frequency. Higher is quieter but derates output current.",
+   "page": 120
+  },
+  {
+   "id": "A441",
+   "name": "Droop Hertz@ FLA",
+   "range": "0.0 to 10.0 Hz",
+   "default": "0.0 Hz",
+   "desc": "Reduces output frequency in proportion to load for load sharing (525 only).",
+   "page": 120
+  },
+  {
+   "id": "A442",
+   "name": "Accel Time 2",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Alternate accel ramp, selected via digital input.",
+   "page": 120
+  },
+  {
+   "id": "A443",
+   "name": "Decel Time 2",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Alternate decel ramp, selected via digital input.",
+   "page": 120
+  },
+  {
+   "id": "A444",
+   "name": "Accel Time 3",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Third accel ramp, selectable by digital inputs.",
+   "page": 121
+  },
+  {
+   "id": "A445",
+   "name": "Decel Time 3",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Third decel ramp, selectable by digital inputs.",
+   "page": 121
+  },
+  {
+   "id": "A446",
+   "name": "Accel Time 4",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Fourth accel ramp, selectable by digital inputs.",
+   "page": 121
+  },
+  {
+   "id": "A447",
+   "name": "Decel Time 4",
+   "range": "0.00 to 600.00 s",
+   "default": "10.00 s",
+   "desc": "Fourth decel ramp, selectable by digital inputs.",
+   "page": 121
+  },
+  {
+   "id": "A448",
+   "name": "Skip Frequency 1",
+   "range": "0.0 to 500.0 Hz",
+   "default": "0.0 Hz (Disabled)",
+   "desc": "Centre of a speed range to avoid, e.g. to dodge a mechanical resonance (525 only).",
+   "page": 121
+  },
+  {
+   "id": "A449",
+   "name": "Skip Freq Band 1",
+   "range": "0.0 to 30.0 Hz",
+   "default": "0.0 Hz",
+   "desc": "Width of the avoided range around skip frequency 1.",
+   "page": 121
+  },
+  {
+   "id": "A450",
+   "name": "Skip Frequency 2",
+   "range": "0.0 to 500.0 Hz",
+   "default": "0.0 Hz (Disabled)",
+   "desc": "Centre of a speed range to avoid, e.g. to dodge a mechanical resonance (525 only).",
+   "page": 121
+  },
+  {
+   "id": "A451",
+   "name": "Skip Freq Band 2",
+   "range": "0.0 to 30.0 Hz",
+   "default": "0.0 Hz",
+   "desc": "Width of the avoided range around skip frequency 2.",
+   "page": 121
+  },
+  {
+   "id": "A452",
+   "name": "Skip Frequency 3",
+   "range": "0.0 to 500.0 Hz",
+   "default": "0.0 Hz (Disabled)",
+   "desc": "Centre of a speed range to avoid, e.g. to dodge a mechanical resonance (525 only).",
+   "page": 121
+  },
+  {
+   "id": "A453",
+   "name": "Skip Freq Band 3",
+   "range": "0.0 to 30.0 Hz",
+   "default": "0.0 Hz",
+   "desc": "Width of the avoided range around skip frequency 3.",
+   "page": 121
+  },
+  {
+   "id": "A454",
+   "name": "Skip Frequency 4",
+   "range": "0.0 to 500.0 Hz",
+   "default": "0.0 Hz (Disabled)",
+   "desc": "Centre of a speed range to avoid, e.g. to dodge a mechanical resonance (525 only).",
+   "page": 121
+  },
+  {
+   "id": "A455",
+   "name": "Skip Freq Band 4",
+   "range": "0.0 to 30.0 Hz",
+   "default": "0.0 Hz",
+   "desc": "Width of the avoided range around skip frequency 4.",
+   "page": 121
+  },
+  {
+   "id": "A458",
+   "name": "PID 1 Trim Sel",
+   "range": "0 Disabled, 1-13 trim on selected source",
+   "default": "0 (Disabled)",
+   "desc": "Applies PID1 output as a trim on top of the chosen speed reference (525 only).",
+   "page": 122
+  },
+  {
+   "id": "A459",
+   "name": "PID 1 Ref Sel",
+   "range": "0 PID Setpoint, 1-13 other sources",
+   "default": "0 (PID Setpoint)",
+   "desc": "Source of the PID1 reference (525 only).",
+   "page": 123
+  },
+  {
+   "id": "A460",
+   "name": "PID 1 Fdback Sel",
+   "range": "0 0-10V Input, 1 4-20mA Input, 2 Serial/DSI, 3 Network Opt, 4 Pulse Input, 5 Encoder, 6 EtherNet/IP",
+   "default": "0 (0-10V Input)",
+   "desc": "Source of the PID1 feedback signal (525 only).",
+   "page": 123
+  },
+  {
+   "id": "A461",
+   "name": "PID 1 Prop Gain",
+   "range": "0.00 to 99.99",
+   "default": "0.01",
+   "desc": "Proportional gain of PID1.",
+   "page": 123
+  },
+  {
+   "id": "A462",
+   "name": "PID 1 Integ Time",
+   "range": "0.0 to 999.9 s",
+   "default": "2.0 s",
+   "desc": "Integral time of PID1.",
+   "page": 124
+  },
+  {
+   "id": "A463",
+   "name": "PID 1 Diff Rate",
+   "range": "0.00 to 99.99",
+   "default": "0.00",
+   "desc": "Differential rate of PID1 (1/s).",
+   "page": 124
+  },
+  {
+   "id": "A464",
+   "name": "PID 1 Setpoint",
+   "range": "0.0 to 100.0%",
+   "default": "0.0%",
+   "desc": "Internal fixed setpoint for PID1.",
+   "page": 124
+  },
+  {
+   "id": "A465",
+   "name": "PID 1 Deadband",
+   "range": "0.0 to 10.0%",
+   "default": "0.0%",
+   "desc": "Error band around the reference that PID1 ignores.",
+   "page": 124
+  },
+  {
+   "id": "A467",
+   "name": "PID 1 Invert Err",
+   "range": "0 Normal, 1 Inverted",
+   "default": "0 (Normal)",
+   "desc": "Flips the PID1 error sign for reverse-acting processes.",
+   "page": 124
+  },
+  {
+   "id": "A481",
+   "name": "Process Disp Lo",
+   "range": "0.00 to 99.99",
+   "default": "0.00",
+   "desc": "Value shown in b010 at minimum frequency.",
+   "page": 125
+  },
+  {
+   "id": "A482",
+   "name": "Process Disp Hi",
+   "range": "0.00 to 99.99",
+   "default": "0.00",
+   "desc": "Value shown in b010 at maximum frequency.",
+   "page": 125
+  },
+  {
+   "id": "A484",
+   "name": "Current Limit 1",
+   "range": "0.0 to Drive Rated Amps x 1.5 (Normal Duty) or x 1.8 (Heavy Duty)",
+   "default": "Drive Rated Amps x 1.1 (Normal Duty); x 1.5 (Heavy Duty)",
+   "desc": "Maximum output current before the drive reduces speed/torque. Lower it to protect the load; too low causes stall (F006).",
+   "page": 125
+  },
+  {
+   "id": "A485",
+   "name": "Current Limit 2",
+   "range": "0.0 to Drive Rated Amps x 1.5 (Normal Duty) or x 1.8 (Heavy Duty)",
+   "default": "Drive Rated Amps x 1.1",
+   "desc": "Second current limit, activated by a digital input (525 only).",
+   "page": 125
+  },
+  {
+   "id": "A486",
+   "name": "Shear Pin1 Level",
+   "range": "0.0 to (Drive Rated Amps x 2)",
+   "default": "0.0 A (Disabled)",
+   "desc": "Current level that triggers shear-pin fault 1 if sustained (525 only).",
+   "page": 125
+  },
+  {
+   "id": "A487",
+   "name": "Shear Pin 1 Time",
+   "range": "0.00 to 30.00 s",
+   "default": "0.00 s",
+   "desc": "How long current must exceed A486 before F063 (525 only).",
+   "page": 125
+  },
+  {
+   "id": "A488",
+   "name": "Shear Pin2 Level",
+   "range": "0.0 to (Drive Rated Amps x 2)",
+   "default": "0.0 A (Disabled)",
+   "desc": "Current level for shear-pin fault 2 (525 only).",
+   "page": 125
+  },
+  {
+   "id": "A489",
+   "name": "Shear Pin 2 Time",
+   "range": "0.00 to 30.00 s",
+   "default": "0.00 s",
+   "desc": "How long current must exceed A488 before F063 (525 only).",
+   "page": 125
+  },
+  {
+   "id": "A490",
+   "name": "Load Loss Level",
+   "range": "0.0 to Drive Rated Amps",
+   "default": "0.0 A",
+   "desc": "Current below which the load is considered lost (F015); 0 leaves it off (525 only).",
+   "page": 126
+  },
+  {
+   "id": "A491",
+   "name": "Load Loss Time",
+   "range": "0 to 9999 s",
+   "default": "0 s",
+   "desc": "How long current must stay under A490 before F015 (525 only).",
+   "page": 126
+  },
+  {
+   "id": "A492",
+   "name": "Stall Fault Time",
+   "range": "0 60 s, 1 120 s, 2 240 s, 3 360 s, 4 480 s, 5 Flt Disabled",
+   "default": "0 (60 Seconds)",
+   "desc": "How long the drive may stay stalled before F006 is raised.",
+   "page": 126
+  },
+  {
+   "id": "A493",
+   "name": "Motor OL Select",
+   "range": "0 No Derate, 1 Min Derate, 2 Max Derate",
+   "default": "0 (No Derate)",
+   "desc": "Whether the Class 10 overload curve is derated at low speed, for self-cooled motors.",
+   "page": 126
+  },
+  {
+   "id": "A494",
+   "name": "Motor OL Ret",
+   "range": "0 Reset, 1 Save",
+   "default": "0 (Reset)",
+   "desc": "Whether the motor overload counter is kept through power-off or cleared at power-up.",
+   "page": 126
+  },
+  {
+   "id": "A495",
+   "name": "Drive OL Mode",
+   "range": "0 Disabled, 1 Reduce CLim, 2 Reduce PWM, 3 Both-PWM 1st",
+   "default": "3 (Both-PWM 1st)",
+   "desc": "How the drive protects itself from overload before faulting (F064): lower the current limit, lower the carrier frequency, or both.",
+   "page": 127
+  },
+  {
+   "id": "A496",
+   "name": "IR Voltage Drop",
+   "range": "0.0 to 600.0 VAC",
+   "default": "Based on Drive Rating",
+   "desc": "Voltage dropped across the motor stator resistance; set by autotune.",
+   "page": 127
+  },
+  {
+   "id": "A497",
+   "name": "Flux Current Ref",
+   "range": "0.00 to (Drive Rated Amps x 1.4)",
+   "default": "Based on Drive Rating",
+   "desc": "Current needed for full motor flux (roughly the no-load current); set by rotate tune.",
+   "page": 127
+  },
+  {
+   "id": "A530",
+   "name": "Boost Select",
+   "range": "0 Custom V/Hz, 1 30.0 VT, 2 35.0 VT, 3 40.0 VT, 4 45.0 VT, 5 0.0 no IR, 6 2.5 CT, 7 2.5 CT, 8 5.0 CT, 9 7.5 CT, 10 10.0 CT, 11 12.5 CT, 12 15.0 CT, 13 17.5 CT, 14 20.0 CT",
+   "default": "6 (2.5 CT) for 400/600V 5 HP and above; 7 (2.5 CT) for 200V 5 HP and above; 8 (5.0 CT) for drives below 5 HP",
+   "desc": "Chooses the V/Hz curve and low-speed voltage boost (VT for fans/pumps, CT for constant-torque loads). Used in V/Hz control. Too much boost causes overcurrent or overload faults; too little gives poor starting.",
+   "page": 131
+  },
+  {
+   "id": "A531",
+   "name": "Start Boost",
+   "range": "0.0 to 25.0%",
+   "default": "2.5%",
+   "desc": "Low-frequency voltage boost when A530 is Custom V/Hz.",
+   "page": 132
+  },
+  {
+   "id": "A532",
+   "name": "Break Voltage",
+   "range": "0.0 to 100.0%",
+   "default": "25.0%",
+   "desc": "Voltage at the break frequency on a custom V/Hz curve.",
+   "page": 132
+  },
+  {
+   "id": "A533",
+   "name": "Break Frequency",
+   "range": "0.0 to 500.0 Hz",
+   "default": "15.0 Hz",
+   "desc": "Frequency at which the break voltage is applied on a custom curve.",
+   "page": 132
+  },
+  {
+   "id": "A534",
+   "name": "Maximum Voltage",
+   "range": "10 to 255V (230V drives); 20 to 510V (460V); 25 to 637.5V (600V)",
+   "default": "Drive Rated Volts",
+   "desc": "Highest voltage the drive will output.",
+   "page": 132
+  },
+  {
+   "id": "A535",
+   "name": "Motor Fdbk Type",
+   "range": "0 None, 1 Pulse Train, 2 Single Chan, 3 Single Check, 4 Quadrature, 5 Quad Check",
+   "default": "0 (None)",
+   "desc": "Type of speed feedback used. Quadrature types need the optional encoder card (525).",
+   "page": 133
+  },
+  {
+   "id": "A536",
+   "name": "Encoder PPR",
+   "range": "1 to 20000 PPR",
+   "default": "1024 PPR",
+   "desc": "Encoder pulses per revolution (525 only).",
+   "page": 133
+  },
+  {
+   "id": "A537",
+   "name": "Pulse In Scale",
+   "range": "0 to 20000",
+   "default": "64",
+   "desc": "Scaling for pulse-train input: input Hz divided by this value gives output Hz.",
+   "page": 133
+  },
+  {
+   "id": "A538",
+   "name": "Ki Speed Loop",
+   "range": "0.0 to 400.0",
+   "default": "2.0",
+   "desc": "Integral gain of the closed-loop speed regulator.",
+   "page": 133
+  },
+  {
+   "id": "A539",
+   "name": "Kp Speed Loop",
+   "range": "0.0 to 200.0",
+   "default": "0.5",
+   "desc": "Proportional gain of the closed-loop speed regulator.",
+   "page": 133
+  },
+  {
+   "id": "A540",
+   "name": "Var PWM Disable",
+   "range": "0 Enabled, 1 Disabled",
+   "default": "0 (Enabled)",
+   "desc": "Allows or blocks automatic lowering of carrier frequency at low speed.",
+   "page": 134
+  },
+  {
+   "id": "A541",
+   "name": "Auto Rstrt Tries",
+   "range": "0 to 9",
+   "default": "0",
+   "desc": "How many times the drive retries after a resettable fault. Leave 0 unless automatic restart is safe for the machine.",
+   "page": 134
+  },
+  {
+   "id": "A542",
+   "name": "Auto Rstrt Delay",
+   "range": "0.0 to 120.0 s",
+   "default": "1.0 s",
+   "desc": "Wait between automatic restart attempts. Setting 0 with tries above 0 clears overvoltage/undervoltage/heatsink faults without restarting.",
+   "page": 134
+  },
+  {
+   "id": "A543",
+   "name": "Start At PowerUp",
+   "range": "0 Disabled, 1 Enabled",
+   "default": "0 (Disabled)",
+   "desc": "Allows the drive to start on power-up if a run signal is already present. Hazardous if unintended.",
+   "page": 134
+  },
+  {
+   "id": "A544",
+   "name": "Reverse Disable",
+   "range": "0 Rev Enabled, 1 Rev Disabled",
+   "default": "0 (Rev Enabled)",
+   "desc": "Blocks reverse rotation when set to 1. Check this if the drive refuses to run in reverse.",
+   "page": 134
+  },
+  {
+   "id": "A545",
+   "name": "Flying Start En",
+   "range": "0 Disabled, 1 Enabled",
+   "default": "0 (Disabled)",
+   "desc": "Lets the drive catch a motor that is already spinning and ramp from its actual speed.",
+   "page": 134
+  },
+  {
+   "id": "A546",
+   "name": "FlyStrt CurLimit",
+   "range": "30 to 200%",
+   "default": "65%",
+   "desc": "Current level used to decide the drive has locked on to the spinning motor.",
+   "page": 135
+  },
+  {
+   "id": "A547",
+   "name": "Compensation",
+   "range": "0 Disabled, 1 Electrical, 2 Mechanical, 3 Both",
+   "default": "1 (Electrical)",
+   "desc": "Corrections for motor instability or resonance; try it when the motor hunts.",
+   "page": 135
+  },
+  {
+   "id": "A548",
+   "name": "Power Loss Mode",
+   "range": "0 Coast, 1 Decel",
+   "default": "0 (Coast)",
+   "desc": "Reaction to loss of input power: coast with a fault, or decelerate to hold up the DC bus.",
+   "page": 135
+  },
+  {
+   "id": "A549",
+   "name": "Half Bus Enable",
+   "range": "0 Disabled, 1 Enabled",
+   "default": "0 (Disabled)",
+   "desc": "Ride-through for short supply dips at half voltage; needs enough line impedance.",
+   "page": 135
+  },
+  {
+   "id": "A550",
+   "name": "Bus Reg Enable",
+   "range": "0 Disabled, 1 Enabled",
+   "default": "1 (Enabled)",
+   "desc": "Bus regulator that stretches decel time to avoid overvoltage. Disable when using a brake resistor or PointStop.",
+   "page": 135
+  },
+  {
+   "id": "A551",
+   "name": "Fault Clear",
+   "range": "0 Ready/Idle, 1 Reset Fault, 2 Clear Buffer",
+   "default": "0 (Ready/Idle)",
+   "desc": "Clears the active fault, and with 2 also empties the fault history.",
+   "page": 135
+  },
+  {
+   "id": "A552",
+   "name": "Program Lock",
+   "range": "0000 to 9999",
+   "default": "0000",
+   "desc": "Four-digit code protecting parameters from changes.",
+   "page": 135
+  },
+  {
+   "id": "A553",
+   "name": "Program Lock Mod",
+   "range": "0 Full Lock, 1 Keypad Lock, 2 Custom Only, 3 KeyPd Custom",
+   "default": "0 (Full Lock)",
+   "desc": "How the lock in A552 behaves (all parameters, keypad only, or custom group access).",
+   "page": 136
+  },
+  {
+   "id": "A554",
+   "name": "Drv Ambient Sel",
+   "range": "0 Normal, 1 55C, 2 60C, 3 65C +Fan Kit, 4 70C +Fan Kit",
+   "default": "0 (Normal)",
+   "desc": "Declares the expected ambient above 50 C so the drive derates properly.",
+   "page": 136
+  },
+  {
+   "id": "A555",
+   "name": "Reset Meters",
+   "range": "0 Ready/Idle, 1 Reset Meters, 2 Reset Time",
+   "default": "0 (Ready/Idle)",
+   "desc": "Clears energy meters or run-time counters.",
+   "page": 136
+  },
+  {
+   "id": "A557",
+   "name": "Out Phas Loss En",
+   "range": "0 Disable, 1 Enable",
+   "default": "0 (Disable)",
+   "desc": "Turns on output phase-loss detection (F021).",
+   "page": 136
+  },
+  {
+   "id": "A572",
+   "name": "Speed Ratio",
+   "range": "0.01 to 99.99",
+   "default": "1.00",
+   "desc": "Scales the speed command.",
+   "page": 140
+  },
+  {
+   "id": "A573",
+   "name": "Mtr Options Cfg",
+   "range": "00 to 11",
+   "default": "11",
+   "desc": "Enables jerk limiting and zero-speed slip suppression options.",
+   "page": 140
+  },
+  {
+   "id": "A574",
+   "name": "RdyBit Mode Cfg",
+   "range": "0 Standard, 1 Enhanced",
+   "default": "0 (Standard)",
+   "desc": "Selects which stop conditions drop the network Ready bit. Reset or power cycle needed.",
+   "page": 140
+  },
+  {
+   "id": "A575",
+   "name": "Flux Braking En",
+   "range": "0 Disable, 1 Enable",
+   "default": "0 (Disable)",
+   "desc": "Enables flux braking for faster stops without a resistor.",
+   "page": 140
+  },
+  {
+   "id": "F604",
+   "name": "Fault 4 Code",
+   "range": "F0 to F127",
+   "default": "Read only",
+   "desc": "Fault history slot 4 (F604 to F610 hold slots 4 to 10).",
+   "page": 144
+  },
+  {
+   "id": "F611",
+   "name": "Fault 1 Time-hr",
+   "range": "0 to 32767 hr",
+   "default": "Read only",
+   "desc": "Run-time hour count when fault 1 occurred (525 only; slots 2-10 follow).",
+   "page": 144
+  },
+  {
+   "id": "F631",
+   "name": "Fault 1 Freq",
+   "range": "0.00 to 500.00 Hz",
+   "default": "Read only",
+   "desc": "Output frequency when fault 1 occurred (525 only).",
+   "page": 145
+  },
+  {
+   "id": "F641",
+   "name": "Fault 1 Current",
+   "range": "0.00 to (Drive Rated Amps x 2)",
+   "default": "Read only",
+   "desc": "Output current when fault 1 occurred. Useful for telling overload from short.",
+   "page": 145
+  },
+  {
+   "id": "F651",
+   "name": "Fault 1 BusVolts",
+   "range": "0 to 1200V DC",
+   "default": "Read only",
+   "desc": "DC bus voltage when fault 1 occurred.",
+   "page": 145
+  },
+  {
+   "id": "F661",
+   "name": "Status @ Fault 1",
+   "range": "0 to 0x1F",
+   "default": "Read only",
+   "desc": "Drive status bits at the moment of fault 1 (525 only).",
+   "page": 146
+  },
+  {
+   "id": "F681",
+   "name": "Comm Sts - DSI",
+   "range": "0000 to 1911",
+   "default": "Read only",
+   "desc": "Status of the RS-485 port: Rx, Tx, connection type and error digits.",
+   "page": 146
+  },
+  {
+   "id": "F682",
+   "name": "Comm Sts - Opt",
+   "range": "0000 to 1911",
+   "default": "Read only",
+   "desc": "Status of the internal communication option.",
+   "page": 146
+  },
+  {
+   "id": "F683",
+   "name": "Com Sts-Emb Enet",
+   "range": "0000 to 1911",
+   "default": "Read only",
+   "desc": "Status of the embedded EtherNet/IP port (525 only).",
+   "page": 147
+  },
+  {
+   "id": "F684",
+   "name": "EN Addr Src",
+   "range": "1 Parameters, 2 BOOTP",
+   "default": "Read only",
+   "desc": "Shows whether the Ethernet address came from parameters or BOOTP.",
+   "page": 147
+  },
+  {
+   "id": "F685",
+   "name": "EN Rate Act",
+   "range": "0 No Link, 1 10Mbps Full, 2 10Mbps Half, 3 100Mbps Full, 4 100Mbps Half, 5 Dup IP Addr, 6 Disabled",
+   "default": "Read only",
+   "desc": "Actual Ethernet link state; No Link means a cable/switch problem and Dup IP Addr flags an address conflict.",
+   "page": 147
+  },
+  {
+   "id": "F687",
+   "name": "HW Addr 1",
+   "range": "0 to 255",
+   "default": "Read only",
+   "desc": "First byte of the MAC address (F687-F692 hold all six bytes).",
+   "page": 148
+  },
+  {
+   "id": "F693",
+   "name": "EN IP Addr Act 1",
+   "range": "0 to 255",
+   "default": "Read only",
+   "desc": "First byte of the IP address in use (F693-F696 hold the four bytes; 0 if none).",
+   "page": 148
+  },
+  {
+   "id": "F697",
+   "name": "EN Subnet Act 1",
+   "range": "0 to 255",
+   "default": "Read only",
+   "desc": "First byte of the subnet mask in use (F697-F700).",
+   "page": 148
+  },
+  {
+   "id": "F701",
+   "name": "EN Gateway Act 1",
+   "range": "0 to 255",
+   "default": "Read only",
+   "desc": "First byte of the gateway in use (F701-F704).",
+   "page": 149
+  },
+  {
+   "id": "F725",
+   "name": "EN Rx Overruns",
+   "range": "0 to 65535",
+   "default": "Read only",
+   "desc": "Count of received-packet overruns on the Ethernet port; rising values suggest network trouble.",
+   "page": 150
+  },
+  {
+   "id": "F727",
+   "name": "EN Rx Errors",
+   "range": "0 to 65535",
+   "default": "Read only",
+   "desc": "Count of Ethernet receive errors.",
+   "page": 150
+  },
+  {
+   "id": "F729",
+   "name": "EN Tx Errors",
+   "range": "0 to 65535",
+   "default": "Read only",
+   "desc": "Count of Ethernet transmit errors.",
+   "page": 150
+  },
+  {
+   "id": "F730",
+   "name": "EN Missed IO Pkt",
+   "range": "0 to 65535",
+   "default": "Read only",
+   "desc": "Count of missed I/O packets, a sign of an unreliable EtherNet/IP connection.",
+   "page": 151
+  },
+  {
+   "id": "F731",
+   "name": "DSI Errors",
+   "range": "0 to 65535",
+   "default": "Read only",
+   "desc": "Count of RS-485 (DSI/Modbus) communication errors.",
+   "page": 151
+  }
+ ]
+}

@@ -4,3 +4,5 @@
 *.jks
 *.apk
 site/servmod/
+manuals_src/*.pdf
+*.pdf

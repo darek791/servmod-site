@@ -1,0 +1,2090 @@
+{
+ "id": "wj200",
+ "maker": "Hitachi",
+ "title": "Hitachi WJ200 series",
+ "models": "WJ200",
+ "doc": {
+  "name": "WJ200 Series Quick Reference Guide",
+  "number": "NT3381AX",
+  "date": "April 2016",
+  "url": "https://hitachi.asia/ice/products/inverters/WJ200/index.html"
+ },
+ "faults": [
+  {
+   "code": "E01",
+   "name": "Over-current at constant speed",
+   "meaning": "Output current went above the safe limit while the drive was running at steady speed (short circuit, locked rotor or heavy load). Output is switched off.",
+   "checks": [
+    "Look for a shorted motor lead or phase-to-phase / phase-to-earth fault: disconnect the motor and megger the cable and motor windings",
+    "Check that the motor shaft turns freely and the load is not jammed or overloaded",
+    "On a dual-voltage motor, confirm the star/delta link arrangement matches the supply voltage"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E02",
+   "name": "Over-current during deceleration",
+   "meaning": "Excess output current was detected while slowing down; output is cut. The manual gives the same cause hints as E01.",
+   "checks": [
+    "Look for a shorted motor lead or phase-to-phase / phase-to-earth fault: disconnect the motor and megger the cable and motor windings",
+    "Check that the motor shaft turns freely and the load is not jammed or overloaded",
+    "On a dual-voltage motor, confirm the star/delta link arrangement matches the supply voltage",
+    "Lengthen the deceleration time (F003 / A093) if the load inertia is high"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E03",
+   "name": "Over-current during acceleration",
+   "meaning": "Excess output current was detected while speeding up; output is cut. Same cause hints as E01.",
+   "checks": [
+    "Look for a shorted motor lead or phase-to-phase / phase-to-earth fault: disconnect the motor and megger the cable and motor windings",
+    "Check that the motor shaft turns freely and the load is not jammed or overloaded",
+    "On a dual-voltage motor, confirm the star/delta link arrangement matches the supply voltage",
+    "Lengthen the acceleration time (F002 / A092) or review torque boost (A042) and V/f settings"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E04",
+   "name": "Over-current in other conditions",
+   "meaning": "Over-current occurred at a time that is not constant speed, acceleration or deceleration. Same cause hints as E01.",
+   "checks": [
+    "Look for a shorted motor lead or phase-to-phase / phase-to-earth fault: disconnect the motor and megger the cable and motor windings",
+    "Check that the motor shaft turns freely and the load is not jammed or overloaded",
+    "On a dual-voltage motor, confirm the star/delta link arrangement matches the supply voltage"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E05",
+   "name": "Motor overload (electronic thermal)",
+   "meaning": "The drive's electronic thermal model decided the motor was overloaded and tripped the output.",
+   "checks": [
+    "Check mechanical load and look for binding or a blocked fan/process",
+    "Verify the thermal level b012 matches the motor nameplate current and the characteristic b013 suits the motor",
+    "Check motor capacity H003 and pole count H004 are entered correctly"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E06",
+   "name": "Braking resistor overload",
+   "meaning": "The braking-chopper duty ratio went above the limit set in b090, so the drive shut off its output.",
+   "checks": [
+    "Check b090 against the resistor's rating",
+    "Reduce regeneration: lengthen the deceleration time or use a larger / additional braking resistor",
+    "Check b097 resistor value setting is correct"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E07",
+   "name": "Over-voltage",
+   "meaning": "The DC bus voltage rose above its limit, for example from regenerative energy from the motor or a high supply voltage.",
+   "checks": [
+    "Lengthen the deceleration time or enable deceleration over-voltage suppression (b130)",
+    "Fit or check a braking resistor / unit for overhauling loads",
+    "Measure the incoming supply voltage for surges or an over-high level"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E08",
+   "name": "EEPROM error",
+   "meaning": "The built-in memory had a problem, typically due to noise or high temperature, and the output was shut off.",
+   "checks": [
+    "Cycle power; resets from RS terminal or STOP/RESET are not accepted for this trip",
+    "If it repeats, initialise the drive (b084 / b180) and re-enter settings",
+    "Review earthing, cable routing and cabinet temperature for noise/heat"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E09",
+   "name": "Under-voltage",
+   "meaning": "The internal DC bus voltage dropped under its threshold, which can cause control faults, motor heating or weak torque. The drive shuts off its output.",
+   "checks": [
+    "Measure the supply voltage on all phases and look for dips or a missing phase",
+    "Check input contactor, fuses, terminals and any input reactor",
+    "See restart-after-undervoltage settings b001 to b005"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E10",
+   "name": "Current detection error",
+   "meaning": "A fault in the drive's internal current sensing circuit was detected and the output was shut off.",
+   "checks": [
+    "Cycle power and retry",
+    "Check for heavy noise sources or earthing problems",
+    "If it persists the drive likely needs repair"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E11",
+   "name": "CPU error",
+   "meaning": "The drive's processor malfunctioned and the output was switched off.",
+   "checks": [
+    "Cycle power and retry",
+    "Check earthing and noise suppression",
+    "If it repeats, have the drive repaired or replaced"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E12",
+   "name": "External trip",
+   "meaning": "A digital input assigned to the EXT function (option 12) was activated, so the drive latched a trip.",
+   "checks": [
+    "Find which input is set to EXT in C001-C007 and check what is wired to it",
+    "Check the external device or interlock contact that triggered it",
+    "Check input logic (C011-C017) in case of an NO/NC mismatch"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E13",
+   "name": "Unattended start protection (USP)",
+   "meaning": "Power was applied while a run command was already active and USP was enabled, so the drive refused to start.",
+   "checks": [
+    "Remove the run command (FW/RV) and then reset, or press reset",
+    "Wait at least 3 seconds after power-up before giving a run command",
+    "Disable the USP input if automatic start on power-up is wanted"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E14",
+   "name": "Ground fault",
+   "meaning": "A ground fault between the drive output and the motor was found during the power-up test. This protects the drive, not people.",
+   "checks": [
+    "Disconnect the motor and insulation-test the motor and cable to earth",
+    "Check for moisture or damaged cable insulation",
+    "Reset is not accepted; cycle power, and initialise if the fault persists"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E15",
+   "name": "Input over-voltage",
+   "meaning": "The drive checks incoming voltage after 100 seconds in stop mode and tripped because the level was too high.",
+   "checks": [
+    "Measure the supply voltage and compare with the drive's rating",
+    "Check for surges from other equipment or power factor correction caps",
+    "After clearing, the drive can run again"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E19",
+   "name": "Inverter thermal sensor error",
+   "meaning": "The thermal sensor inside the power module is not connected / not being read.",
+   "checks": [
+    "Cycle power and retry",
+    "If persistent the drive hardware needs repair"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E21",
+   "name": "Inverter over-temperature",
+   "meaning": "The temperature of the power devices went above the allowed level, so the drive tripped.",
+   "checks": [
+    "Check the cooling fan runs and the heatsink and vents are clean",
+    "Check cabinet and ambient temperature (b075) and clearances",
+    "Reduce load or carrier frequency (b083); check automatic carrier reduction b089"
+   ],
+   "page": 98
+  },
+  {
+   "code": "E22",
+   "name": "CPU communication error",
+   "meaning": "Communication between the drive's two processors failed.",
+   "checks": [
+    "Cycle power and retry",
+    "Check earthing and noise",
+    "Repair or replace if it recurs"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E25",
+   "name": "Main circuit error",
+   "meaning": "The drive could not confirm that its main power supply circuit was established, because of noise or a damaged main-circuit part.",
+   "checks": [
+    "Cycle power; check the main power connection and fuses",
+    "Check for noise sources and earthing",
+    "Repair if it persists"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E30",
+   "name": "Driver error",
+   "meaning": "A fault in the safety protection circuit between the CPU and the output driver was detected, possibly from heavy electrical noise. The output stage was turned off.",
+   "checks": [
+    "Reset by key/terminal is not accepted; cycle power",
+    "Improve earthing, shielding and cable separation to reduce noise",
+    "Initialise the drive if it recurs, then repair if still present"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E35",
+   "name": "Thermistor trip",
+   "meaning": "The motor thermistor connected to terminals 5 and L indicated an over-temperature, so the output was turned off.",
+   "checks": [
+    "Check the motor temperature, ventilation and load",
+    "Check the thermistor wiring and the PTC function setting on terminal 5 (C005 = 19)",
+    "Check the thermistor calibration C085"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E36",
+   "name": "Brake error",
+   "meaning": "With brake control enabled (b120 = 01) the drive did not receive the brake confirmation signal within the confirmation wait time b124 after sending brake release.",
+   "checks": [
+    "Check the brake confirmation (BOK) input wiring and the brake itself",
+    "Check b121-b127 timing and release settings",
+    "Check the brake actually lifts"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E37",
+   "name": "Safe stop",
+   "meaning": "The safe-stop (GS) input was triggered when b145 is set to 01.",
+   "checks": [
+    "Check the safety circuit wired to GS1 and GS2 and the emergency stop device",
+    "The STOP/RESET key cannot reset it; cycle power",
+    "Initialise if the same trip returns"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E38",
+   "name": "Low-speed overload",
+   "meaning": "The drive detected an overload while running at very low speed and shut off the output.",
+   "checks": [
+    "Check the load and motor at low speed for binding",
+    "Check the motor cooling at low speed",
+    "Review overload settings (b012, b021-b023)"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E40",
+   "name": "Operator connection error",
+   "meaning": "Communication between the drive and its keypad/operator failed.",
+   "checks": [
+    "Check the operator cable and connector seating",
+    "Check the keypad for damage",
+    "See external operator loss action b165"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E41",
+   "name": "Modbus communication error",
+   "meaning": "A Modbus timeout occurred while the communication error action was set to trip (C076 = 00).",
+   "checks": [
+    "Check the RS-485 wiring, termination and polarity",
+    "Check master polling interval against timeout C077",
+    "Check C071-C075 communication settings and C072 address match the master"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E43",
+   "name": "EzSQ invalid instruction",
+   "meaning": "The stored EzSQ program is corrupt, or the PRG input was turned on when no program was downloaded.",
+   "checks": [
+    "Re-download the EzSQ program",
+    "Check the PRG terminal function and A017 setting if no program is used"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E44",
+   "name": "EzSQ nesting count error",
+   "meaning": "In the EzSQ program, subroutines, if-statements or for-next loops are nested deeper than eight levels.",
+   "checks": [
+    "Simplify the program structure to eight levels or fewer and re-download"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E45",
+   "name": "EzSQ instruction error",
+   "meaning": "The drive met a program instruction it cannot execute.",
+   "checks": [
+    "Review the EzSQ program for unsupported or invalid instructions and re-download"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E50-E59",
+   "name": "EzSQ user trip 0 to 9",
+   "meaning": "User-defined trips raised by the EzSQ program (E50 to E59 correspond to user trip 0 to 9).",
+   "checks": [
+    "Check the EzSQ program source to see which condition raises the trip"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E60-E69",
+   "name": "Option board error",
+   "meaning": "The drive detected an error in the option board fitted in the option slot.",
+   "checks": [
+    "Reseat the option board and check it is compatible",
+    "See the option board's instruction manual for the specific code",
+    "Check P001 for the action on option errors"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E80",
+   "name": "Encoder disconnection",
+   "meaning": "An encoder connection error was found: broken wiring, failed encoder, or an encoder that does not support line driver output.",
+   "checks": [
+    "Check encoder wiring and shield",
+    "Check the encoder type and supply",
+    "Check P003, P004 and P011 settings"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E81",
+   "name": "Excessive speed",
+   "meaning": "Motor speed reached or exceeded the maximum frequency (A004) multiplied by the over-speed detection level (P026).",
+   "checks": [
+    "Check encoder feedback and settings",
+    "Review A004 and P026",
+    "Check for an overhauling load"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E83",
+   "name": "Positioning range error",
+   "meaning": "The current position went outside the allowed position range set by P072 and P073.",
+   "checks": [
+    "Review P072/P073 limits and the positioning set-up"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E98",
+   "name": "Outside failure (safe stop)",
+   "meaning": "Raised from the safe stop signal when b145 = 02 (outside failure).",
+   "checks": [
+    "Check GS1, GS2 and EDM wiring and the external safety device",
+    "Reset by terminal/key is not accepted; cycle power"
+   ],
+   "page": 99
+  },
+  {
+   "code": "E99",
+   "name": "Inside failure (safe stop)",
+   "meaning": "Raised from the safe stop signal when b145 = 02, 03 or 05 (inside failure).",
+   "checks": [
+    "Check GS1, GS2 and EDM wiring and the external safety device",
+    "Reset by terminal/key is not accepted; cycle power"
+   ],
+   "page": 99
+  }
+ ],
+ "params": [
+  {
+   "id": "d001",
+   "name": "Output frequency monitor",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "-",
+   "desc": "Live frequency the drive is sending to the motor. Handy for checking the drive is following the command.",
+   "page": 53
+  },
+  {
+   "id": "d002",
+   "name": "Output current monitor",
+   "range": "0.0 to 655.3 A",
+   "default": "-",
+   "desc": "Filtered motor current; compare with nameplate to spot overload or no-load conditions.",
+   "page": 53
+  },
+  {
+   "id": "d003",
+   "name": "Rotation direction monitor",
+   "range": "F / o / r",
+   "default": "-",
+   "desc": "Shows forward, stop or reverse.",
+   "page": 53
+  },
+  {
+   "id": "d004",
+   "name": "PID feedback (PV) monitor",
+   "range": "0.00 to 10000",
+   "default": "-",
+   "desc": "Scaled process variable used by the PID loop (scaled by A075).",
+   "page": 53
+  },
+  {
+   "id": "d005",
+   "name": "Intelligent input terminal status",
+   "range": "bit display",
+   "default": "-",
+   "desc": "Shows which of the programmable input terminals are currently ON; useful for checking wiring.",
+   "page": 53
+  },
+  {
+   "id": "d006",
+   "name": "Intelligent output terminal status",
+   "range": "bit display",
+   "default": "-",
+   "desc": "Shows which programmable output terminals and relay are ON.",
+   "page": 53
+  },
+  {
+   "id": "d013",
+   "name": "Output voltage monitor",
+   "range": "0.0 to 600.0 V",
+   "default": "-",
+   "desc": "Voltage being applied to the motor.",
+   "page": 53
+  },
+  {
+   "id": "d016",
+   "name": "Elapsed RUN time monitor",
+   "range": "0 to 99,900 h",
+   "default": "-",
+   "desc": "Total hours the drive has been in run mode.",
+   "page": 53
+  },
+  {
+   "id": "d017",
+   "name": "Elapsed power-on time monitor",
+   "range": "0 to 99,900 h",
+   "default": "-",
+   "desc": "Total hours the drive has been powered.",
+   "page": 53
+  },
+  {
+   "id": "d018",
+   "name": "Heat sink temperature monitor",
+   "range": "-20 to 150 C",
+   "default": "-",
+   "desc": "Cooling fin temperature; check this when diagnosing E21 over-temperature trips.",
+   "page": 53
+  },
+  {
+   "id": "d022",
+   "name": "Life check monitor",
+   "range": "bit display",
+   "default": "-",
+   "desc": "Indicates whether the electrolytic capacitors or the cooling fan have reached their life limit.",
+   "page": 53
+  },
+  {
+   "id": "d050",
+   "name": "Dual monitor",
+   "range": "per b160 / b161",
+   "default": "-",
+   "desc": "Shows two chosen d-monitors, switched with the up/down keys.",
+   "page": 54
+  },
+  {
+   "id": "d060",
+   "name": "Inverter mode monitor",
+   "range": "I-C / I-V / H-I / P",
+   "default": "-",
+   "desc": "Shows the active drive mode: induction CT, induction VT, high-frequency, or permanent magnet.",
+   "page": 54
+  },
+  {
+   "id": "d062",
+   "name": "Frequency source monitor",
+   "range": "code",
+   "default": "-",
+   "desc": "Shows where the frequency reference is currently coming from (operator, multi-speed, Modbus, analog input, etc.). Available from version 3.0.",
+   "page": 54
+  },
+  {
+   "id": "d063",
+   "name": "Run command source monitor",
+   "range": "1 to 4",
+   "default": "-",
+   "desc": "Shows the active run command source: terminal, operator, Modbus or option. Available from version 3.0.",
+   "page": 54
+  },
+  {
+   "id": "d080",
+   "name": "Trip counter",
+   "range": "0 to 65530",
+   "default": "-",
+   "desc": "Number of trips recorded since the history was last cleared.",
+   "page": 54
+  },
+  {
+   "id": "d081",
+   "name": "Trip monitor 1 (latest)",
+   "range": "-",
+   "default": "-",
+   "desc": "Detail of the most recent trip: code, frequency, current, DC bus voltage and run/power-on hours at that moment. d082-d086 hold the five earlier trips.",
+   "page": 54
+  },
+  {
+   "id": "d090",
+   "name": "Warning monitor",
+   "range": "-",
+   "default": "-",
+   "desc": "Displays the active warning code.",
+   "page": 54
+  },
+  {
+   "id": "d102",
+   "name": "DC bus voltage monitor",
+   "range": "0.0 to 999.9 V",
+   "default": "-",
+   "desc": "Internal DC bus voltage; useful for over-/under-voltage diagnosis.",
+   "page": 54
+  },
+  {
+   "id": "d103",
+   "name": "BRD load ratio monitor",
+   "range": "0.0 to 100.0 %",
+   "default": "-",
+   "desc": "How heavily the built-in brake chopper is being used.",
+   "page": 54
+  },
+  {
+   "id": "d104",
+   "name": "Electronic thermal monitor",
+   "range": "0.0 to 100.0 %",
+   "default": "-",
+   "desc": "Accumulated motor thermal load; an E05 trip is expected as this approaches full. Available from version 3.0.",
+   "page": 54
+  },
+  {
+   "id": "F001",
+   "name": "Output frequency setting",
+   "range": "0.0 / start freq. to A004 Hz",
+   "default": "0.00",
+   "desc": "Target frequency used when the frequency source is set to the keypad value (A001 = 02).",
+   "page": 55
+  },
+  {
+   "id": "F002",
+   "name": "Acceleration time (1)",
+   "range": "0.00 to 3600 s",
+   "default": "10.00",
+   "desc": "Ramp-up time of the standard (first) acceleration profile.",
+   "page": 55
+  },
+  {
+   "id": "F202",
+   "name": "Acceleration time (1), 2nd motor",
+   "range": "0.00 to 3600 s",
+   "default": "10.00",
+   "desc": "Same as F002 but applied when the second motor set is selected.",
+   "page": 55
+  },
+  {
+   "id": "F003",
+   "name": "Deceleration time (1)",
+   "range": "0.00 to 3600 s",
+   "default": "10.00",
+   "desc": "Ramp-down time of the standard (first) deceleration profile. Lengthen it to cure over-voltage trips.",
+   "page": 55
+  },
+  {
+   "id": "F203",
+   "name": "Deceleration time (1), 2nd motor",
+   "range": "0.00 to 3600 s",
+   "default": "10.00",
+   "desc": "Second-motor version of F003.",
+   "page": 55
+  },
+  {
+   "id": "F004",
+   "name": "Keypad RUN key direction",
+   "range": "00 Forward / 01 Reverse",
+   "default": "00",
+   "desc": "Chooses which direction the RUN key on the keypad commands.",
+   "page": 55
+  },
+  {
+   "id": "A001",
+   "name": "Frequency source",
+   "range": "00 POT, 01 Terminal, 02 F001, 03 Modbus, 04 Option, 06 Pulse train, 07 EzSQ, 10 Calculate",
+   "default": "01",
+   "desc": "Selects where the speed reference comes from. If the drive ignores the keypad or analog input, check this first.",
+   "page": 56
+  },
+  {
+   "id": "A201",
+   "name": "Frequency source, 2nd motor",
+   "range": "as A001",
+   "default": "01",
+   "desc": "Second-motor version of A001.",
+   "page": 56
+  },
+  {
+   "id": "A002",
+   "name": "Run command source",
+   "range": "01 Terminal, 02 Keypad RUN, 03 Modbus, 04 Option",
+   "default": "01",
+   "desc": "Selects where start/stop commands come from. A drive that will not start from the keypad usually has this set to terminal.",
+   "page": 56
+  },
+  {
+   "id": "A202",
+   "name": "Run command source, 2nd motor",
+   "range": "as A002",
+   "default": "01",
+   "desc": "Second-motor version of A002.",
+   "page": 56
+  },
+  {
+   "id": "A003",
+   "name": "Base frequency",
+   "range": "30 Hz to A004",
+   "default": "50.0",
+   "desc": "Frequency at which the output reaches full voltage; set to match the motor nameplate.",
+   "page": 56
+  },
+  {
+   "id": "A203",
+   "name": "Base frequency, 2nd motor",
+   "range": "30 Hz to A204",
+   "default": "50.0",
+   "desc": "Second-motor version of A003.",
+   "page": 56
+  },
+  {
+   "id": "A004",
+   "name": "Maximum frequency",
+   "range": "base freq. to 400 (580) Hz",
+   "default": "50.0",
+   "desc": "Upper limit of the output frequency for the V/f pattern and reference scaling.",
+   "page": 56
+  },
+  {
+   "id": "A204",
+   "name": "Maximum frequency, 2nd motor",
+   "range": "2nd base freq. to 400 (580) Hz",
+   "default": "50.0",
+   "desc": "Second-motor version of A004.",
+   "page": 56
+  },
+  {
+   "id": "A005",
+   "name": "[AT] selection",
+   "range": "00, 02, 03",
+   "default": "00",
+   "desc": "Defines which analog inputs the AT terminal switches between (O/OI, O/POT or OI/POT).",
+   "page": 56
+  },
+  {
+   "id": "A011",
+   "name": "[O] input start frequency",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Frequency corresponding to the bottom of the 0-10 V analog input range.",
+   "page": 56
+  },
+  {
+   "id": "A012",
+   "name": "[O] input end frequency",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Frequency corresponding to the top of the 0-10 V input range.",
+   "page": 56
+  },
+  {
+   "id": "A013",
+   "name": "[O] input start voltage",
+   "range": "0. to 100. %",
+   "default": "0.",
+   "desc": "Percentage of the voltage input at which the active range begins.",
+   "page": 56
+  },
+  {
+   "id": "A014",
+   "name": "[O] input end voltage",
+   "range": "0. to 100. %",
+   "default": "100.",
+   "desc": "Percentage of the voltage input at which the active range ends.",
+   "page": 57
+  },
+  {
+   "id": "A015",
+   "name": "[O] start frequency enable",
+   "range": "00 Use A011, 01 Use 0 Hz",
+   "default": "01",
+   "desc": "Chooses whether the output at the minimum analog signal is the A011 offset or 0 Hz.",
+   "page": 57
+  },
+  {
+   "id": "A016",
+   "name": "Analog input filter",
+   "range": "1 to 31",
+   "default": "8.",
+   "desc": "Smoothing filter for analog inputs; higher values calm a noisy reference but respond slower.",
+   "page": 57
+  },
+  {
+   "id": "A019",
+   "name": "Multi-speed operation selection",
+   "range": "00 Binary, 01 Bit",
+   "default": "00",
+   "desc": "Chooses binary (16 speeds from 4 terminals) or bit-wise (8 speeds) multi-speed selection.",
+   "page": 57
+  },
+  {
+   "id": "A020",
+   "name": "Multi-speed frequency 0",
+   "range": "0.00 / start freq. to 400 (580) Hz",
+   "default": "6.0",
+   "desc": "First preset speed. Presets 1-15 are A021 to A035.",
+   "page": 57
+  },
+  {
+   "id": "A021-A035",
+   "name": "Multi-speed frequency 1 to 15",
+   "range": "0.00 / start freq. to 400 (580) Hz",
+   "default": "0.0",
+   "desc": "Fifteen further preset speeds selected by the CF terminals.",
+   "page": 57
+  },
+  {
+   "id": "A038",
+   "name": "Jog frequency",
+   "range": "start freq. to 9.99 Hz",
+   "default": "6.00",
+   "desc": "Speed used for jogging.",
+   "page": 57
+  },
+  {
+   "id": "A039",
+   "name": "Jog stop mode",
+   "range": "00-05",
+   "default": "04",
+   "desc": "How the motor stops at the end of a jog (free-run, controlled decel or DC brake, with or without operation during run).",
+   "page": 58
+  },
+  {
+   "id": "A041",
+   "name": "Torque boost select",
+   "range": "00 Manual, 01 Automatic",
+   "default": "00",
+   "desc": "Chooses fixed or automatic low-speed torque boost.",
+   "page": 58
+  },
+  {
+   "id": "A042",
+   "name": "Manual torque boost value",
+   "range": "0.0 to 20.0 %",
+   "default": "1.0",
+   "desc": "Extra voltage at low speed to help starting; too much can cause over-current trips.",
+   "page": 58
+  },
+  {
+   "id": "A043",
+   "name": "Manual torque boost frequency",
+   "range": "0.0 to 50.0 %",
+   "default": "5.0",
+   "desc": "Frequency point (as a percentage of base) at which the manual boost ends.",
+   "page": 58
+  },
+  {
+   "id": "A044",
+   "name": "V/f characteristic curve",
+   "range": "00 Constant torque, 01 Reduced torque, 02 Free V/f, 03 SLV",
+   "default": "00",
+   "desc": "Selects the voltage/frequency pattern or sensorless vector control.",
+   "page": 58
+  },
+  {
+   "id": "A045",
+   "name": "V/f gain",
+   "range": "20. to 100. %",
+   "default": "100.",
+   "desc": "Scales the output voltage of the chosen V/f pattern.",
+   "page": 58
+  },
+  {
+   "id": "A051",
+   "name": "DC braking enable",
+   "range": "00 Off, 01 During stop, 02 Frequency detection",
+   "default": "00",
+   "desc": "Turns on DC injection braking at stop.",
+   "page": 59
+  },
+  {
+   "id": "A052",
+   "name": "DC braking frequency",
+   "range": "B082 to 60 Hz",
+   "default": "0.5",
+   "desc": "Frequency below which DC braking begins.",
+   "page": 59
+  },
+  {
+   "id": "A053",
+   "name": "DC braking wait time",
+   "range": "0.0 to 5.0 s",
+   "default": "0.0",
+   "desc": "Delay between end of deceleration and start of DC braking.",
+   "page": 59
+  },
+  {
+   "id": "A054",
+   "name": "DC braking force (decel)",
+   "range": "0 to 100 %",
+   "default": "50.",
+   "desc": "Strength of the DC braking current.",
+   "page": 59
+  },
+  {
+   "id": "A055",
+   "name": "DC braking time (decel)",
+   "range": "0.0 to 60.0 s",
+   "default": "0.5",
+   "desc": "How long DC braking is applied.",
+   "page": 59
+  },
+  {
+   "id": "A056",
+   "name": "DC braking edge/level detect for [DB]",
+   "range": "00 Edge, 01 Level",
+   "default": "01",
+   "desc": "Whether the DB terminal acts on a level or on an edge.",
+   "page": 59
+  },
+  {
+   "id": "A057",
+   "name": "DC braking force at start",
+   "range": "0 to 100 %",
+   "default": "0.",
+   "desc": "DC braking level applied before starting to hold the shaft.",
+   "page": 59
+  },
+  {
+   "id": "A058",
+   "name": "DC braking time at start",
+   "range": "0.0 to 60.0 s",
+   "default": "0.0",
+   "desc": "Duration of the start-time DC braking.",
+   "page": 59
+  },
+  {
+   "id": "A059",
+   "name": "Carrier frequency during DC braking",
+   "range": "2.0 to 15.0 kHz",
+   "default": "5.0",
+   "desc": "PWM carrier used while DC braking (manual lists the unit as s; range implies kHz).",
+   "page": 59
+  },
+  {
+   "id": "A061",
+   "name": "Frequency upper limit",
+   "range": "A062 to A004 Hz (0.0 = off)",
+   "default": "0.00",
+   "desc": "Caps the output below the maximum frequency.",
+   "page": 59
+  },
+  {
+   "id": "A062",
+   "name": "Frequency lower limit",
+   "range": "B082 to A061 Hz (0.0 = off)",
+   "default": "0.00",
+   "desc": "Minimum frequency the drive will run at once started.",
+   "page": 60
+  },
+  {
+   "id": "A063",
+   "name": "Jump frequency 1 (center)",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Centre of a frequency band the drive skips to avoid mechanical resonance. A065 and A067 are jumps 2 and 3.",
+   "page": 60
+  },
+  {
+   "id": "A064",
+   "name": "Jump frequency 1 width",
+   "range": "0.00 to 10.0 Hz",
+   "default": "0.50",
+   "desc": "Half-width of jump band 1. A066 and A068 are widths 2 and 3.",
+   "page": 60
+  },
+  {
+   "id": "A069",
+   "name": "Acceleration hold frequency",
+   "range": "0.0 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Frequency at which acceleration pauses.",
+   "page": 60
+  },
+  {
+   "id": "A070",
+   "name": "Acceleration hold time",
+   "range": "0.0 to 60.0 s",
+   "default": "0.0",
+   "desc": "Duration of the acceleration pause.",
+   "page": 60
+  },
+  {
+   "id": "A071",
+   "name": "PID enable",
+   "range": "00 Off, 01 On, 02 On with reverse",
+   "default": "00",
+   "desc": "Turns on the built-in PID controller.",
+   "page": 60
+  },
+  {
+   "id": "A072",
+   "name": "PID proportional gain",
+   "range": "0.00 to 25.00",
+   "default": "1.00",
+   "desc": "Proportional gain of the PID loop.",
+   "page": 60
+  },
+  {
+   "id": "A073",
+   "name": "PID integral time",
+   "range": "0.0 to 3600 s",
+   "default": "1.0",
+   "desc": "Integral time constant.",
+   "page": 60
+  },
+  {
+   "id": "A074",
+   "name": "PID derivative time",
+   "range": "0.00 to 100.0 s",
+   "default": "0.00",
+   "desc": "Derivative time constant.",
+   "page": 60
+  },
+  {
+   "id": "A075",
+   "name": "PV scale conversion",
+   "range": "0.01 to 99.99",
+   "default": "1.00",
+   "desc": "Multiplier applied to the feedback value for display.",
+   "page": 60
+  },
+  {
+   "id": "A076",
+   "name": "PV source",
+   "range": "00 OI, 01 O, 02 Modbus, 03 Pulse, 10 Calculate",
+   "default": "00",
+   "desc": "Chooses the feedback signal for PID.",
+   "page": 60
+  },
+  {
+   "id": "A077",
+   "name": "Reverse PID action",
+   "range": "00 SP-PV, 01 -(SP-PV)",
+   "default": "00",
+   "desc": "Inverts the error sign for processes where more output lowers the feedback.",
+   "page": 61
+  },
+  {
+   "id": "A078",
+   "name": "PID output limit",
+   "range": "0.0 to 100.0 %",
+   "default": "0.0",
+   "desc": "Limits how much the PID output can correct the frequency.",
+   "page": 61
+  },
+  {
+   "id": "A081",
+   "name": "AVR function select",
+   "range": "00 On, 01 Off, 02 On except decel",
+   "default": "02",
+   "desc": "Automatic voltage regulation keeps motor voltage steady when supply varies.",
+   "page": 61
+  },
+  {
+   "id": "A082",
+   "name": "AVR voltage select",
+   "range": "200V: 200-240; 400V: 380-480 V",
+   "default": "230/400",
+   "desc": "Rated motor voltage for AVR; set from the motor nameplate.",
+   "page": 61
+  },
+  {
+   "id": "A085",
+   "name": "Energy-saving operation mode",
+   "range": "00 Normal, 01 Energy-saving",
+   "default": "00",
+   "desc": "Reduces output voltage under light load to save energy.",
+   "page": 61
+  },
+  {
+   "id": "A092",
+   "name": "Acceleration time (2)",
+   "range": "0.00 to 3600 s",
+   "default": "10.00",
+   "desc": "Second acceleration ramp time.",
+   "page": 61
+  },
+  {
+   "id": "A093",
+   "name": "Deceleration time (2)",
+   "range": "0.00 to 3600 s",
+   "default": "10.00",
+   "desc": "Second deceleration ramp time.",
+   "page": 61
+  },
+  {
+   "id": "A094",
+   "name": "Method to switch to Acc2/Dec2",
+   "range": "00 2CH terminal, 01 Frequency, 02 FWD/REV",
+   "default": "00",
+   "desc": "Chooses what triggers the second ramp set.",
+   "page": 61
+  },
+  {
+   "id": "A095",
+   "name": "Acc1 to Acc2 transition frequency",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Frequency at which acceleration changes to the second ramp.",
+   "page": 62
+  },
+  {
+   "id": "A096",
+   "name": "Dec1 to Dec2 transition frequency",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Frequency at which deceleration changes to the second ramp.",
+   "page": 62
+  },
+  {
+   "id": "A097",
+   "name": "Acceleration curve selection",
+   "range": "00-04",
+   "default": "01",
+   "desc": "Ramp shape for acceleration: linear, S, U, inverse U or EL-S.",
+   "page": 62
+  },
+  {
+   "id": "A098",
+   "name": "Deceleration curve selection",
+   "range": "00-04",
+   "default": "01",
+   "desc": "Ramp shape for deceleration.",
+   "page": 62
+  },
+  {
+   "id": "A101",
+   "name": "[OI] input start frequency",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Frequency at the bottom of the 4-20 mA input range.",
+   "page": 62
+  },
+  {
+   "id": "A102",
+   "name": "[OI] input end frequency",
+   "range": "0.00 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Frequency at the top of the current input range.",
+   "page": 62
+  },
+  {
+   "id": "A103",
+   "name": "[OI] input start current",
+   "range": "0. to 100. %",
+   "default": "20.",
+   "desc": "Percentage of full-scale current at which the active range starts (20% = 4 mA).",
+   "page": 62
+  },
+  {
+   "id": "A104",
+   "name": "[OI] input end current",
+   "range": "0. to 100. %",
+   "default": "100.",
+   "desc": "Percentage of full-scale current at which the active range ends.",
+   "page": 62
+  },
+  {
+   "id": "A105",
+   "name": "[OI] start frequency select",
+   "range": "00 Use A101, 01 Use 0 Hz",
+   "default": "00",
+   "desc": "Whether output at minimum signal is A101 or 0 Hz.",
+   "page": 62
+  },
+  {
+   "id": "A141",
+   "name": "A input select (calculate function)",
+   "range": "00-07",
+   "default": "02",
+   "desc": "First operand source for the calculate function.",
+   "page": 63
+  },
+  {
+   "id": "A142",
+   "name": "B input select (calculate function)",
+   "range": "00-07",
+   "default": "03",
+   "desc": "Second operand source for the calculate function.",
+   "page": 63
+  },
+  {
+   "id": "A143",
+   "name": "Calculation symbol",
+   "range": "00 ADD, 01 SUB, 02 MUL",
+   "default": "00",
+   "desc": "Operation applied to A and B inputs.",
+   "page": 63
+  },
+  {
+   "id": "A145",
+   "name": "ADD frequency",
+   "range": "0.00 to 400. (580.) Hz",
+   "default": "0.00",
+   "desc": "Offset added to or subtracted from the output frequency when the ADD terminal is on.",
+   "page": 63
+  },
+  {
+   "id": "b001",
+   "name": "Restart mode on power failure / under-voltage",
+   "range": "00-04",
+   "default": "00",
+   "desc": "Selects whether and how the drive restarts after a power dip.",
+   "page": 65
+  },
+  {
+   "id": "b002",
+   "name": "Allowable under-voltage power failure time",
+   "range": "0.3 to 25 s",
+   "default": "1.0",
+   "desc": "How long an under-voltage can last before the drive trips regardless of restart mode.",
+   "page": 65
+  },
+  {
+   "id": "b003",
+   "name": "Retry wait time before motor restart",
+   "range": "0.3 to 100 s",
+   "default": "1.0",
+   "desc": "Delay after power returns before the motor restarts.",
+   "page": 65
+  },
+  {
+   "id": "b004",
+   "name": "Power failure / under-voltage trip alarm enable",
+   "range": "00, 01, 02",
+   "default": "00",
+   "desc": "Whether a brief power failure raises a trip alarm.",
+   "page": 65
+  },
+  {
+   "id": "b005",
+   "name": "Number of restarts on power failure",
+   "range": "00 16 times, 01 always",
+   "default": "00",
+   "desc": "Limits automatic restarts after under-voltage.",
+   "page": 65
+  },
+  {
+   "id": "b008",
+   "name": "Restart mode on over-voltage / over-current trip",
+   "range": "00-04",
+   "default": "00",
+   "desc": "Automatic restart behaviour after OC/OV trips.",
+   "page": 65
+  },
+  {
+   "id": "b010",
+   "name": "Number of retries on OV/OC trip",
+   "range": "1 to 3 times",
+   "default": "3",
+   "desc": "Maximum automatic retries after over-voltage/over-current trips.",
+   "page": 65
+  },
+  {
+   "id": "b011",
+   "name": "Retry wait time on OV/OC trip",
+   "range": "0.3 to 100 s",
+   "default": "1.0",
+   "desc": "Wait before each retry.",
+   "page": 66
+  },
+  {
+   "id": "b012",
+   "name": "Level of electronic thermal",
+   "range": "20 to 100 % of rated inverter current",
+   "default": "Rated current of model",
+   "desc": "Motor overload trip level; set to the motor nameplate current to protect the motor (E05).",
+   "page": 66
+  },
+  {
+   "id": "b013",
+   "name": "Electronic thermal characteristic",
+   "range": "00 Reduced torque, 01 Constant torque, 02 Free",
+   "default": "01",
+   "desc": "Selects the thermal curve matching the motor type and cooling.",
+   "page": 66
+  },
+  {
+   "id": "b015",
+   "name": "Free thermal frequency 1",
+   "range": "0 to 400 (580) Hz",
+   "default": "0.",
+   "desc": "First frequency point for the free-setting thermal curve (b017, b019 are points 2 and 3; b016, b018, b020 are the currents).",
+   "page": 66
+  },
+  {
+   "id": "b021",
+   "name": "Overload restriction operation mode",
+   "range": "00-03",
+   "default": "01",
+   "desc": "Limits current during overload by adjusting frequency instead of tripping.",
+   "page": 66
+  },
+  {
+   "id": "b022",
+   "name": "Overload restriction level",
+   "range": "20 to 200 % of rated current",
+   "default": "Rated current x 1.5",
+   "desc": "Current level at which overload restriction acts.",
+   "page": 66
+  },
+  {
+   "id": "b023",
+   "name": "Deceleration rate at overload restriction",
+   "range": "0.1 to 3000.0 s",
+   "default": "1.0",
+   "desc": "How fast frequency is reduced during overload restriction.",
+   "page": 66
+  },
+  {
+   "id": "b027",
+   "name": "OC suppression selection",
+   "range": "00 Off, 01 On, 02 On with voltage reduction",
+   "default": "00",
+   "desc": "Suppresses over-current trips by easing the output.",
+   "page": 67
+  },
+  {
+   "id": "b031",
+   "name": "Software lock mode selection",
+   "range": "00, 01, 02, 03, 10",
+   "default": "01",
+   "desc": "Locks parameters against changes. If a value will not change, check this and the SFT terminal.",
+   "page": 67
+  },
+  {
+   "id": "b033",
+   "name": "Motor cable length parameter",
+   "range": "5. to 20.",
+   "default": "10.",
+   "desc": "Cable length compensation setting.",
+   "page": 67
+  },
+  {
+   "id": "b034",
+   "name": "Run / power-on warning time",
+   "range": "0 to 655,350 h",
+   "default": "0.",
+   "desc": "Time after which a run-time warning is raised; 0 disables.",
+   "page": 67
+  },
+  {
+   "id": "b035",
+   "name": "Rotation direction restriction",
+   "range": "00 None, 01 Reverse inhibited, 02 Forward inhibited",
+   "default": "00",
+   "desc": "Blocks one direction of rotation.",
+   "page": 67
+  },
+  {
+   "id": "b036",
+   "name": "Reduced voltage start selection",
+   "range": "0 to 255",
+   "default": "2",
+   "desc": "Softens the voltage ramp at start; 0 disables.",
+   "page": 67
+  },
+  {
+   "id": "b037",
+   "name": "Function code display restriction",
+   "range": "00-05",
+   "default": "00",
+   "desc": "Restricts which parameters are visible; if a parameter seems missing set 00 for full display.",
+   "page": 68
+  },
+  {
+   "id": "b038",
+   "name": "Initial display selection",
+   "range": "000, 001-030, 201, 202",
+   "default": "001",
+   "desc": "Chooses the parameter shown on power-up.",
+   "page": 68
+  },
+  {
+   "id": "b040",
+   "name": "Torque limit selection",
+   "range": "00-02",
+   "default": "00",
+   "desc": "Chooses how torque limits are set (by quadrant, terminals or analog).",
+   "page": 68
+  },
+  {
+   "id": "b041",
+   "name": "Torque limit 1 (fwd/power)",
+   "range": "0 to 200 % / no",
+   "default": "200.",
+   "desc": "Torque limit in the forward driving quadrant (b042-b044 cover the other quadrants).",
+   "page": 68
+  },
+  {
+   "id": "b046",
+   "name": "Reverse run protection",
+   "range": "00 Off, 01 On",
+   "default": "00",
+   "desc": "Prevents unintended reverse rotation.",
+   "page": 68
+  },
+  {
+   "id": "b049",
+   "name": "Dual rating selection",
+   "range": "00 CT, 01 VT",
+   "default": "00",
+   "desc": "Selects constant-torque or variable-torque drive rating.",
+   "page": 68
+  },
+  {
+   "id": "b050",
+   "name": "Controlled deceleration on power loss",
+   "range": "00-03",
+   "default": "00",
+   "desc": "What the drive does when mains is lost: trip or ride through by decelerating.",
+   "page": 68
+  },
+  {
+   "id": "b070",
+   "name": "Operation level at [O] disconnection",
+   "range": "0. to 100. % / no",
+   "default": "no",
+   "desc": "Reference level the drive uses if the voltage analog signal is lost.",
+   "page": 69
+  },
+  {
+   "id": "b071",
+   "name": "Operation level at [OI] disconnection",
+   "range": "0. to 100. % / no",
+   "default": "no",
+   "desc": "Reference level used if the 4-20 mA signal is lost.",
+   "page": 69
+  },
+  {
+   "id": "b075",
+   "name": "Ambient temperature setting",
+   "range": "-10 to 50 C",
+   "default": "40",
+   "desc": "Ambient temperature used for derating decisions.",
+   "page": 69
+  },
+  {
+   "id": "b078",
+   "name": "Watt-hour clearance",
+   "range": "00 Off, 01 Clear",
+   "default": "00",
+   "desc": "Clears the watt-hour counter.",
+   "page": 69
+  },
+  {
+   "id": "b082",
+   "name": "Start frequency",
+   "range": "0.10 to 9.99 Hz",
+   "default": "0.50",
+   "desc": "Frequency at which output starts when a run command is given.",
+   "page": 69
+  },
+  {
+   "id": "b083",
+   "name": "Carrier frequency",
+   "range": "2.0 to 15.0 kHz",
+   "default": "10.0",
+   "desc": "PWM switching frequency; lower it to cut noise and heating, raise it for quieter motor.",
+   "page": 69
+  },
+  {
+   "id": "b084",
+   "name": "Initialization mode",
+   "range": "00-04",
+   "default": "00",
+   "desc": "Chooses what is reset: trip history, parameters, or both (and the EzSQ program).",
+   "page": 69
+  },
+  {
+   "id": "b085",
+   "name": "Country for initialization",
+   "range": "01 Mode 1",
+   "default": "01",
+   "desc": "Regional default set used on initialization.",
+   "page": 69
+  },
+  {
+   "id": "b086",
+   "name": "Frequency scaling conversion factor",
+   "range": "0.01 to 99.99",
+   "default": "1.00",
+   "desc": "Multiplier for the scaled frequency display d007.",
+   "page": 69
+  },
+  {
+   "id": "b087",
+   "name": "STOP key enable",
+   "range": "00 On, 01 Always off, 02 Off for stop",
+   "default": "00",
+   "desc": "Whether the keypad STOP key works.",
+   "page": 69
+  },
+  {
+   "id": "b088",
+   "name": "Restart mode after FRS",
+   "range": "00-02",
+   "default": "00",
+   "desc": "How the drive resumes after a free-run stop is cancelled.",
+   "page": 69
+  },
+  {
+   "id": "b089",
+   "name": "Automatic carrier frequency reduction",
+   "range": "00-02",
+   "default": "01",
+   "desc": "Reduces carrier automatically as current or heatsink temperature rises.",
+   "page": 70
+  },
+  {
+   "id": "b090",
+   "name": "Dynamic braking usage ratio",
+   "range": "0.0 to 100 %",
+   "default": "0.0",
+   "desc": "Allowed duty of the braking resistor; 0 disables braking (E06 threshold).",
+   "page": 70
+  },
+  {
+   "id": "b091",
+   "name": "Stop mode selection",
+   "range": "00 Decel, 01 Free-run",
+   "default": "00",
+   "desc": "Whether a stop command ramps down or coasts.",
+   "page": 70
+  },
+  {
+   "id": "b092",
+   "name": "Cooling fan control",
+   "range": "00 Always, 01 During run, 02 Temperature",
+   "default": "01",
+   "desc": "When the cooling fan runs.",
+   "page": 70
+  },
+  {
+   "id": "b094",
+   "name": "Initialization target data",
+   "range": "00-03",
+   "default": "00",
+   "desc": "Which parameter groups are reset on initialization.",
+   "page": 70
+  },
+  {
+   "id": "b095",
+   "name": "Dynamic braking control (BRD) selection",
+   "range": "00 Off, 01 Run only, 02 Always",
+   "default": "00",
+   "desc": "Enables the built-in brake chopper.",
+   "page": 70
+  },
+  {
+   "id": "b096",
+   "name": "BRD activation level",
+   "range": "200V: 330-390; 400V: 660-780 V",
+   "default": "360/720",
+   "desc": "DC bus voltage at which braking turns on.",
+   "page": 70
+  },
+  {
+   "id": "b097",
+   "name": "BRD resistor value",
+   "range": "min. resistance to 600.0 ohm",
+   "default": "Min. resistance",
+   "desc": "Value of the connected braking resistor.",
+   "page": 70
+  },
+  {
+   "id": "b120",
+   "name": "Brake control enable",
+   "range": "00, 01, 02",
+   "default": "00",
+   "desc": "Enables the mechanical brake sequence.",
+   "page": 71
+  },
+  {
+   "id": "b121",
+   "name": "Brake wait time for release",
+   "range": "0.00 to 5.00 s",
+   "default": "0.00",
+   "desc": "Delay before the brake release signal.",
+   "page": 71
+  },
+  {
+   "id": "b124",
+   "name": "Brake wait time for confirmation",
+   "range": "0.00 to 5.00 s",
+   "default": "0.00",
+   "desc": "Time allowed for brake confirmation before an E36 trip.",
+   "page": 71
+  },
+  {
+   "id": "b130",
+   "name": "Deceleration overvoltage suppression enable",
+   "range": "00 Off, 01 On, 02 On with accel",
+   "default": "00",
+   "desc": "Prevents E07 trips by holding or extending deceleration when the DC bus rises.",
+   "page": 71
+  },
+  {
+   "id": "b131",
+   "name": "Decel overvoltage suppression level",
+   "range": "200V: 330-395; 400V: 660-790 V",
+   "default": "380/760",
+   "desc": "DC bus level at which suppression acts.",
+   "page": 71
+  },
+  {
+   "id": "b145",
+   "name": "GS input mode",
+   "range": "00-06",
+   "default": "00",
+   "desc": "Selects how the safe stop (GS1/GS2) inputs behave and which trip codes they produce.",
+   "page": 72
+  },
+  {
+   "id": "b150",
+   "name": "Display when external operator connected",
+   "range": "d001-d030",
+   "default": "001",
+   "desc": "Parameter shown on the built-in display when an external operator is attached.",
+   "page": 72
+  },
+  {
+   "id": "b165",
+   "name": "External operator communication loss action",
+   "range": "00-04",
+   "default": "02",
+   "desc": "What the drive does if the external operator connection is lost.",
+   "page": 72
+  },
+  {
+   "id": "b166",
+   "name": "Data read/write select",
+   "range": "00 Read/Write, 01 Protected",
+   "default": "00",
+   "desc": "Write protection for data.",
+   "page": 72
+  },
+  {
+   "id": "b171",
+   "name": "Inverter mode selection",
+   "range": "00-03",
+   "default": "00",
+   "desc": "Selects standard IM, high-frequency IM or PM motor mode. Initialise after changing.",
+   "page": 72
+  },
+  {
+   "id": "b180",
+   "name": "Initialization trigger",
+   "range": "00 Off, 01 Perform",
+   "default": "00",
+   "desc": "Setting 01 starts the initialization configured by b084, b085 and b094.",
+   "page": 72
+  },
+  {
+   "id": "b190",
+   "name": "Password setting A",
+   "range": "0000 to FFFF",
+   "default": "0000",
+   "desc": "Sets a password for parameter protection.",
+   "page": 73
+  },
+  {
+   "id": "b191",
+   "name": "Password authentication A",
+   "range": "0000 to FFFF",
+   "default": "0000",
+   "desc": "Entry used to unlock password A.",
+   "page": 73
+  },
+  {
+   "id": "C001",
+   "name": "Input [1] function",
+   "range": "68 options",
+   "default": "00 [FW]",
+   "desc": "Assigns a function to digital input terminal 1; C002-C007 do the same for terminals 2-7.",
+   "page": 74
+  },
+  {
+   "id": "C002",
+   "name": "Input [2] function",
+   "range": "68 options",
+   "default": "01 [RV]",
+   "desc": "Function of input terminal 2.",
+   "page": 74
+  },
+  {
+   "id": "C003",
+   "name": "Input [3] function",
+   "range": "68 options",
+   "default": "12 [EXT]",
+   "desc": "Function of input terminal 3 (can be GS1).",
+   "page": 74
+  },
+  {
+   "id": "C004",
+   "name": "Input [4] function",
+   "range": "68 options",
+   "default": "18 [RS]",
+   "desc": "Function of input terminal 4 (can be GS2).",
+   "page": 74
+  },
+  {
+   "id": "C005",
+   "name": "Input [5] function",
+   "range": "68 options",
+   "default": "02 [CF1]",
+   "desc": "Function of input terminal 5 (can be PTC thermistor).",
+   "page": 74
+  },
+  {
+   "id": "C006",
+   "name": "Input [6] function",
+   "range": "68 options",
+   "default": "03 [CF2]",
+   "desc": "Function of input terminal 6.",
+   "page": 74
+  },
+  {
+   "id": "C007",
+   "name": "Input [7] function",
+   "range": "68 options",
+   "default": "06 [JG]",
+   "desc": "Function of input terminal 7.",
+   "page": 74
+  },
+  {
+   "id": "C011",
+   "name": "Input [1] active state",
+   "range": "00 NO, 01 NC",
+   "default": "00",
+   "desc": "Normally open or closed logic for input 1; C012-C017 cover inputs 2-7.",
+   "page": 74
+  },
+  {
+   "id": "C021",
+   "name": "Output [11] function",
+   "range": "48 options",
+   "default": "00 [RUN]",
+   "desc": "Function of open-collector output 11.",
+   "page": 74
+  },
+  {
+   "id": "C022",
+   "name": "Output [12] function",
+   "range": "48 options",
+   "default": "01 [FA1]",
+   "desc": "Function of open-collector output 12.",
+   "page": 74
+  },
+  {
+   "id": "C026",
+   "name": "Alarm relay function",
+   "range": "48 options",
+   "default": "05 [AL]",
+   "desc": "Function of the relay output.",
+   "page": 74
+  },
+  {
+   "id": "C027",
+   "name": "[EO] terminal selection",
+   "range": "00-16",
+   "default": "07",
+   "desc": "Signal output on the pulse/PWM EO terminal.",
+   "page": 74
+  },
+  {
+   "id": "C028",
+   "name": "[AM] terminal selection",
+   "range": "00-16",
+   "default": "07 [LAD]",
+   "desc": "Signal output on the 0-10 V AM terminal.",
+   "page": 75
+  },
+  {
+   "id": "C031",
+   "name": "Output [11] active state",
+   "range": "00 NO, 01 NC",
+   "default": "00",
+   "desc": "Contact logic of output 11.",
+   "page": 75
+  },
+  {
+   "id": "C032",
+   "name": "Output [12] active state",
+   "range": "00 NO, 01 NC",
+   "default": "00",
+   "desc": "Contact logic of output 12.",
+   "page": 75
+  },
+  {
+   "id": "C036",
+   "name": "Alarm relay active state",
+   "range": "00 NO, 01 NC",
+   "default": "01",
+   "desc": "Relay logic; default NC means the relay also signals power loss.",
+   "page": 75
+  },
+  {
+   "id": "C039",
+   "name": "Low current detection level",
+   "range": "0.0 to 2.0 x rated current",
+   "default": "Rated current",
+   "desc": "Threshold for the low-load output.",
+   "page": 75
+  },
+  {
+   "id": "C041",
+   "name": "Overload warning level",
+   "range": "0 to 2 x rated current",
+   "default": "Rated current x 1.15",
+   "desc": "Current at which the OL output turns on, before an overload trip.",
+   "page": 75
+  },
+  {
+   "id": "C042",
+   "name": "Frequency arrival setting for acceleration",
+   "range": "0.0 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Threshold for the FA2/FA3 outputs during acceleration.",
+   "page": 75
+  },
+  {
+   "id": "C043",
+   "name": "Frequency arrival setting for deceleration",
+   "range": "0.0 to 400.0 (580.0) Hz",
+   "default": "0.00",
+   "desc": "Threshold for the FA2/FA3 outputs during deceleration.",
+   "page": 75
+  },
+  {
+   "id": "C061",
+   "name": "Electronic thermal warning level",
+   "range": "0 to 100 %",
+   "default": "90.",
+   "desc": "Thermal load at which the THM warning output turns on.",
+   "page": 76
+  },
+  {
+   "id": "C063",
+   "name": "Zero speed detection level",
+   "range": "0.00 to 100.0 Hz",
+   "default": "0.00",
+   "desc": "Frequency below which the ZS output is on.",
+   "page": 76
+  },
+  {
+   "id": "C064",
+   "name": "Heat sink overheat warning",
+   "range": "0. to 110. C",
+   "default": "100.",
+   "desc": "Heatsink temperature at which the OHF warning output turns on.",
+   "page": 76
+  },
+  {
+   "id": "C071",
+   "name": "Communication speed",
+   "range": "03-10",
+   "default": "05",
+   "desc": "Modbus baud rate (05 = 9600). Power cycle needed.",
+   "page": 76
+  },
+  {
+   "id": "C072",
+   "name": "Modbus address",
+   "range": "1 to 247",
+   "default": "1.",
+   "desc": "Slave address of the drive on the network.",
+   "page": 76
+  },
+  {
+   "id": "C074",
+   "name": "Communication parity",
+   "range": "00 None, 01 Even, 02 Odd",
+   "default": "00",
+   "desc": "Serial parity. Power cycle needed.",
+   "page": 76
+  },
+  {
+   "id": "C075",
+   "name": "Communication stop bit",
+   "range": "1 or 2",
+   "default": "1",
+   "desc": "Number of stop bits. Power cycle needed.",
+   "page": 76
+  },
+  {
+   "id": "C076",
+   "name": "Communication error select",
+   "range": "00-04",
+   "default": "02",
+   "desc": "Action on a communication error: trip, decelerate, ignore, coast or decelerate to stop (trip gives E41).",
+   "page": 76
+  },
+  {
+   "id": "C077",
+   "name": "Communication error time-out",
+   "range": "0.00 to 99.99 s",
+   "default": "0.00",
+   "desc": "Watchdog time before a communication loss is declared.",
+   "page": 76
+  },
+  {
+   "id": "C078",
+   "name": "Communication wait time",
+   "range": "0. to 1000. ms",
+   "default": "0.",
+   "desc": "Delay before the drive replies to a Modbus request.",
+   "page": 77
+  },
+  {
+   "id": "C081",
+   "name": "[O] input span calibration",
+   "range": "0.0 to 200.0 %",
+   "default": "100.0",
+   "desc": "Fine scale adjustment of the voltage analog input.",
+   "page": 77
+  },
+  {
+   "id": "C082",
+   "name": "[OI] input span calibration",
+   "range": "0.0 to 200.0 %",
+   "default": "100.0",
+   "desc": "Fine scale adjustment of the current analog input.",
+   "page": 77
+  },
+  {
+   "id": "C085",
+   "name": "Thermistor input span calibration",
+   "range": "0.0 to 200.0 %",
+   "default": "100.0",
+   "desc": "Calibration for the PTC thermistor input.",
+   "page": 77
+  },
+  {
+   "id": "C096",
+   "name": "Communication selection",
+   "range": "00 Modbus-RTU, 01 EzCOM, 02 EzCOM admin",
+   "default": "00",
+   "desc": "Serial protocol used on RS-485. Power cycle needed.",
+   "page": 77
+  },
+  {
+   "id": "C101",
+   "name": "Up/Down memory mode selection",
+   "range": "00 Clear, 01 Keep",
+   "default": "00",
+   "desc": "Whether the UP/DWN adjusted frequency is remembered after power-off.",
+   "page": 77
+  },
+  {
+   "id": "C102",
+   "name": "Reset selection",
+   "range": "00-03",
+   "default": "00",
+   "desc": "Defines when the RS input clears a trip and whether it stops a running drive.",
+   "page": 77
+  },
+  {
+   "id": "C103",
+   "name": "Restart mode after reset",
+   "range": "00-02",
+   "default": "00",
+   "desc": "How the drive restarts after a reset.",
+   "page": 77
+  },
+  {
+   "id": "C111",
+   "name": "Overload warning level 2",
+   "range": "0 to 2 x rated current",
+   "default": "Rated current x 1.15",
+   "desc": "Threshold for the second overload warning output (OL2).",
+   "page": 78
+  },
+  {
+   "id": "C160",
+   "name": "Input [1] response time",
+   "range": "0 to 200 (x2 ms)",
+   "default": "1.",
+   "desc": "Debounce/response time of input 1; C161-C166 for inputs 2-6.",
+   "page": 79
+  },
+  {
+   "id": "H001",
+   "name": "Auto-tuning selection",
+   "range": "00 Off, 01 Stopped, 02 Rotating",
+   "default": "00",
+   "desc": "Starts motor auto-tuning to measure motor constants.",
+   "page": 87
+  },
+  {
+   "id": "H002",
+   "name": "Motor constant selection",
+   "range": "00 Hitachi standard, 02 Auto-tuned",
+   "default": "00",
+   "desc": "Chooses which motor data set the drive uses.",
+   "page": 87
+  },
+  {
+   "id": "H003",
+   "name": "Motor capacity",
+   "range": "0.1 to 18.5 kW",
+   "default": "Model dependent",
+   "desc": "Motor power; set from the nameplate.",
+   "page": 87
+  },
+  {
+   "id": "H004",
+   "name": "Motor poles setting",
+   "range": "2 to 48 poles",
+   "default": "4",
+   "desc": "Number of motor poles; set from nameplate.",
+   "page": 87
+  },
+  {
+   "id": "H005",
+   "name": "Motor speed response constant",
+   "range": "1 to 1000",
+   "default": "100.",
+   "desc": "Speed response gain for vector control.",
+   "page": 87
+  },
+  {
+   "id": "H006",
+   "name": "Motor stabilization constant",
+   "range": "0. to 255.",
+   "default": "100.",
+   "desc": "Stability adjustment; raise if the motor hunts.",
+   "page": 87
+  },
+  {
+   "id": "H020",
+   "name": "Motor constant R1 (Hitachi motor)",
+   "range": "0.001 to 65.535 ohm",
+   "default": "Model dependent",
+   "desc": "Primary resistance for standard Hitachi motor data; H021 R2, H022 L, H023 I0, H024 J follow.",
+   "page": 87
+  },
+  {
+   "id": "H030",
+   "name": "Motor constant R1 (auto-tuned)",
+   "range": "0.001 to 65.535 ohm",
+   "default": "Model dependent",
+   "desc": "Auto-tuned primary resistance; H031 R2, H032 L, H033 I0, H034 J follow.",
+   "page": 88
+  },
+  {
+   "id": "H102",
+   "name": "PM motor code setting",
+   "range": "00 Hitachi standard, 01 Auto-tune",
+   "default": "00",
+   "desc": "Selects PM motor data source.",
+   "page": 89
+  },
+  {
+   "id": "H103",
+   "name": "PM motor capacity",
+   "range": "0.1 to 18.5 kW",
+   "default": "kW dependent",
+   "desc": "Rated power of the PM motor.",
+   "page": 89
+  },
+  {
+   "id": "H104",
+   "name": "PM motor pole setting",
+   "range": "2 to 48",
+   "default": "kW dependent",
+   "desc": "Number of poles of the PM motor.",
+   "page": 89
+  },
+  {
+   "id": "H105",
+   "name": "PM rated current",
+   "range": "0.00 to 1.00 x inverter rated current",
+   "default": "kW dependent",
+   "desc": "Rated current of the PM motor.",
+   "page": 89
+  },
+  {
+   "id": "P001",
+   "name": "Reaction when option card error occurs",
+   "range": "00 Trip, 01 Ignore",
+   "default": "00",
+   "desc": "Whether an option card fault trips the drive.",
+   "page": 91
+  },
+  {
+   "id": "P003",
+   "name": "[EA] terminal selection",
+   "range": "00, 01, 02",
+   "default": "00",
+   "desc": "Function of the EA input (speed reference, encoder feedback or EzSQ).",
+   "page": 91
+  },
+  {
+   "id": "P004",
+   "name": "Pulse train input mode for feedback",
+   "range": "00-03",
+   "default": "00",
+   "desc": "Encoder signal type.",
+   "page": 91
+  },
+  {
+   "id": "P011",
+   "name": "Encoder pulse setting",
+   "range": "32 to 1024 ppr",
+   "default": "512",
+   "desc": "Encoder pulses per revolution.",
+   "page": 91
+  },
+  {
+   "id": "P026",
+   "name": "Over-speed error detection level",
+   "range": "0 to 150 %",
+   "default": "115.0",
+   "desc": "Level used for the E81 excessive speed trip.",
+   "page": 91
+  },
+  {
+   "id": "P027",
+   "name": "Speed deviation error detection level",
+   "range": "0 to 120 Hz",
+   "default": "10.00",
+   "desc": "Speed deviation threshold for DSE output.",
+   "page": 91
+  },
+  {
+   "id": "P200",
+   "name": "Serial communication mode",
+   "range": "00 Standard, 01 Free mapping",
+   "default": "00",
+   "desc": "Select Modbus register mapping mode. Power cycle needed. Version 3.0 onwards.",
+   "page": 95
+  }
+ ]
+}

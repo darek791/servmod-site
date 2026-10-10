@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds the ServMod static site: python build.py  ->  ../site (or OUT env)."""
-import os, shutil, datetime, html
+import glob, json, os, shutil, datetime, html
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
 DOMAIN = "https://servmod.com"
@@ -8,7 +8,7 @@ APP_VERSION = "0.26"
 TODAY = datetime.date.today().isoformat()
 
 NAV = [("features", "/features.html", "Modules"), ("equipment", "/equipment.html", "Equipment"),
-       ("guides", "/guides.html", "Connection guides"), ("manuals", "/manuals/", "Manuals"), ("pricing", "/pricing.html", "Pricing"),
+       ("guides", "/guides.html", "Connection guides"), ("manuals", "/manuals/", "Fault codes"), ("pricing", "/pricing.html", "Pricing"),
        ("support", "/support.html", "Support")]
 
 def page(key, title, desc, body, path, extra_head="", noindex=False):
@@ -298,14 +298,13 @@ def support():
     return page("support", "Support", "Contact ServMod support and read answers to common questions about phones, adapters, drives and licences.", body, "/support.html")
 
 def manuals():
-    body = """<div class="wrap page"><h1>Manuals</h1>
-<p class="intro">Search fault codes and parameters across the full manufacturer manuals. The app can open this page directly on the right code.</p>
+    body = """<div class="wrap page"><h1>Fault codes and parameters</h1>
+<p class="intro">Look up a fault code or a parameter for the drives ServMod works with. The answers are short summaries written by us. Each one points to the page of the manufacturer's manual it comes from, so you can read the original.</p>
 <div class="f" style="margin-top:26px"><div class="row"><div><label for="mq">Search</label><input id="mq" type="search" placeholder="E04, F013, P-12, acceleration time" autocomplete="off"></div>
-<div><label for="mm">Manual</label><select id="mm"><option value="">All manuals</option></select></div></div></div>
+<div><label for="mm">Drive</label><select id="mm"><option value="">All drives</option></select></div></div></div>
 <div id="mres" style="margin-top:24px"></div>
-<h2 style="font-size:1.4rem;margin:36px 0 12px">All manuals</h2><ul id="mlist"></ul>
-<p class="hint" style="margin-top:24px">Manuals belong to their manufacturers. Links open the PDF at the page found.</p></div>"""
-    return page("manuals", "Manuals", "Searchable PDF manuals for drives and devices: fault codes, parameters and wiring, linked from the ServMod app.", body, "/manuals/", extra_head='<script src="/manuals.js" defer></script>')
+<p class="hint" style="margin-top:30px">These summaries are a quick aid and can contain mistakes or be out of date. Always check the manufacturer's current manual before changing settings on a machine. ServMod is not affiliated with Hitachi, Rockwell Automation, Allen-Bradley, Omron or Danfoss; product names belong to their owners.</p></div>"""
+    return page("manuals", "Fault codes and parameters", "Quick look-up of drive fault codes and parameters for Hitachi WJ200, PowerFlex 520, Omron MX2 and Danfoss FC 280, with links to the manufacturer manuals.", body, "/manuals/", extra_head='<script src="/manuals.js" defer></script>')
 
 def doc(key, title, desc, path, inner, draft=True):
     note = '<div class="draft-note">Draft. This page will be completed and reviewed before ordering opens.</div>' if draft else ""
@@ -366,6 +365,11 @@ def main():
         os.makedirs(os.path.dirname(os.path.join(OUT, name)), exist_ok=True)
         open(os.path.join(OUT, name), "w", encoding="utf-8").write(content)
     shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "style.css"))
+    ms = []
+    for f in sorted(glob.glob(os.path.join(HERE, "..", "manuals_src", "data", "*.json"))):
+        ms.append(json.load(open(f, encoding="utf-8")))
+    os.makedirs(os.path.join(OUT, "manuals"), exist_ok=True)
+    json.dump({"manuals": ms}, open(os.path.join(OUT, "manuals", "data.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     shutil.copy(os.path.join(HERE, "manuals.js"), os.path.join(OUT, "manuals.js"))
     shutil.copy(os.path.join(HERE, "site.js"), os.path.join(OUT, "site.js"))
     urls = [("/", "1.0")] + [(f"/{n}".replace("index.html", ""), "0.7") for n in PAGES if n not in ("index.html", "404.html")]
