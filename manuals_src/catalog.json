@@ -1,0 +1,8 @@
+{
+  "_help": "List each PDF placed in manuals_src/. id = short slug used in app links. Run: python tools/index_manuals.py",
+  "manuals": [
+    {"id": "wj200", "file": "wj200.pdf", "title": "Hitachi WJ200 User Manual", "maker": "Hitachi", "models": "WJ200", "lang": "en"},
+    {"id": "pf525", "file": "pf525.pdf", "title": "PowerFlex 520-series User Manual", "maker": "Allen-Bradley", "models": "PowerFlex 520/525", "lang": "en"},
+    {"id": "mx2", "file": "mx2.pdf", "title": "Omron MX2 User's Manual", "maker": "Omron", "models": "MX2", "lang": "en"}
+  ]
+}

@@ -8,7 +8,7 @@ APP_VERSION = "0.26"
 TODAY = datetime.date.today().isoformat()
 
 NAV = [("features", "/features.html", "Modules"), ("equipment", "/equipment.html", "Equipment"),
-       ("guides", "/guides.html", "Connection guides"), ("pricing", "/pricing.html", "Pricing"),
+       ("guides", "/guides.html", "Connection guides"), ("manuals", "/manuals/", "Manuals"), ("pricing", "/pricing.html", "Pricing"),
        ("support", "/support.html", "Support")]
 
 def page(key, title, desc, body, path, extra_head="", noindex=False):
@@ -297,6 +297,16 @@ def support():
 </div></div></div>"""
     return page("support", "Support", "Contact ServMod support and read answers to common questions about phones, adapters, drives and licences.", body, "/support.html")
 
+def manuals():
+    body = """<div class="wrap page"><h1>Manuals</h1>
+<p class="intro">Search fault codes and parameters across the full manufacturer manuals. The app can open this page directly on the right code.</p>
+<div class="f" style="margin-top:26px"><div class="row"><div><label for="mq">Search</label><input id="mq" type="search" placeholder="E04, F013, P-12, acceleration time" autocomplete="off"></div>
+<div><label for="mm">Manual</label><select id="mm"><option value="">All manuals</option></select></div></div></div>
+<div id="mres" style="margin-top:24px"></div>
+<h2 style="font-size:1.4rem;margin:36px 0 12px">All manuals</h2><ul id="mlist"></ul>
+<p class="hint" style="margin-top:24px">Manuals belong to their manufacturers. Links open the PDF at the page found.</p></div>"""
+    return page("manuals", "Manuals", "Searchable PDF manuals for drives and devices: fault codes, parameters and wiring, linked from the ServMod app.", body, "/manuals/", extra_head='<script src="/manuals.js" defer></script>')
+
 def doc(key, title, desc, path, inner, draft=True):
     note = '<div class="draft-note">Draft. This page will be completed and reviewed before ordering opens.</div>' if draft else ""
     body = f'<div class="wrap page"><div class="prose"><h1>{title}</h1>{note}{inner}</div></div>'
@@ -340,6 +350,7 @@ PAGES = {
  "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY),
  "refunds.html": doc("", "Refunds", "How refunds for ServMod will work.", "/refunds.html", REFUNDS),
  "licence.html": doc("", "Licence", "How the ServMod licence and activation will work.", "/licence.html", LICENCE),
+ "manuals/index.html": manuals(),
  "404.html": not_found(),
 }
 
@@ -352,10 +363,12 @@ def main():
         if f in ("fonts", "assets"): continue
         if os.path.isfile(p): os.remove(p)
     for name, content in PAGES.items():
+        os.makedirs(os.path.dirname(os.path.join(OUT, name)), exist_ok=True)
         open(os.path.join(OUT, name), "w", encoding="utf-8").write(content)
     shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "style.css"))
+    shutil.copy(os.path.join(HERE, "manuals.js"), os.path.join(OUT, "manuals.js"))
     shutil.copy(os.path.join(HERE, "site.js"), os.path.join(OUT, "site.js"))
-    urls = [("/", "1.0")] + [(f"/{n}", "0.7") for n in PAGES if n not in ("index.html", "404.html")]
+    urls = [("/", "1.0")] + [(f"/{n}".replace("index.html", ""), "0.7") for n in PAGES if n not in ("index.html", "404.html")]
     open(os.path.join(OUT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{DOMAIN}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n" for u, p in urls) + "</urlset>\n")
     open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nDisallow: /servmod/\nSitemap: {DOMAIN}/sitemap.xml\n")
     print("built", len(PAGES), "pages ->", OUT)

@@ -171,8 +171,9 @@ async def support(req: Request):
         raise HTTPException(429, "too many requests, try later")
     u = core.session_user(req.cookies.get(COOKIE))
     core.q("INSERT INTO tickets(created,user_id,email,subject,message) VALUES(?,?,?,?,?)", (core.now(), u["id"] if u else None, email, subj, msg))
+    extra = "".join(f"{k}: {str(d.get(k))[:200]}\n" for k in ("name", "info") if d.get(k))
     to = os.environ.get("SUPPORT_TO") or (sorted(core.ADMIN_EMAILS)[0] if core.ADMIN_EMAILS else None)
-    if to: mail.send(to, "[ServMod support] " + (subj or "new message"), f"From: {email}\n\n{msg}", reply_to=email)
+    if to: mail.send(to, "[ServMod support] " + (subj or "new message"), f"From: {email}\n{extra}\n{msg}", reply_to=email)
     return {"ok": True}
 
 # ---------- admin
