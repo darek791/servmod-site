@@ -7,6 +7,7 @@ User=servmod
 Group=servmod
 WorkingDirectory=/opt/servmod-app
 EnvironmentFile=/etc/servmod/api.env
+ExecStartPre=+/bin/sh -c 'test -f /var/lib/servmod-click-ok || (/opt/servmod-app/venv/bin/pip install -q --force-reinstall --no-deps click==8.1.8 h11 && touch /var/lib/servmod-click-ok)'
 ExecStartPre=+/bin/chmod -R u=rwX,g=rX,o= /opt/servmod-app/servmod_api
 ExecStartPre=+/bin/chown -R root:servmod /opt/servmod-app/servmod_api
 ExecStart=/opt/servmod-app/venv/bin/python -m uvicorn servmod_api.app:app --host 127.0.0.1 --port 8100 --proxy-headers --forwarded-allow-ips 127.0.0.1
