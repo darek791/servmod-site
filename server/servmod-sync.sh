@@ -1,6 +1,7 @@
 #!/bin/bash
 # servmod-sync v2: pulls GitHub main, deploys site/, nginx conf and (if installed) the API backend.
 set -u
+umask 022
 REPO_URL="https://github.com/darek791/servmod-site.git"
 REPO=/var/lib/servmod-repo
 LOCK=/run/servmod-sync.lock
@@ -28,8 +29,9 @@ if [ -x /opt/servmod-app/venv/bin/pip ] && [ -d backend/servmod_api ]; then
     /opt/servmod-app/venv/bin/pip install -q -r backend/requirements.txt && echo "$H" > /var/lib/servmod-sync.req || log "pip install failed"
   fi
   cmp -s server/servmod-api.service /etc/systemd/system/servmod-api.service || { cp server/servmod-api.service /etc/systemd/system/servmod-api.service; systemctl daemon-reload; }
-  chown -R root:servmod /opt/servmod-app/servmod_api
+  chown -R root:servmod /opt/servmod-app/servmod_api; chmod -R u=rwX,g=rX,o= /opt/servmod-app/servmod_api
   systemctl restart servmod-api && log "api restarted"
 fi
+cmp -s server/servmod-sync.sh /usr/local/bin/servmod-sync || install -m 755 server/servmod-sync.sh /usr/local/bin/servmod-sync
 echo "$NEW" > /var/lib/servmod-sync.head
 log "deployed $NEW"

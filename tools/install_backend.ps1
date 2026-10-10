@@ -20,5 +20,5 @@ scp -i $key "$root\server\servmod-sync.sh" "${srv}:/tmp/servmod-sync.sh"
 $hdr = "export ADMIN_EMAILS='$admin' MAIL_FROM='$from' MAIL_MODE='$mode' RESEND_API_KEY='$rk'`n"
 $boot = (Get-Content -Raw "$root\server\bootstrap_backend.sh") -replace "`r", ""
 $sync = "sed -i 's/\r$//' /tmp/servmod-sync.sh`n"
-($sync + $hdr + $boot) | ssh -i $key $srv "bash -s"
+(($sync + $hdr + $boot) -replace "`r", "") | ssh -i $key $srv "bash -s"
 Write-Host "`nDone. Open https://servmod.com/account/ and sign in." -ForegroundColor Green

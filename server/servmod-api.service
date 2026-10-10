@@ -7,7 +7,9 @@ User=servmod
 Group=servmod
 WorkingDirectory=/opt/servmod-app
 EnvironmentFile=/etc/servmod/api.env
-ExecStart=/opt/servmod-app/venv/bin/uvicorn servmod_api.app:app --host 127.0.0.1 --port 8100 --proxy-headers --forwarded-allow-ips 127.0.0.1
+ExecStartPre=+/bin/chmod -R u=rwX,g=rX,o= /opt/servmod-app/servmod_api
+ExecStartPre=+/bin/chown -R root:servmod /opt/servmod-app/servmod_api
+ExecStart=/opt/servmod-app/venv/bin/python -m uvicorn servmod_api.app:app --host 127.0.0.1 --port 8100 --proxy-headers --forwarded-allow-ips 127.0.0.1
 Restart=always
 RestartSec=3
 NoNewPrivileges=true
