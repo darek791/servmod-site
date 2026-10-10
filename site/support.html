@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Support - ServMod</title>
+<meta name="description" content="Contact ServMod support and read answers to common questions about phones, adapters, drives and licences.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://servmod.com/support.html">
+<link rel="icon" href="/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="ServMod">
+<meta property="og:title" content="Support - ServMod"><meta property="og:description" content="Contact ServMod support and read answers to common questions about phones, adapters, drives and licences.">
+<meta property="og:url" content="https://servmod.com/support.html"><meta property="og:image" content="https://servmod.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
+  <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav" aria-label="Main"><a href="/features.html">Modules</a><a href="/equipment.html">Equipment</a><a href="/guides.html">Connection guides</a><a href="/pricing.html">Pricing</a><a href="/support.html" aria-current=page>Support</a><a class="btn" href="/pricing.html">Get ServMod</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap page"><div class="split rev"><div>
+<h1>Support</h1>
+<p class="intro">Tell us what you were doing, which drive or printer it was and what the screen said. A short answer from you saves a long exchange.</p>
+<form class="f" id="support-form" data-endpoint="/api/support" novalidate style="margin-top:30px">
+  <div class="row"><div><label for="name">Name</label><input id="name" name="name" autocomplete="name" required></div>
+  <div><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div></div>
+  <div><label for="topic">What is it about?</label><select id="topic" name="topic"><option>A question before buying</option><option>Problem connecting to a drive</option><option>Problem with a printer or PLC</option><option>Activation code or licence</option><option>A drive or device you want supported</option><option>Something else</option></select></div>
+  <div><label for="info">Drive or device and app version</label><input id="info" name="info" placeholder="For example: Omron MX2, app 0.26"><div class="hint">Optional, but it helps.</div></div>
+  <div><label for="message">Message</label><textarea id="message" name="message" required></textarea></div>
+  <div class="hp" aria-hidden="true"><label>Leave empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+  <div><button class="btn" type="submit">Send message</button></div>
+  <div class="msg" id="form-msg" role="status"></div>
+</form>
+</div><div id="faq">
+<h2 style="font-size:1.6rem;margin-bottom:18px">Common questions</h2>
+<details><summary>Do I need internet to use ServMod?</summary><div class="a"><p>No. Everything works offline. The app only goes online if you choose About, Check for updates.</p></div></details><details><summary>Which phone do I need?</summary><div class="a"><p>An Android 7.0 or newer phone or tablet with USB host (OTG). Most phones from the last several years have it.</p></div></details><details><summary>Which cable or adapter do I need?</summary><div class="a"><p>For drives, a USB-RS485 adapter with an FTDI, CP210x, CH34x or CH343 chip. For printers, a USB-C Ethernet adapter. See the connection guides.</p></div></details><details><summary>Can it damage my equipment?</summary><div class="a"><p>Writing parameters or running a motor can make machinery move or stop unexpectedly. Back up first, check every written value and test on the bench before a production machine. Read the terms of use.</p></div></details><details><summary>Does it work on iPhone?</summary><div class="a"><p>No. ServMod is Android only.</p></div></details><details><summary>Will it support my drive or PLC?</summary><div class="a"><p>More models are planned. Tell us what you need through the support form. Tell us the exact model and the protocol, if you know it.</p></div></details><details><summary>What if I lose my phone?</summary><div class="a"><p>Each licence will be tied to your account email. Sign in, enter the Device ID of the new phone and get a new activation code.</p></div></details>
+</div></div></div>
+</main>
+<footer><div class="wrap">
+  <div class="block">
+    <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
+    <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
+  </div>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release 0.26, in testing. Created by Dariusz Grabowski, United Kingdom.</p>
+</div></footer>
+<script src="/site.js" defer></script>
+</body>
+</html>

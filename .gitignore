@@ -1,0 +1,6 @@
+.env
+*.key
+*.keystore
+*.jks
+*.apk
+site/servmod/

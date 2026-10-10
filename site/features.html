@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modules - ServMod</title>
+<meta name="description" content="Everything ServMod does: inverters, printers, read-only PLC, calculators, encrypted passwords, notes, parts search and an ESP32 loader.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://servmod.com/features.html">
+<link rel="icon" href="/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="ServMod">
+<meta property="og:title" content="Modules - ServMod"><meta property="og:description" content="Everything ServMod does: inverters, printers, read-only PLC, calculators, encrypted passwords, notes, parts search and an ESP32 loader.">
+<meta property="og:url" content="https://servmod.com/features.html"><meta property="og:image" content="https://servmod.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
+  <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav" aria-label="Main"><a href="/features.html" aria-current=page>Modules</a><a href="/equipment.html">Equipment</a><a href="/guides.html">Connection guides</a><a href="/pricing.html">Pricing</a><a href="/support.html">Support</a><a class="btn" href="/pricing.html">Get ServMod</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap page" style="padding-bottom:0"><h1>Modules</h1><p class="intro">What each part of ServMod does today. Status labels are honest: release 0.26 is in testing, and modules marked draft have not been tried on live equipment yet.</p><div style="margin-top:26px"><div class="legend"><span class="st">Ready</span><span class="st test">In field testing</span><span class="st draft">Draft</span><span class="st plan">Planned</span></div></div></div><section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">Inverters</h2><p class="intro">Hitachi WJ200 and WL200 over USB cable or USB-RS485, Allen-Bradley PowerFlex 520 and 525 on the DSI port, Omron 3G3MX2 over RS-485.</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none"><li style="padding:12px 0;border-bottom:1px solid var(--line)">Read all parameters and keep the backup on the phone</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Restore a backup to the drive</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Compare a backup with the drive, or the drive with factory settings</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Edit a single parameter</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Run the motor manually from the Control screen</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Faults screen with causes and reset notes from the manual (Hitachi WJ200)</li></ul></div></section><section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">Printers</h2><p class="intro">Honeywell PM45 thermal label printers over a USB-Ethernet adapter.</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none"><li style="padding:12px 0;border-bottom:1px solid var(--line)">Test the Ethernet port and test-print</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Keep your own printer list and test one or all</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">PM45 fault guide: error alerts, front panel LEDs, print, network and RFID problems</li></ul></div></section><section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">PLC, read only</h2><p class="intro">Omron over FINS/UDP (port 9600) and Allen-Bradley Logix or Micro800 over EtherNet/IP (port 44818).</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none"><li style="padding:12px 0;border-bottom:1px solid var(--line)">Per-machine list of items with live reading every second</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">List of value changes you can copy</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">No write function, by design</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Draft: tested on a simulator, not yet on a real PLC</li></ul></div></section><section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">Calc, Access, Notes, Parts</h2><p class="intro">Four small tools for the daily routine.</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none"><li style="padding:12px 0;border-bottom:1px solid var(--line)">Calc: power, cable size, resistor colours, UK wiring colours, Ethernet pinouts</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Access: encrypted machine passwords</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Notes: service notes with annotated photos</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Parts: warehouse search with CSV and XLSX import</li></ul></div></section><section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">ESP32 Loader</h2><p class="intro">Flash ESP32, ESP32-S3 and CYD boards straight from the phone.</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none"><li style="padding:12px 0;border-bottom:1px solid var(--line)">USB loader for .bin files with offsets</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">MD5 verification and chip check</li><li style="padding:12px 0;border-bottom:1px solid var(--line)">Checked on a real ESP32 CYD board</li></ul></div></section><section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">Condition and Network</h2><p class="intro">Vibration and condition checks from the phone sensors, and network checks for the plant.</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none"><li style="padding:12px 0;border-bottom:1px solid var(--line)">In field testing</li></ul></div></section>
+</main>
+<footer><div class="wrap">
+  <div class="block">
+    <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
+    <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
+  </div>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release 0.26, in testing. Created by Dariusz Grabowski, United Kingdom.</p>
+</div></footer>
+<script src="/site.js" defer></script>
+</body>
+</html>

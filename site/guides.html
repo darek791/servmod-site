@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Connection guides - ServMod</title>
+<meta name="description" content="How to wire Omron MX2, Hitachi WJ200/WL200 and Allen-Bradley PowerFlex 520/525 drives to the phone with a USB-RS485 adapter.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://servmod.com/guides.html">
+<link rel="icon" href="/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="ServMod">
+<meta property="og:title" content="Connection guides - ServMod"><meta property="og:description" content="How to wire Omron MX2, Hitachi WJ200/WL200 and Allen-Bradley PowerFlex 520/525 drives to the phone with a USB-RS485 adapter.">
+<meta property="og:url" content="https://servmod.com/guides.html"><meta property="og:image" content="https://servmod.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
+  <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav" aria-label="Main"><a href="/features.html">Modules</a><a href="/equipment.html">Equipment</a><a href="/guides.html" aria-current=page>Connection guides</a><a href="/pricing.html">Pricing</a><a href="/support.html">Support</a><a class="btn" href="/pricing.html">Get ServMod</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap page"><div class="prose" style="max-width:48em">
+<h1>Connection guides</h1>
+<p class="intro">Wire the drive to the phone with a USB-RS485 adapter. Bench-test before you touch a production machine.</p>
+<h2>Omron 3G3MX2 over USB-RS485</h2>
+<dl class="kv"><dt>Adapter A (D+)</dt><dd>to RS+ on the control terminals</dd><dt>Adapter B (D-)</dt><dd>to RS- on the control terminals</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd><dt>Termination</dt><dd>Switch on the 120 ohm termination on the last drive</dd></dl>
+<p>The RJ45 is for the remote operator only, not for ServMod. Changes to C071 to C075 apply after a power cycle.</p>
+<h2>Hitachi WJ200 and WL200</h2>
+<dl class="kv"><dt>Connection</dt><dd>USB cable from the inverter, or a USB-RS485 adapter on the RS-485 terminals</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd></dl>
+<h2>Allen-Bradley PowerFlex 520 and 525</h2>
+<dl class="kv"><dt>Connection</dt><dd>USB-RS485 adapter on the DSI RJ45, pins 4 (TxRxD+) and 5 (TxRxD-)</dd><dt>Defaults</dt><dd>Node 100, 9600 baud, 8-N-1</dd></dl>
+<p>The left RJ45 is EtherNet/IP and the right one is DSI.</p>
+<h2>If the phone does not see the adapter</h2>
+<ul><li>Use a data cable, not a charge-only cable, and an adapter with an FTDI, CP210x, CH34x or CH343 chip.</li>
+<li>Confirm the USB permission prompt when it appears.</li>
+<li>Check that slave number, baud rate and format in ServMod match the drive. A mismatch looks like no answer.</li>
+<li>Swap A and B if the drive still does not answer. Labelling differs between adapters.</li></ul>
+<p>Still stuck? Send the drive model and what the screen says through the <a href="/support.html">support form</a>.</p>
+</div></div>
+</main>
+<footer><div class="wrap">
+  <div class="block">
+    <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
+    <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
+  </div>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release 0.26, in testing. Created by Dariusz Grabowski, United Kingdom.</p>
+</div></footer>
+<script src="/site.js" defer></script>
+</body>
+</html>
