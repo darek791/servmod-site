@@ -15,9 +15,9 @@
       show('Enter your name, a valid email address and a message.', 'err'); return;
     }
     var b = form.querySelector('button'); b.disabled = true; show('Sending...', 'ok');
-    fetch(form.dataset.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+    fetch(form.dataset.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'servmod' }, body: JSON.stringify(d) })
       .then(function (r) { if (!r.ok) throw new Error(r.status); form.reset(); show('Message sent. We will reply to the email address you gave.', 'ok'); })
-      .catch(function () { show('The message could not be sent because the support service is not live yet. Please write to support@servmod.com instead.', 'err'); })
+      .catch(function () { show('The message could not be sent. Please try again later or write to support@servmod.com.', 'err'); })
       .then(function () { b.disabled = false; });
   });
 })();

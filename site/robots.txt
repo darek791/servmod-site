@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /servmod/
+Disallow: /account/
+Disallow: /api/
 Sitemap: https://servmod.com/sitemap.xml

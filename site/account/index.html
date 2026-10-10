@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your account - ServMod</title>
+<meta name="description" content="Sign in to ServMod to manage your licence and activation codes.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://servmod.com/account/">
+<link rel="icon" href="/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="ServMod">
+<meta property="og:title" content="Your account - ServMod"><meta property="og:description" content="Sign in to ServMod to manage your licence and activation codes.">
+<meta property="og:url" content="https://servmod.com/account/"><meta property="og:image" content="https://servmod.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="noindex">
+<link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/style.css"><script src="/account.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
+  <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav" aria-label="Main"><a href="/features.html">Modules</a><a href="/equipment.html">Equipment</a><a href="/guides.html">Connection guides</a><a href="/manuals/">Fault codes</a><a href="/pricing.html">Pricing</a><a href="/support.html">Support</a><a href="/account/">Sign in</a><a class="btn" href="/pricing.html">Get ServMod</a></nav>
+</div></header>
+<main id="main">
+<div class="wrap page" id="acct"><h1>Your account</h1>
+<noscript><p>This page needs JavaScript.</p></noscript>
+<div id="a-msg" class="msg" role="status"></div>
+<section id="a-login" hidden>
+  <p class="intro">Sign in with your e-mail address. We send you a one-time link and a 6-digit code. There is no password to remember.</p>
+  <form class="f" id="a-form1" style="margin-top:24px;max-width:460px" novalidate>
+    <div><label for="a-email">E-mail</label><input id="a-email" type="email" autocomplete="email" required></div>
+    <div><button class="btn" type="submit">Send sign-in link</button></div>
+  </form>
+  <form class="f" id="a-form2" style="margin-top:24px;max-width:460px" hidden novalidate>
+    <p>Check your inbox. Click the link, or enter the code here. It is valid for 15 minutes.</p>
+    <div><label for="a-code">6-digit code</label><input id="a-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*"></div>
+    <div><button class="btn" type="submit">Sign in</button></div>
+  </form>
+</section>
+<section id="a-main" hidden>
+  <p class="intro">Signed in as <b id="a-who"></b>. <a href="#" id="a-out">Sign out</a></p>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Your licence</h2>
+  <div id="a-ents"></div>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Activate a phone</h2>
+  <p class="hint">Open ServMod on the phone, go to the licence screen and copy the Device ID. Paste it here to get the activation code. If you change phones, release the old one first.</p>
+  <form class="f" id="a-dev" style="margin-top:14px;max-width:560px" novalidate>
+    <div class="row"><div><label for="a-did">Device ID</label><input id="a-did" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
+    <div><label for="a-lab">Name (optional)</label><input id="a-lab" maxlength="60" placeholder="e.g. Work phone"></div></div>
+    <div><button class="btn" type="submit">Get activation code</button></div>
+  </form>
+  <div id="a-code-out" style="margin-top:16px"></div>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Your phones</h2>
+  <div id="a-devs"></div>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Your data</h2>
+  <p><a class="btn ghost" href="/api/me/export" download="servmod-account.json">Download my data</a> <button class="btn ghost" id="a-del" type="button">Delete my account</button></p>
+</section>
+<section id="a-admin" hidden>
+  <h2 style="font-size:1.5rem;margin:40px 0 10px">Admin</h2>
+  <form class="f" id="a-grant" style="max-width:560px" novalidate><div class="row"><div><label for="g-email">Grant a licence to</label><input id="g-email" type="email"></div><div><label for="g-seats">Phones</label><input id="g-seats" type="number" min="1" max="20" value="1"></div></div><div><button class="btn" type="submit">Grant</button></div></form>
+  <h3 style="margin:24px 0 8px">Support messages</h3><div id="ad-t"></div>
+  <h3 style="margin:24px 0 8px">Users and licences</h3><div id="ad-u"></div>
+</section></div>
+</main>
+<footer><div class="wrap">
+  <div class="block">
+    <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
+    <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
+  </div>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release 0.26, in testing. Created by Dariusz Grabowski, United Kingdom.</p>
+</div></footer>
+<script src="/site.js" defer></script>
+</body>
+</html>

@@ -41,7 +41,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 <header class="top"><div class="wrap">
   <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
   <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
-  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" href="/pricing.html">Get ServMod</a></nav>
+  <nav class="nav" id="nav" aria-label="Main">{nav}<a href="/account/">Sign in</a><a class="btn" href="/pricing.html">Get ServMod</a></nav>
 </div></header>
 <main id="main">
 {body}
@@ -306,6 +306,47 @@ def manuals():
 <p class="hint" style="margin-top:30px">These summaries are a quick aid and can contain mistakes or be out of date. Always check the manufacturer's current manual before changing settings on a machine. ServMod is not affiliated with Hitachi, Rockwell Automation, Allen-Bradley, Omron or Danfoss; product names belong to their owners.</p></div>"""
     return page("manuals", "Fault codes and parameters", "Quick look-up of drive fault codes and parameters for Hitachi WJ200, PowerFlex 520, Omron MX2 and Danfoss FC 280, with links to the manufacturer manuals.", body, "/manuals/", extra_head='<script src="/manuals.js" defer></script>')
 
+def account():
+    body = """<div class="wrap page" id="acct"><h1>Your account</h1>
+<noscript><p>This page needs JavaScript.</p></noscript>
+<div id="a-msg" class="msg" role="status"></div>
+<section id="a-login" hidden>
+  <p class="intro">Sign in with your e-mail address. We send you a one-time link and a 6-digit code. There is no password to remember.</p>
+  <form class="f" id="a-form1" style="margin-top:24px;max-width:460px" novalidate>
+    <div><label for="a-email">E-mail</label><input id="a-email" type="email" autocomplete="email" required></div>
+    <div><button class="btn" type="submit">Send sign-in link</button></div>
+  </form>
+  <form class="f" id="a-form2" style="margin-top:24px;max-width:460px" hidden novalidate>
+    <p>Check your inbox. Click the link, or enter the code here. It is valid for 15 minutes.</p>
+    <div><label for="a-code">6-digit code</label><input id="a-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*"></div>
+    <div><button class="btn" type="submit">Sign in</button></div>
+  </form>
+</section>
+<section id="a-main" hidden>
+  <p class="intro">Signed in as <b id="a-who"></b>. <a href="#" id="a-out">Sign out</a></p>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Your licence</h2>
+  <div id="a-ents"></div>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Activate a phone</h2>
+  <p class="hint">Open ServMod on the phone, go to the licence screen and copy the Device ID. Paste it here to get the activation code. If you change phones, release the old one first.</p>
+  <form class="f" id="a-dev" style="margin-top:14px;max-width:560px" novalidate>
+    <div class="row"><div><label for="a-did">Device ID</label><input id="a-did" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
+    <div><label for="a-lab">Name (optional)</label><input id="a-lab" maxlength="60" placeholder="e.g. Work phone"></div></div>
+    <div><button class="btn" type="submit">Get activation code</button></div>
+  </form>
+  <div id="a-code-out" style="margin-top:16px"></div>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Your phones</h2>
+  <div id="a-devs"></div>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Your data</h2>
+  <p><a class="btn ghost" href="/api/me/export" download="servmod-account.json">Download my data</a> <button class="btn ghost" id="a-del" type="button">Delete my account</button></p>
+</section>
+<section id="a-admin" hidden>
+  <h2 style="font-size:1.5rem;margin:40px 0 10px">Admin</h2>
+  <form class="f" id="a-grant" style="max-width:560px" novalidate><div class="row"><div><label for="g-email">Grant a licence to</label><input id="g-email" type="email"></div><div><label for="g-seats">Phones</label><input id="g-seats" type="number" min="1" max="20" value="1"></div></div><div><button class="btn" type="submit">Grant</button></div></form>
+  <h3 style="margin:24px 0 8px">Support messages</h3><div id="ad-t"></div>
+  <h3 style="margin:24px 0 8px">Users and licences</h3><div id="ad-u"></div>
+</section></div>"""
+    return page("", "Your account", "Sign in to ServMod to manage your licence and activation codes.", body, "/account/", extra_head='<script src="/account.js" defer></script>', noindex=True)
+
 def doc(key, title, desc, path, inner, draft=True):
     note = '<div class="draft-note">Draft. This page will be completed and reviewed before ordering opens.</div>' if draft else ""
     body = f'<div class="wrap page"><div class="prose"><h1>{title}</h1>{note}{inner}</div></div>'
@@ -350,6 +391,7 @@ PAGES = {
  "refunds.html": doc("", "Refunds", "How refunds for ServMod will work.", "/refunds.html", REFUNDS),
  "licence.html": doc("", "Licence", "How the ServMod licence and activation will work.", "/licence.html", LICENCE),
  "manuals/index.html": manuals(),
+ "account/index.html": account(),
  "404.html": not_found(),
 }
 
@@ -370,10 +412,11 @@ def main():
         ms.append(json.load(open(f, encoding="utf-8")))
     os.makedirs(os.path.join(OUT, "manuals"), exist_ok=True)
     json.dump({"manuals": ms}, open(os.path.join(OUT, "manuals", "data.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    shutil.copy(os.path.join(HERE, "account.js"), os.path.join(OUT, "account.js"))
     shutil.copy(os.path.join(HERE, "manuals.js"), os.path.join(OUT, "manuals.js"))
     shutil.copy(os.path.join(HERE, "site.js"), os.path.join(OUT, "site.js"))
-    urls = [("/", "1.0")] + [(f"/{n}".replace("index.html", ""), "0.7") for n in PAGES if n not in ("index.html", "404.html")]
+    urls = [("/", "1.0")] + [(f"/{n}".replace("index.html", ""), "0.7") for n in PAGES if n not in ("index.html", "404.html", "account/index.html")]
     open(os.path.join(OUT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{DOMAIN}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n" for u, p in urls) + "</urlset>\n")
-    open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nDisallow: /servmod/\nSitemap: {DOMAIN}/sitemap.xml\n")
+    open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nDisallow: /servmod/\nDisallow: /account/\nDisallow: /api/\nSitemap: {DOMAIN}/sitemap.xml\n")
     print("built", len(PAGES), "pages ->", OUT)
 main()
