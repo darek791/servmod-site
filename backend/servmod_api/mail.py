@@ -23,7 +23,7 @@ def send(to: str, subject: str, text: str, reply_to: str | None = None) -> bool:
                 s.starttls(context=ssl.create_default_context())
                 s.login(os.environ["SMTP_USER"], os.environ["SMTP_PASS"]); s.send_message(m)
         else:
-            OUTBOX.append((to, subject, text)); log.warning("MAIL(log) to=%s subject=%s", to, subject)
+            OUTBOX.append((to, subject, text)); log.warning("MAIL(log) to=%s subject=%s\n%s", to, subject, text)
         return True
     except Exception as e:
         log.error("mail failed: %s", e); return False

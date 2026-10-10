@@ -1,0 +1,21 @@
+[Unit]
+Description=ServMod API (accounts, licences, support)
+After=network.target
+
+[Service]
+User=servmod
+Group=servmod
+WorkingDirectory=/opt/servmod-app
+EnvironmentFile=/etc/servmod/api.env
+ExecStart=/opt/servmod-app/venv/bin/uvicorn servmod_api.app:app --host 127.0.0.1 --port 8100 --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/servmod
+ReadOnlyPaths=/etc/servmod
+
+[Install]
+WantedBy=multi-user.target
