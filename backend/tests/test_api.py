@@ -66,3 +66,13 @@ def test_support_and_delete(c):
     tok, _ = login(c, "a@b.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
     assert c.delete("/api/me", headers=H).status_code == 200
     assert c.get("/api/me").status_code == 401
+
+def test_hex_key_format_matches_vendor_script(tmp_path, monkeypatch):
+    from servmod_api import licence
+    d = 0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    kp = tmp_path / "license_private.key"; kp.write_text("%064x\n" % d)
+    monkeypatch.setenv("LICENSE_KEY", str(kp))
+    key = licence.load_key()
+    code = licence.make_code(key, "DEV-123456", "ALL", 0, "a|b@x.com")
+    assert licence.verify_code(key.public_key(), code)
+    assert licence.unb64u(code.split(".")[1]) == b"DEV-123456|ALL|0|a b@x.com"

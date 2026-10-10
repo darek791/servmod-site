@@ -9,13 +9,14 @@ def b64u(b: bytes) -> str: return base64.urlsafe_b64encode(b).decode().rstrip("=
 def unb64u(s: str) -> bytes: return base64.urlsafe_b64decode(s + "=" * (-len(s) % 4))
 
 def load_key():
-    with open(KEY_PATH(), "rb") as f: raw = f.read()
-    try: return serialization.load_pem_private_key(raw, None)
-    except ValueError:
-        return serialization.load_der_private_key(unb64u(raw.decode().strip()) if raw[:1] != b"\x30" else raw, None)
+    """Accepts the 64-hex-digit private scalar written by wl200_license.py keygen, or a PEM file."""
+    with open(KEY_PATH(), "rb") as f: raw = f.read().strip()
+    if len(raw) == 64 and all(c in b"0123456789abcdefABCDEF" for c in raw):
+        return ec.derive_private_key(int(raw, 16), ec.SECP256R1())
+    return serialization.load_pem_private_key(raw, None)
 
 def make_code(key, device, features, exp=0, name=""):
-    payload = f"{device}|{features}|{exp}|{name}".encode()
+    payload = "|".join([device, features, str(exp), name.replace("|", " ")]).encode()
     sig = key.sign(payload, ec.ECDSA(hashes.SHA256()))
     return f"WL1.{b64u(payload)}.{b64u(sig)}"
 
