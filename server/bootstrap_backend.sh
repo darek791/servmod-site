@@ -9,6 +9,10 @@ mkdir -p /opt/servmod-app /var/lib/servmod /etc/servmod
 chown servmod:servmod /var/lib/servmod; chmod 700 /var/lib/servmod
 [ -x /opt/servmod-app/venv/bin/pip ] || python3 -m venv /opt/servmod-app/venv
 umask 077
+if [ -z "${RESEND_API_KEY:-}" ] && [ -f /etc/servmod/api.env ]; then
+  OLDKEY=$(grep '^RESEND_API_KEY=' /etc/servmod/api.env | cut -d= -f2-)
+  if [ -n "$OLDKEY" ]; then RESEND_API_KEY="$OLDKEY"; MAIL_MODE=resend; fi
+fi
 cat > /etc/servmod/api.env <<ENV
 SITE_URL=https://servmod.com
 ADMIN_EMAILS=${ADMIN_EMAILS}
