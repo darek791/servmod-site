@@ -41,7 +41,8 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 <header class="top"><div class="wrap">
   <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
   <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
-  <nav class="nav" id="nav" aria-label="Main">{nav}<a href="/account/">Sign in</a><a class="btn" href="/pricing.html">Get ServMod</a></nav>
+  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" href="/pricing.html">Get ServMod</a></nav>
+  <a class="acct" id="acct-link" href="/account/">Sign in</a>
 </div></header>
 <main id="main">
 {body}

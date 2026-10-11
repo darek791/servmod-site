@@ -38,6 +38,8 @@ a:hover{color:var(--orange)}
 .btn.ghost{background:transparent;color:var(--text);border-color:#5a5a5a}
 .btn.ghost:hover{border-color:var(--text);color:var(--text);background:transparent}
 .nav .btn{padding:10px 16px;font-size:15px;color:#000;border-bottom:1.5px solid var(--orange)}
+.acct{margin-left:22px;font:600 15px var(--head);color:var(--text);border:1.5px solid #5a5a5a;padding:9px 14px;border-radius:2px;text-decoration:none;white-space:nowrap}
+.acct:hover{border-color:var(--orange);color:var(--text)}
 .menu{display:none;margin-left:auto;background:none;border:1.5px solid #5a5a5a;color:var(--text);font:600 15px var(--head);padding:9px 14px;border-radius:2px}
 
 /* hero */
@@ -178,6 +180,7 @@ footer{padding:56px 0 40px}
 }
 @media (max-width:780px){
   .menu{display:block}
+  .acct{margin-left:10px;padding:9px 12px}
   .nav{display:none;position:absolute;left:0;right:0;top:68px;background:#000;border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:0;padding:8px 24px 18px}
   .nav.open{display:flex}
   .nav a{padding:14px 0;border-bottom:1px solid var(--line-soft);font-size:17px}

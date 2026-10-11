@@ -1,4 +1,6 @@
 (function () {
+  var acct = document.getElementById('acct-link');
+  if (acct && window.fetch) fetch('/api/me', { credentials: 'same-origin' }).then(function (r) { if (r.ok) acct.textContent = 'My account'; }).catch(function () {});
   var btn = document.querySelector('.menu'), nav = document.getElementById('nav');
   if (btn && nav) btn.addEventListener('click', function () {
     var open = nav.classList.toggle('open'); btn.setAttribute('aria-expanded', open);
