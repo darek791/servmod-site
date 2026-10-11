@@ -1,6 +1,6 @@
 import os, json, logging
 from fastapi import FastAPI, Request, Response, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from . import core, mail, licence
 
 log = logging.getLogger("servmod")
@@ -45,6 +45,17 @@ def set_cookie(resp: Response, tok: str):
 
 @app.get("/api/health")
 def health(): return {"ok": True}
+
+@app.get("/api/latest.apk")
+def latest_apk():
+    """Redirect to the newest stable APK named in the published feed."""
+    try:
+        with open(os.environ.get("FEED_DIR", "/var/www/servmod/servmod") + "/version.json", encoding="utf-8") as f:
+            url = json.load(f)["apkUrl"]
+    except Exception:
+        raise HTTPException(404, "no release published")
+    if not url.startswith(core.SITE_URL + "/servmod/releases/"): raise HTTPException(404, "no release published")
+    return RedirectResponse(url, 302)
 
 # ---------- auth
 @app.post("/api/auth/request")

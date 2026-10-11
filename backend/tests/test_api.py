@@ -76,3 +76,12 @@ def test_hex_key_format_matches_vendor_script(tmp_path, monkeypatch):
     code = licence.make_code(key, "DEV-123456", "ALL", 0, "a|b@x.com")
     assert licence.verify_code(key.public_key(), code)
     assert licence.unb64u(code.split(".")[1]) == b"DEV-123456|ALL|0|a b@x.com"
+
+def test_latest_apk_redirect(c, tmp_path, monkeypatch):
+    monkeypatch.setenv("FEED_DIR", str(tmp_path))
+    assert c.get("/api/latest.apk", follow_redirects=False).status_code == 404
+    (tmp_path / "version.json").write_text('{"apkUrl":"https://servmod.com/servmod/releases/ServMod-0.27.0.apk"}')
+    r = c.get("/api/latest.apk", follow_redirects=False)
+    assert r.status_code == 302 and r.headers["location"].endswith("ServMod-0.27.0.apk")
+    (tmp_path / "version.json").write_text('{"apkUrl":"https://evil.example/x.apk"}')
+    assert c.get("/api/latest.apk", follow_redirects=False).status_code == 404
