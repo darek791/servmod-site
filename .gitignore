@@ -6,3 +6,6 @@
 site/servmod/
 manuals_src/*.pdf
 *.pdf
+__pycache__/
+*.pyc
+.pytest_cache/

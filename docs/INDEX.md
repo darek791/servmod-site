@@ -1,6 +1,6 @@
 # ServMod website – project index (read this first)
 
-Last updated: 2026-10-11 (site commit cf7ed02). Keep this file current: when something is added/changed/learned, update it in the same commit.
+Last updated: 2026-10-12. Keep this file current: when something is added/changed/learned, update it in the same commit.
 Mirror on the PC: `C:\Users\grabo\Desktop\Arduino\ServMod\handoff\website\` (copy of `docs/`). Master copy = this repo.
 
 ## What it is
@@ -20,13 +20,13 @@ Static marketing site + small FastAPI backend for **ServMod** (Android toolbox f
 | `docs/` | This index + `HOW_WE_WORK.md`. |
 
 ## Pages (URL -> builder in build.py)
-`/` home · `/features.html` modules · `/equipment.html` · `/guides.html` connection guides · `/manuals/` fault codes · `/pricing.html` (no shop yet) · `/support.html` (form -> `/api/support`) · `/account/` (login by e-mail link/6-digit code, no passwords) · `/licence.html`, `/privacy.html`, `/terms.html`, `/refunds.html` · `404.html`. Header has an always-visible **Sign in / My account** button (`#acct-link`).
+`/` home · `/features.html` modules · `/equipment.html` · `/guides.html` connection guides · `/manuals/` fault codes · `/pricing.html` (no shop yet) · `/support.html` (form -> `/api/support`) · `/account/` (login by e-mail link/6-digit code, no passwords) · `/waitlist.html` (waiting list: join form, confirm/unsubscribe landing via `#confirm=`/`#unsub=` fragment), `/licence.html`, `/privacy.html`, `/terms.html`, `/refunds.html` · `404.html`. Header has an always-visible **Sign in / My account** button (`#acct-link`).
 
 ## Backend API (`/api/*`, proxied by nginx to 127.0.0.1:8100)
 Public: `GET /api/health`, `GET /api/latest.apk` (302 to newest APK in feed; 404 while none published), `POST /api/support` (valid e-mail, message 10-5000 chars, rate-limited, stored as ticket + mailed to SUPPORT_TO or first ADMIN_EMAIL).
 Auth: `POST /api/auth/request|verify|logout`. Account: `GET /api/me`, `POST /api/devices` (Device ID -> activation code), `POST /api/devices/release`, `GET /api/me/export`, `DELETE /api/me`.
-Admin (ADMIN_EMAILS only): `/api/admin/overview|grant|revoke|ticket`.
-All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite tables: users, login_tokens, sessions, entitlements, licences, tickets, rate, audit.
+Waiting list: `POST /api/waitlist` (double opt-in: sends confirm mail), `POST /api/waitlist/confirm|unsubscribe` ({token}), `POST /api/waitlist/me` ({on}, signed in; also a checkbox on the account page). Admin (ADMIN_EMAILS only): `/api/admin/overview|grant|revoke|ticket`, `POST /api/admin/waitlist/notify` ({subject,text,test:true} sends only to the admin; a real send needs `confirm:true`, goes to confirmed rows not yet notified unless `again:true`, in a background thread 0.6 s apart). Admin UI is the Waiting list block on the account page.
+All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite tables: waitlist (email, confirmed, tok, source, notified), users, login_tokens, sessions, entitlements, licences, tickets, rate, audit.
 
 ## Infrastructure
 - Domain servmod.com on Cloudflare DNS -> Hetzner server (167.233.108.235; the box formerly ran the trading bots – bot files still there, do not delete without asking). nginx + certbot TLS.
@@ -36,5 +36,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## Current status / open items
 - Done: full static site, manuals search, account login, support form (works), licence activation codes, visible Sign-in button.
+- Waiting list built 2026-10-12: send the release e-mail from the account page (admin) when the first public version is published, together with the "unlock".
 - Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for Dariusz to show those files), automatic licence e-mail after purchase, publishing the APK (only on "unlock").
 - Known gotcha: do not reuse DOM id `acct` (account page uses it) – header link is `acct-link`.

@@ -41,7 +41,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 <header class="top"><div class="wrap">
   <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
   <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
-  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" href="/pricing.html">Get ServMod</a></nav>
+  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" href="/waitlist.html">Get notified</a></nav>
   <a class="acct" id="acct-link" href="/account/">Sign in</a>
 </div></header>
 <main id="main">
@@ -56,7 +56,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 FOOTER = f"""<footer><div class="wrap">
   <div class="block">
     <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
-    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li></ul></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/waitlist.html">Waiting list</a></li></ul></div>
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
@@ -95,7 +95,7 @@ def hero():
   <div>
     <h1>Back up the drive before you touch it.</h1>
     <p class="lead">ServMod reads, saves and compares inverter parameters from your Android phone, over a USB-RS485 adapter. No laptop, no mobile signal, no software to install on a PC.</p>
-    <div class="actions"><a class="btn" href="/pricing.html">Get ServMod</a><a class="btn ghost" href="#job">See how a job goes</a></div>
+    <div class="actions"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Omron</li></ul>
   </div>
   <figure class="sheet" style="margin:0">{HERO_SVG}<figcaption><span>Fig. 1 Phone to drive over RS-485</span><span>Omron MX2 shown</span></figcaption></figure>
@@ -147,6 +147,30 @@ def module_rows(n=None):
     rows = MODULES if n is None else MODULES[:n]
     return "".join(f'<tr><td><b>{a}</b></td><td>{b}</td><td><span class="st {c}">{d}</span></td></tr>' for a, b, c, d in rows)
 
+def wl_form(uid):
+    return f"""<form class="f wl-form" novalidate style="margin-top:22px;max-width:460px">
+  <div><label for="wl-{uid}">Email</label><input id="wl-{uid}" name="email" type="email" autocomplete="email" required></div>
+  <div class="hp" aria-hidden="true"><label>Leave empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+  <div><button class="btn" type="submit">Notify me</button></div>
+  <div class="msg" role="status"></div>
+</form>"""
+
+def waitlist():
+    body = f"""<div class="wrap page"><div class="split"><div>
+<h1>Be first to know</h1>
+<div id="wl-status" class="msg" role="status"></div>
+<p class="intro">ServMod is in testing on real equipment and is not on sale yet. Leave your email address and we will send you one message when the first public version is available. Nothing else.</p>
+{wl_form("page")}
+<p class="hint" style="margin-top:14px">We first send a message to confirm that the address is yours. Unsubscribe with the link in any message from us. See the <a href="/privacy.html">privacy page</a>.</p>
+</div><div class="prose">
+<h2 style="margin-top:0">Prefer an account?</h2>
+<p>Create an account (it only needs your email address and a one-time code, no password) and tick <b>Email me once when the first public version is released</b> on the account page. It does the same thing, and the account will also hold your licence when ordering opens.</p>
+<p><a class="btn ghost" href="/account/">Create an account or sign in</a></p>
+<h2>What you get</h2>
+<ul><li>One email when ServMod is released.</li><li>No newsletter, no ads, no sharing of your address.</li></ul>
+</div></div></div>"""
+    return page("", "Waiting list", "Join the ServMod waiting list and get one email when the first public version is released.", body, "/waitlist.html")
+
 def home():
     body = hero() + strip() + JOB + f"""
 <section><div class="wrap">
@@ -165,6 +189,14 @@ def home():
     <div><h3>Passwords stay encrypted</h3><p>The Access vault uses AES-GCM through the Android keystore, hides itself from screenshots, and clears the clipboard after 30 seconds.</p></div>
     <div><h3>Manual names, not nicknames</h3><p>Parameters keep the codes and names from the manufacturer's manual, so what you read on screen matches the paper.</p></div>
   </div>
+</div></section>
+
+<section><div class="wrap split">
+  <div>
+    <h2>Be first to know</h2>
+    <p class="intro">The first public version is not out yet. Leave your email and we will tell you the day it is.</p>
+  </div>
+  <div>{wl_form("home")}<p class="hint" style="margin-top:10px">One message at release, nothing else. You confirm your address first. <a href="/waitlist.html">More</a></p></div>
 </div></section>
 
 <section><div class="wrap split">
@@ -254,7 +286,7 @@ def pricing():
     body = """<div class="wrap page"><div class="split"><div>
 <h1>Pricing</h1>
 <p class="intro">Ordering is not open yet. The app is in testing on real equipment, and prices will be published on this page before the shop opens.</p>
-<div class="actions" style="margin-top:28px"><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
+<div class="actions" style="margin-top:28px"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
 </div><div class="prose">
 <h2 style="margin-top:0">How a licence will work</h2>
 <ol>
@@ -337,12 +369,20 @@ def account():
   <div id="a-code-out" style="margin-top:16px"></div>
   <h2 style="font-size:1.5rem;margin:30px 0 10px">Your phones</h2>
   <div id="a-devs"></div>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Release news</h2>
+  <p><label><input type="checkbox" id="a-wl"> Email me once when the first public version of ServMod is released.</label></p>
   <h2 style="font-size:1.5rem;margin:30px 0 10px">Your data</h2>
   <p><a class="btn ghost" href="/api/me/export" download="servmod-account.json">Download my data</a> <button class="btn ghost" id="a-del" type="button">Delete my account</button></p>
 </section>
 <section id="a-admin" hidden>
   <h2 style="font-size:1.5rem;margin:40px 0 10px">Admin</h2>
   <form class="f" id="a-grant" style="max-width:560px" novalidate><div class="row"><div><label for="g-email">Grant a licence to</label><input id="g-email" type="email"></div><div><label for="g-seats">Phones</label><input id="g-seats" type="number" min="1" max="20" value="1"></div></div><div><button class="btn" type="submit">Grant</button></div></form>
+  <h3 style="margin:24px 0 8px">Waiting list</h3><div id="ad-w"></div>
+  <form class="f" id="ad-wf" style="max-width:560px;margin-top:10px" novalidate>
+    <div><label for="ad-ws-sub">Subject</label><input id="ad-ws-sub" maxlength="150"></div>
+    <div><label for="ad-ws-txt">Message (an unsubscribe link is added automatically)</label><textarea id="ad-ws-txt"></textarea></div>
+    <div class="actions"><button class="btn ghost" id="ad-wt" type="button">Send test to me</button> <button class="btn" id="ad-ws" type="button">Send to the waiting list</button></div>
+  </form>
   <h3 style="margin:24px 0 8px">Support messages</h3><div id="ad-t"></div>
   <h3 style="margin:24px 0 8px">Users and licences</h3><div id="ad-u"></div>
 </section></div>"""
@@ -367,6 +407,7 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself.</p>
 <p>The Device ID shown in the app is a code derived from your phone. It is used only to create your activation code. The update check downloads one small file and sends no identifier.</p>
 <h2>This website</h2><p>The site uses no advertising cookies and no analytics scripts. Fonts are served from this site, not from a third party. Cloudflare delivers the site and may process technical request data such as IP address to protect and speed it up.</p>
+<h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to send you one email when the first public version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
 <h2>Support messages</h2><p>If you write to support, we keep your name, email address and message to answer you and to help with later questions.</p>
 <h2>Ordering</h2><p>When ordering opens, we will store your email address, your Device ID and your order details to issue and re-issue your activation code and to handle payment, tax and support. Card and PayPal payments are handled by the payment providers, and we do not see your card details. This section will be completed with the full list of providers, retention periods and your rights before ordering opens.</p>
 <h2>Contact</h2><p>The controller of the data is Dariusz Grabowski, United Kingdom. Contact: <a href="mailto:support@servmod.com">support@servmod.com</a>.</p>"""
@@ -388,6 +429,7 @@ PAGES = {
  "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(),
  "pricing.html": pricing(), "support.html": support(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
+ "waitlist.html": waitlist(),
  "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY),
  "refunds.html": doc("", "Refunds", "How refunds for ServMod will work.", "/refunds.html", REFUNDS),
  "licence.html": doc("", "Licence", "How the ServMod licence and activation will work.", "/licence.html", LICENCE),

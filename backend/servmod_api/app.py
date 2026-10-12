@@ -1,4 +1,4 @@
-import os, json, logging
+import os, json, logging, secrets, threading, time
 from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
 from . import core, mail, licence
@@ -115,7 +115,8 @@ def me(req: Request):
         active = core.q("SELECT COUNT(*) c FROM licences WHERE entitlement_id=? AND released IS NULL", (e["id"],)).fetchone()["c"]
         ents.append({"id": e["id"], "product": e["product"], "features": e["features"], "seats": e["seats"], "seats_used": active,
                      "moves_left": max(0, core.MOVES_PER_YEAR - moves_used(e["id"])), "revoked": bool(e["revoked"]), "created": e["created"]})
-    return {"email": u["email"], "admin": u["email"] in core.ADMIN_EMAILS, "entitlements": ents, "licences": licences_of(u["id"])}
+    wl = core.q("SELECT 1 FROM waitlist WHERE email=? AND confirmed=1", (u["email"],)).fetchone()
+    return {"email": u["email"], "admin": u["email"] in core.ADMIN_EMAILS, "entitlements": ents, "licences": licences_of(u["id"]), "waitlist": bool(wl)}
 
 @app.post("/api/devices")
 async def add_device(req: Request):
@@ -157,7 +158,8 @@ async def release_device(req: Request):
 def export(req: Request):
     u = current(req)
     return {"user": {"email": u["email"], "created": u["created"]}, "licences": licences_of(u["id"]),
-            "tickets": [dict(t) for t in core.q("SELECT id,created,subject,message,status FROM tickets WHERE user_id=?", (u["id"],)).fetchall()]}
+            "tickets": [dict(t) for t in core.q("SELECT id,created,subject,message,status FROM tickets WHERE user_id=?", (u["id"],)).fetchall()],
+            "waiting_list": [dict(t) for t in core.q("SELECT created,confirmed,source FROM waitlist WHERE email=?", (u["email"],)).fetchall()]}
 
 @app.delete("/api/me")
 async def delete_me(req: Request):
@@ -165,6 +167,7 @@ async def delete_me(req: Request):
     core.q("DELETE FROM licences WHERE entitlement_id IN (SELECT id FROM entitlements WHERE user_id=?)", (u["id"],))
     for t in ("entitlements", "sessions"): core.q(f"DELETE FROM {t} WHERE user_id=?", (u["id"],))
     core.q("UPDATE tickets SET user_id=NULL WHERE user_id=?", (u["id"],))
+    core.q("DELETE FROM waitlist WHERE email=?", (u["email"],))
     core.q("DELETE FROM users WHERE id=?", (u["id"],))
     core.audit(u["email"], "delete_account")
     r = JSONResponse({"ok": True}); r.delete_cookie(COOKIE, path="/"); return r
@@ -187,13 +190,90 @@ async def support(req: Request):
     if to: mail.send(to, "[ServMod support] " + (subj or "new message"), f"From: {email}\n{extra}\n{msg}", reply_to=email)
     return {"ok": True}
 
+
+# ---------- waiting list (double opt-in; confirm/unsubscribe links carry a token in the URL fragment and are completed by a POST,
+# so mail scanners that pre-open links cannot confirm or unsubscribe anyone by accident)
+WL_FOOT = "\n\n--\nYou get this e-mail because you joined the ServMod waiting list. Unsubscribe: {url}\n"
+
+def _wl_url(kind, tok): return f"{core.SITE_URL}/waitlist.html#{kind}={tok}"
+
+@app.post("/api/waitlist")
+async def waitlist_join(req: Request):
+    d = await body(req)
+    if d.get("website"): return {"ok": True}  # honeypot
+    email = core.norm_email(d.get("email"))
+    if not email: raise HTTPException(400, "invalid email")
+    if not core.rate_ok("wl-ip:" + ip(req), 8, 3600) or not core.rate_ok("wl-em:" + email, 3, 86400):
+        raise HTTPException(429, "too many requests, try later")
+    row = core.q("SELECT * FROM waitlist WHERE email=?", (email,)).fetchone()
+    if row and row["confirmed"]: return {"ok": True}  # same answer, nothing sent
+    tok = row["tok"] if row else secrets.token_urlsafe(24)
+    if not row: core.q("INSERT INTO waitlist(email,created,tok,source) VALUES(?,?,?,?)", (email, core.now(), tok, "web"))
+    mail.send(email, "Confirm your place on the ServMod waiting list",
+              f"Someone (hopefully you) asked to be told when the first public version of ServMod is released.\n\nConfirm here:\n{_wl_url('confirm', tok)}\n\n"
+              "If it was not you, ignore this e-mail and nothing will happen. We send one e-mail when ServMod is released, and nothing else.\n")
+    return {"ok": True}
+
+@app.post("/api/waitlist/confirm")
+async def waitlist_confirm(req: Request):
+    d = await body(req)
+    if not core.rate_ok("wlc-ip:" + ip(req), 30, 3600): raise HTTPException(429, "too many attempts")
+    r = core.q("UPDATE waitlist SET confirmed=1 WHERE tok=?", (str(d.get("token", ""))[:80],))
+    if r.rowcount < 1: raise HTTPException(400, "invalid or expired link")
+    return {"ok": True}
+
+@app.post("/api/waitlist/unsubscribe")
+async def waitlist_unsub(req: Request):
+    d = await body(req)
+    if not core.rate_ok("wlu-ip:" + ip(req), 30, 3600): raise HTTPException(429, "too many attempts")
+    r = core.q("DELETE FROM waitlist WHERE tok=?", (str(d.get("token", ""))[:80],))
+    if r.rowcount < 1: raise HTTPException(400, "invalid link")
+    return {"ok": True}
+
+@app.post("/api/waitlist/me")
+async def waitlist_me(req: Request):
+    u = current(req); d = await body(req)
+    if d.get("on"):
+        if core.q("SELECT 1 FROM waitlist WHERE email=?", (u["email"],)).fetchone():
+            core.q("UPDATE waitlist SET confirmed=1 WHERE email=?", (u["email"],))
+        else:  # the sign-in already proved the address, so no second confirmation is needed
+            core.q("INSERT INTO waitlist(email,created,confirmed,tok,source) VALUES(?,?,1,?,?)", (u["email"], core.now(), secrets.token_urlsafe(24), "account"))
+    else:
+        core.q("DELETE FROM waitlist WHERE email=?", (u["email"],))
+    return {"ok": True, "on": bool(d.get("on"))}
+
+def _wl_send_all(rows, subject, text):
+    for r in rows:
+        if mail.send(r["email"], subject, text + WL_FOOT.format(url=_wl_url("unsub", r["tok"]))):
+            core.q("UPDATE waitlist SET notified=? WHERE id=?", (core.now(), r["id"]))
+        time.sleep(0.6)  # stay under the mail provider's rate limit
+
+@app.post("/api/admin/waitlist/notify")
+async def waitlist_notify(req: Request):
+    a = admin(req); d = await body(req)
+    subject = str(d.get("subject", "")).strip()[:150]; text = str(d.get("text", "")).strip()
+    if not subject or len(text) < 10 or len(text) > 8000: raise HTTPException(400, "subject and a message of 10-8000 characters are needed")
+    if d.get("test"):
+        mail.send(a["email"], "[TEST] " + subject, text + WL_FOOT.format(url=_wl_url("unsub", "test-token")))
+        return {"ok": True, "test": True}
+    if d.get("confirm") is not True: raise HTTPException(400, "confirmation missing")
+    sql = "SELECT * FROM waitlist WHERE confirmed=1" + ("" if d.get("again") else " AND notified IS NULL")
+    rows = [dict(r) for r in core.q(sql).fetchall()]
+    core.audit(a["email"], "waitlist_notify", f"{len(rows)} recipients: {subject}")
+    if rows: threading.Thread(target=_wl_send_all, args=(rows, subject, text), daemon=True).start()
+    return {"ok": True, "queued": len(rows)}
+
 # ---------- admin
 @app.get("/api/admin/overview")
 def overview(req: Request):
     admin(req)
     return {"users": [dict(r) for r in core.q("SELECT id,email,created,last_login FROM users ORDER BY id DESC LIMIT 200")],
             "tickets": [dict(r) for r in core.q("SELECT * FROM tickets ORDER BY id DESC LIMIT 200")],
-            "entitlements": [dict(r) for r in core.q("SELECT e.*,u.email FROM entitlements e JOIN users u ON u.id=e.user_id ORDER BY e.id DESC LIMIT 200")]}
+            "entitlements": [dict(r) for r in core.q("SELECT e.*,u.email FROM entitlements e JOIN users u ON u.id=e.user_id ORDER BY e.id DESC LIMIT 200")],
+            "waitlist": {"confirmed": core.q("SELECT COUNT(*) c FROM waitlist WHERE confirmed=1").fetchone()["c"],
+                         "pending": core.q("SELECT COUNT(*) c FROM waitlist WHERE confirmed=0").fetchone()["c"],
+                         "not_yet_notified": core.q("SELECT COUNT(*) c FROM waitlist WHERE confirmed=1 AND notified IS NULL").fetchone()["c"],
+                         "latest": [dict(r) for r in core.q("SELECT email,created,confirmed,source,notified FROM waitlist ORDER BY id DESC LIMIT 100")]}}
 
 @app.post("/api/admin/grant")
 async def grant(req: Request):
