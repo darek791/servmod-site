@@ -4,7 +4,7 @@ import glob, json, os, shutil, datetime, html
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
 DOMAIN = "https://servmod.com"
-APP_VERSION = "0.26"
+APP_VERSION = "0.55"
 TODAY = datetime.date.today().isoformat()
 
 NAV = [("features", "/features.html", "Modules"), ("equipment", "/equipment.html", "Equipment"),
@@ -60,7 +60,7 @@ FOOTER = f"""<footer><div class="wrap">
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
-  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release {APP_VERSION}, in testing. Created by Dariusz Grabowski, United Kingdom.</p>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release {APP_VERSION}, in testing. Created by Dariusz Grabowski, United Kingdom.</p>
 </div></footer>"""
 
 HERO_SVG = """<svg viewBox="0 40 600 390" role="img" aria-label="Diagram: an Android phone connects through a USB to RS-485 adapter to the RS+ and RS- terminals of an inverter">
@@ -96,14 +96,14 @@ def hero():
     <h1>Back up the drive before you touch it.</h1>
     <p class="lead">ServMod reads, saves and compares inverter parameters from your Android phone, over a USB-RS485 adapter. No laptop, no mobile signal, no software to install on a PC.</p>
     <div class="actions"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="#job">See how a job goes</a></div>
-    <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Omron</li></ul>
+    <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Omron</li></ul>
   </div>
   <figure class="sheet" style="margin:0">{HERO_SVG}<figcaption><span>Fig. 1 Phone to drive over RS-485</span><span>Omron MX2 shown</span></figcaption></figure>
 </div></section>"""
 
 def strip():
-    items = [("Hitachi", "WJ200, WL200"), ("Allen-Bradley", "PowerFlex 520, 525"), ("Omron", "3G3MX2 drives"),
-             ("PLC, read only", "Omron FINS, Logix"), ("Label printers", "Honeywell PM45")]
+    items = [("Hitachi", "WJ200, WL200"), ("Allen-Bradley", "PowerFlex 520, 525"), ("Danfoss", "VLT FC 280"), ("Omron", "3G3MX2 drives"),
+                     ("PLC, read only", "Omron FINS, Logix"), ("Label printers", "Honeywell PM45")]
     return '<div class="strip"><div class="wrap">' + "".join(f"<div><b>{a}</b><span>{b}</span></div>" for a, b in items) + "</div></div>"
 
 JOB = """<section id="job"><div class="wrap split">
@@ -129,17 +129,23 @@ JOB = """<section id="job"><div class="wrap split">
 </div></section>"""
 
 MODULES = [
- ("Inverters", "Hitachi WJ200 and WL200, Allen-Bradley PowerFlex 520 and 525, Omron 3G3MX2. Read, back up, restore, compare, edit, run the motor manually, and look up fault causes.", "test", "In field testing"),
- ("Printers", "Check the Ethernet port and test printing on Honeywell PM45 label printers. Keep your own printer list. Fault guide for the PM45 included.", "test", "In field testing"),
+ ("Inverters", "Hitachi WJ200 and WL200, Allen-Bradley PowerFlex 520 and 525, Danfoss VLT FC 280, Omron 3G3MX2. Read, back up, restore, compare, edit, run the motor manually, and look up fault causes.", "test", "In field testing"),
+ ("Printers", "Check the Ethernet port and test printing on Honeywell PM45 label printers. Cable check finds a corroded plug or damaged cable by counting link drops, lost replies and slow links. Fault guide for the PM45 included.", "test", "In field testing"),
+ ("Tools", "Spirit level, magnet meter, tachometer, slow-motion study of fast machines, loupe, strobe, leak finder, ruler, picture measure, colour matcher and a sensor explorer, all from the phone's own sensors and camera.", "test", "In field testing"),
+ ("USB Tools", "USB stick analyser: partitions, raw sectors, speed and surface scan, format, repair and a file browser. Works even when Android does not mount the stick.", "test", "In field testing"),
+ ("NFC & Barcode", "Scan and program NFC tags and barcodes. A tag opens a backup, a manual or any tool in ServMod. Make QR and barcode stickers and print them.", "draft", "Draft, bench only"),
+ ("Zodiac Printers", "Library of Zodiac printer clone files sorted by machine and date, with label preview, compare and copy to a pendrive for the printer.", "draft", "Draft, bench only"),
+ ("ServMod Box", "Our own ESP32-S3 interface with RS-485, RS-232 and CAN, reached over Wi-Fi or Bluetooth. The hardware is still in development.", "draft", "Draft, bench only"),
+ ("Steppers", "Stepper motor test bench through the ServMod Box: run, jog, moves, speed and acceleration ladders, resonance sweep and endurance tests. A simulator is included.", "draft", "Draft, bench only"),
  ("PLC", "Read Omron (FINS over UDP) and Allen-Bradley (EtherNet/IP) controllers with live values and a change list. It never writes to the PLC.", "draft", "Draft, bench only"),
- ("Condition", "Vibration and condition checks using the phone's own sensors.", "test", "In field testing"),
- ("Network", "Network checks for the shop floor.", "test", "In field testing"),
+ ("Condition", "Vibration and sound checks with history, to compare before and after service.", "test", "In field testing"),
+ ("Network", "Wi-Fi, Ethernet and Bluetooth analyser, ping, port scan and Modbus TCP read.", "test", "In field testing"),
  ("Calc", "Power, cable size (recommended and minimum), resistor colour code, wiring colours (UK) and Ethernet T568A/B.", "ready", "Ready"),
  ("Access", "Machine passwords in an encrypted vault, unlocked with the phone's screen lock.", "ready", "Ready"),
  ("Notes", "Service notes with photos and drawing on top of the photo.", "ready", "Ready"),
  ("Parts", "Search the warehouse list on the phone. Import CSV or XLSX files with automatic column matching.", "ready", "Ready"),
+ ("My Stuff", "Your manuals: PDFs you download and keep offline, opened from the phone or by an NFC tag or barcode.", "draft", "Draft, bench only"),
  ("ESP32 Loader", "Flash ESP32, ESP32-S3 and CYD boards over USB from .bin files, with checksum verification.", "ready", "Ready"),
- ("Steppers", "Test panel and fault guide for stepper drives.", "plan", "Planned"),
 ]
 def status_legend():
     return '<div class="legend"><span class="st">Ready</span><span class="st test">In field testing</span><span class="st draft">Draft</span><span class="st plan">Planned</span></div>'
@@ -174,8 +180,8 @@ def waitlist():
 def home():
     body = hero() + strip() + JOB + f"""
 <section><div class="wrap">
-  <h2>One app, eleven tools</h2>
-  <p class="intro">Inverters and printers come first. The rest are small tools that live in the same app, so one phone covers the service bag.</p>
+  <h2>One app, {len(MODULES)} tools</h2>
+  <p class="intro">Inverters and printers come first. The rest are tools that live in the same app, so one phone covers the service bag.</p>
   <div style="margin-top:32px" class="scroll">{status_legend()}
   <table class="tbl mods"><thead><tr><th>Module</th><th>What it does</th><th>Status</th></tr></thead><tbody>{module_rows()}</tbody></table></div>
   <p class="intro" style="margin-top:22px"><a href="/features.html">Module details</a></p>
@@ -210,30 +216,44 @@ def home():
   </div>
 </div></section>"""
     return page("home", "ServMod - service toolbox for maintenance engineers on Android",
-        "ServMod reads, backs up and compares inverter parameters from an Android phone over USB-RS485. Hitachi, Allen-Bradley and Omron drives, label printers and more, fully offline.", body, "/")
+        "ServMod reads, backs up and compares inverter parameters from an Android phone over USB-RS485. Hitachi, Allen-Bradley, Danfoss and Omron drives, label printers, phone-sensor tools and more, fully offline.", body, "/")
 
 def features():
     cards = [
-     ("Inverters", "Hitachi WJ200 and WL200 over USB cable or USB-RS485, Allen-Bradley PowerFlex 520 and 525 on the DSI port, Omron 3G3MX2 over RS-485.", [
+     ("Inverters", "Hitachi WJ200 and WL200, Allen-Bradley PowerFlex 520 and 525 on the DSI port, Danfoss VLT FC 280 and Omron 3G3MX2 over RS-485. The Hitachi WL200 also works over its USB cable.", [
         "Read all parameters and keep the backup on the phone", "Restore a backup to the drive", "Compare a backup with the drive, or the drive with factory settings",
         "Edit a single parameter", "Run the motor manually from the Control screen", "Faults screen with causes and reset notes from the manual (Hitachi WJ200)"]),
      ("Printers", "Honeywell PM45 thermal label printers over a USB-Ethernet adapter.", [
-        "Test the Ethernet port and test-print", "Keep your own printer list and test one or all", "PM45 fault guide: error alerts, front panel LEDs, print, network and RFID problems"]),
+        "Test the Ethernet port and test-print", "Cable check: counts link drops, lost replies, delay and speed to show a corroded plug or a damaged cable", "Keep your own printer list and test one or all", "PM45 fault guide: error alerts, front panel LEDs, print, network and RFID problems"]),
+     ("Tools", "The phone's sensors and camera as service instruments.", [
+        "Spirit level, magnet meter for motor and coil fields, ruler and picture measure, height from an angle", "Tachometer from the camera, magnet, vibration, light sensor or a slow-motion video",
+        "Slow-motion study: step through a video frame by frame, put two spots on a cylinder and a parcel, and read the delay between them in milliseconds",
+        "Stroboscope, loupe with light and freeze, colour matcher with RAL names, leak finder using the microphone", "Sensor explorer: live values of every sensor in the phone"]),
+     ("USB Tools", "A USB stick analyser and repair kit that works even when Android does not mount the stick.", [
+        "Partitions, raw sectors, speed test and surface scan", "Format and repair FAT sticks, save and restore disk images", "Browse, copy, rename and delete files on the stick", "Writing is locked behind a confirmation, with an automatic backup before destructive steps"]),
+     ("NFC & Barcode", "Tags and stickers that open the right thing on the phone.", [
+        "Scan and program NFC tags and barcodes", "A tag opens a backup with its drive program, a manual or any tool in ServMod", "Make QR, Code 128, Code 39 and EAN-13 stickers in standard sizes and print them", "Draft: not yet tried on many phones"]),
+     ("Zodiac Printers", "Zodiac printer clone files organised on the phone.", [
+        "Library sorted by machine and date, with the jobs inside", "Label preview and compare of two clones", "Copy clones to a pendrive for the printer", "Draft: bench only"]),
+     ("ServMod Box and Steppers", "Our own ESP32-S3 interface and a stepper motor test bench built on it.", [
+        "RS-485, RS-232 and CAN over USB, Wi-Fi or Bluetooth with automatic detection", "Steppers: run, jog, moves, speed and acceleration ladders, resonance sweep, endurance and stress programs, with a simulator", "Draft: the hardware is still in development"]),
      ("PLC, read only", "Omron over FINS/UDP (port 9600) and Allen-Bradley Logix or Micro800 over EtherNet/IP (port 44818).", [
         "Per-machine list of items with live reading every second", "List of value changes you can copy", "No write function, by design", "Draft: tested on a simulator, not yet on a real PLC"]),
      ("Calc, Access, Notes, Parts", "Four small tools for the daily routine.", [
         "Calc: power, cable size, resistor colours, UK wiring colours, Ethernet pinouts", "Access: encrypted machine passwords", "Notes: service notes with annotated photos", "Parts: warehouse search with CSV and XLSX import"]),
      ("ESP32 Loader", "Flash ESP32, ESP32-S3 and CYD boards straight from the phone.", [
         "USB loader for .bin files with offsets", "MD5 verification and chip check", "Checked on a real ESP32 CYD board"]),
-     ("Condition and Network", "Vibration and condition checks from the phone sensors, and network checks for the plant.", ["In field testing"]),
+     ("Condition, Network and My Stuff", "Vibration and sound checks with history, Wi-Fi, Ethernet and Bluetooth analysis with ping, port scan and Modbus TCP read, and your own manuals kept offline.", ["In field testing"]),
     ]
     sec = "".join(f'<section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">{t}</h2><p class="intro">{d}</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none">' + "".join(f'<li style="padding:12px 0;border-bottom:1px solid var(--line)">{x}</li>' for x in items) + "</ul></div></section>" for t, d, items in cards)
     body = f'<div class="wrap page" style="padding-bottom:0"><h1>Modules</h1><p class="intro">What each part of ServMod does today. Status labels are honest: release {APP_VERSION} is in testing, and modules marked draft have not been tried on live equipment yet.</p><div style="margin-top:26px">{status_legend()}</div></div>' + sec
-    return page("features", "Modules", "Everything ServMod does: inverters, printers, read-only PLC, calculators, encrypted passwords, notes, parts search and an ESP32 loader.", body, "/features.html")
+    return page("features", "Modules", "Everything ServMod does: inverters, printers, phone-sensor tools, USB stick tools, NFC and barcode labels, read-only PLC, calculators, encrypted passwords, notes, parts search and an ESP32 loader.", body, "/features.html")
 
 def equipment():
-    drives = [("Hitachi WJ200 / WL200", "USB cable, or USB-RS485 adapter", "Yes", "Yes", "Yes"),
+    drives = [("Hitachi WL200", "USB cable, or USB-RS485 adapter", "Yes", "Yes", "Yes"),
+              ("Hitachi WJ200", "USB-RS485 adapter on the RS-485 terminals (USB cable not working yet)", "Yes", "Yes", "Yes"),
               ("Allen-Bradley PowerFlex 520 / 525", "USB-RS485 adapter on the DSI port", "Yes", "Yes", "Yes"),
+              ("Danfoss VLT FC 280", "USB-RS485 adapter on terminals 68 and 69", "Yes", "Yes", "Yes"),
               ("Omron 3G3MX2 (MX2-V2)", "USB-RS485 adapter (USB port later)", "Yes", "Yes", "Yes")]
     rows = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in drives)
     body = f"""<div class="wrap page">
@@ -250,13 +270,13 @@ def equipment():
 </tbody></table></div>
 <p class="intro" style="margin-top:16px">Siemens is not supported: it needs the PUT/GET function unlocked in the controller. The PLC module is a draft and has been tested on a simulator only.</p>
 <h2 style="margin-top:56px;font-size:1.6rem">Printers</h2>
-<p class="intro" style="margin-top:12px">Honeywell PM45 industrial thermal label printers, over Ethernet through a USB-C Ethernet adapter.</p>
+<p class="intro" style="margin-top:12px">Honeywell PM45 industrial thermal label printers, over Ethernet through a USB-C Ethernet adapter. The Cable check can also test the cable between the phone and any other network device.</p>
 <h2 style="margin-top:56px;font-size:1.6rem">Adapters</h2>
 <div class="prose"><ul>
 <li><b>RS-485:</b> a USB-RS485 adapter with an FTDI, CP210x, CH34x or CH343 chip.</li>
 <li><b>Ethernet:</b> any USB-C Ethernet adapter. Android handles it natively.</li>
 <li><b>One USB-C port:</b> a phone has only one, so for Ethernet and RS-485 together use a powered USB-C hub.</li>
-<li><b>CAN:</b> not supported yet.</li></ul></div>
+<li><b>CAN:</b> not supported yet. It is planned through the ServMod Box.</li></ul></div>
 <p class="intro" style="margin-top:20px">Wiring for each drive is on the <a href="/guides.html">connection guides</a>.</p>
 </div>"""
     return page("equipment", "Supported equipment", "Inverters, PLCs and printers ServMod works with, plus the USB-RS485 and Ethernet adapters you need.", body, "/equipment.html")
@@ -269,7 +289,10 @@ def guides():
 <dl class="kv"><dt>Adapter A (D+)</dt><dd>to RS+ on the control terminals</dd><dt>Adapter B (D-)</dt><dd>to RS- on the control terminals</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd><dt>Termination</dt><dd>Switch on the 120 ohm termination on the last drive</dd></dl>
 <p>The RJ45 is for the remote operator only, not for ServMod. Changes to C071 to C075 apply after a power cycle.</p>
 <h2>Hitachi WJ200 and WL200</h2>
-<dl class="kv"><dt>Connection</dt><dd>USB cable from the inverter, or a USB-RS485 adapter on the RS-485 terminals</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd></dl>
+<dl class="kv"><dt>WL200</dt><dd>USB cable (mini-USB) from the inverter, or a USB-RS485 adapter on the RS-485 terminals</dd><dt>WJ200</dt><dd>USB-RS485 adapter on the RS-485 terminals. The USB cable of the WJ200 does not work with ServMod yet.</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd></dl>
+<h2>Danfoss VLT FC 280</h2>
+<dl class="kv"><dt>Adapter A (D+)</dt><dd>to terminal 68 (P)</dd><dt>Adapter B (D-)</dt><dd>to terminal 69 (N)</dd><dt>Defaults</dt><dd>Address 1, 9600 baud, 8 data bits, even parity, 1 stop bit (8-E-1)</dd></dl>
+<p>Use an isolated adapter if you can, and check the drive's bus parameters (group 8) if it does not answer.</p>
 <h2>Allen-Bradley PowerFlex 520 and 525</h2>
 <dl class="kv"><dt>Connection</dt><dd>USB-RS485 adapter on the DSI RJ45, pins 4 (TxRxD+) and 5 (TxRxD-)</dd><dt>Defaults</dt><dd>Node 100, 9600 baud, 8-N-1</dd></dl>
 <p>The left RJ45 is EtherNet/IP and the right one is DSI.</p>
@@ -280,7 +303,7 @@ def guides():
 <li>Swap A and B if the drive still does not answer. Labelling differs between adapters.</li></ul>
 <p>Still stuck? Send the drive model and what the screen says through the <a href="/support.html">support form</a>.</p>
 </div></div>"""
-    return page("guides", "Connection guides", "How to wire Omron MX2, Hitachi WJ200/WL200 and Allen-Bradley PowerFlex 520/525 drives to the phone with a USB-RS485 adapter.", body, "/guides.html")
+    return page("guides", "Connection guides", "How to wire Omron MX2, Hitachi WJ200/WL200, Danfoss FC 280 and Allen-Bradley PowerFlex 520/525 drives to the phone with a USB-RS485 adapter.", body, "/guides.html")
 
 def pricing():
     body = """<div class="wrap page"><div class="split"><div>
