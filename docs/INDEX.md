@@ -40,3 +40,9 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Waiting list built 2026-10-12: send the release e-mail from the account page (admin) when the first public version is published, together with the "unlock".
 - Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for Dariusz to show those files), automatic licence e-mail after purchase, publishing the APK (only on "unlock").
 - Known gotcha: do not reuse DOM id `acct` (account page uses it) – header link is `acct-link`.
+
+
+## 2026-10-17 content refresh for app 0.60 (commit b9582c2)
+- `APP_VERSION` = 0.60, MODULES = 18 (added Backup; ServMod Box now 'In field testing').
+- Features: Backup card, USB Tools fake-size/recover, Box description; equipment table: Hitachi WJ-C1 via Box; privacy: Backup writes an encrypted copy to a user-chosen cloud folder.
+- Status source for the site: `_komunikacja/STATUS.md` (mirror docs/komunikacja/). On a new app/firmware version: update build.py MODULES and features cards, build, push.
