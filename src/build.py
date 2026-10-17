@@ -4,7 +4,7 @@ import glob, json, os, shutil, datetime, html
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
 DOMAIN = "https://servmod.com"
-APP_VERSION = "0.55"
+APP_VERSION = "0.60"
 TODAY = datetime.date.today().isoformat()
 
 NAV = [("features", "/features.html", "Modules"), ("equipment", "/equipment.html", "Equipment"),
@@ -132,10 +132,11 @@ MODULES = [
  ("Inverters", "Hitachi WJ200 and WL200, Allen-Bradley PowerFlex 520 and 525, Danfoss VLT FC 280, Omron 3G3MX2. Read, back up, restore, compare, edit, run the motor manually, and look up fault causes.", "test", "In field testing"),
  ("Printers", "Check the Ethernet port and test printing on Honeywell PM45 label printers. Cable check finds a corroded plug or damaged cable by counting link drops, lost replies and slow links. Fault guide for the PM45 included.", "test", "In field testing"),
  ("Tools", "Spirit level, magnet meter, tachometer, slow-motion study of fast machines, loupe, strobe, leak finder, ruler, picture measure, colour matcher and a sensor explorer, all from the phone's own sensors and camera.", "test", "In field testing"),
- ("USB Tools", "USB stick analyser: partitions, raw sectors, speed and surface scan, format, repair and a file browser. Works even when Android does not mount the stick.", "test", "In field testing"),
+ ("USB Tools", "USB stick analyser: partitions, raw sectors, speed and surface scan, a check for sticks that claim more space than they have, format, repair and a file browser. Works even when Android does not mount the stick.", "test", "In field testing"),
  ("NFC & Barcode", "Scan and program NFC tags and barcodes. A tag opens a backup, a manual or any tool in ServMod. Make QR and barcode stickers and print them.", "draft", "Draft, bench only"),
  ("Zodiac Printers", "Library of Zodiac printer clone files sorted by machine and date, with label preview, compare and copy to a pendrive for the printer.", "draft", "Draft, bench only"),
- ("ServMod Box", "Our own ESP32-S3 interface with RS-485, RS-232 and CAN, reached over Wi-Fi or Bluetooth. The hardware is still in development.", "draft", "Draft, bench only"),
+ ("ServMod Box", "Our own ESP32-S3 interface with RS-485, RS-232, CAN, USB host and Ethernet, reached over Wi-Fi or Bluetooth. Reads Danfoss FC 280 as fast as a USB adapter, and a restore keeps running inside the Box if the phone link drops. The hardware is still a prototype.", "test", "In field testing"),
+ ("Backup", "Encrypted copy of the app's own data (settings, drive backups, notes, photos, tags) to a folder you choose, such as Google Drive, with restore on a new phone and an optional daily copy.", "test", "In field testing"),
  ("Steppers", "Stepper motor test bench through the ServMod Box: run, jog, moves, speed and acceleration ladders, resonance sweep and endurance tests. A simulator is included.", "draft", "Draft, bench only"),
  ("PLC", "Read Omron (FINS over UDP) and Allen-Bradley (EtherNet/IP) controllers with live values and a change list. It never writes to the PLC.", "draft", "Draft, bench only"),
  ("Condition", "Vibration and sound checks with history, to compare before and after service.", "test", "In field testing"),
@@ -190,7 +191,7 @@ def home():
 <section><div class="wrap">
   <h2>Careful by design</h2>
   <div class="rules">
-    <div><h3>Nothing leaves the phone</h3><p>Backups, printer lists, notes and passwords stay on the device. The only network request the app makes by itself is the check for a new version.</p></div>
+    <div><h3>Nothing leaves the phone</h3><p>Backups, printer lists, notes and passwords stay on the device unless you choose a cloud folder for the encrypted Backup copy. The only network request the app makes by itself is the check for a new version.</p></div>
     <div><h3>The PLC module only reads</h3><p>It has no write function at all, so you can look at a running controller without risking a change.</p></div>
     <div><h3>Passwords stay encrypted</h3><p>The Access vault uses AES-GCM through the Android keystore, hides itself from screenshots, and clears the clipboard after 30 seconds.</p></div>
     <div><h3>Manual names, not nicknames</h3><p>Parameters keep the codes and names from the manufacturer's manual, so what you read on screen matches the paper.</p></div>
@@ -230,13 +231,15 @@ def features():
         "Slow-motion study: step through a video frame by frame, put two spots on a cylinder and a parcel, and read the delay between them in milliseconds",
         "Stroboscope, loupe with light and freeze, colour matcher with RAL names, leak finder using the microphone", "Sensor explorer: live values of every sensor in the phone"]),
      ("USB Tools", "A USB stick analyser and repair kit that works even when Android does not mount the stick.", [
-        "Partitions, raw sectors, speed test and surface scan", "Format and repair FAT sticks, save and restore disk images", "Browse, copy, rename and delete files on the stick", "Writing is locked behind a confirmation, with an automatic backup before destructive steps"]),
+        "Partitions, raw sectors, speed test and surface scan", "Fake size check: finds sticks whose real flash is much smaller than the capacity they report", "Recover tab: undelete on FAT, carve files by signature and find lost partitions (not yet tried on many sticks)", "Format and repair FAT sticks, save and restore disk images", "Browse, copy, rename and delete files on the stick", "Writing is locked behind a confirmation, with an automatic backup before destructive steps"]),
      ("NFC & Barcode", "Tags and stickers that open the right thing on the phone.", [
         "Scan and program NFC tags and barcodes", "A tag opens a backup with its drive program, a manual or any tool in ServMod", "Make QR, Code 128, Code 39 and EAN-13 stickers in standard sizes and print them", "Draft: not yet tried on many phones"]),
      ("Zodiac Printers", "Zodiac printer clone files organised on the phone.", [
         "Library sorted by machine and date, with the jobs inside", "Label preview and compare of two clones", "Copy clones to a pendrive for the printer", "Draft: bench only"]),
      ("ServMod Box and Steppers", "Our own ESP32-S3 interface and a stepper motor test bench built on it.", [
-        "RS-485, RS-232 and CAN over USB, Wi-Fi or Bluetooth with automatic detection", "Steppers: run, jog, moves, speed and acceleration ladders, resonance sweep, endurance and stress programs, with a simulator", "Draft: the hardware is still in development"]),
+        "RS-485, RS-232, CAN, USB host and Ethernet, reached over Wi-Fi or Bluetooth", "Hitachi WJ200 and WJ-C1 over RS-485 through the Box, Danfoss FC 280 read as fast as with a USB adapter", "Backup restore runs inside the Box, so a lost phone link does not stop it", "Ethernet port and cable checks for label printers through the Box", "Steppers: run, jog, moves, speed and acceleration ladders, resonance sweep, endurance and stress programs, with a simulator", "Box and Ethernet checked on the bench; CAN and Steppers are still draft; the hardware is a prototype"]),
+     ("Backup", "Your app data copied to your own cloud folder, encrypted.", [
+        "Choose any folder through the Android picker (Google Drive or another provider)", "Settings, drive backups with notes, photos, tags, notes, parts and manuals are included; Access passwords and the licence are not", "Restore on a new phone, adding what is missing or replacing", "Optional daily copy and a share-by-email copy", "The key comes from your e-mail address, so the real protection is your own cloud account"]),
      ("PLC, read only", "Omron over FINS/UDP (port 9600) and Allen-Bradley Logix or Micro800 over EtherNet/IP (port 44818).", [
         "Per-machine list of items with live reading every second", "List of value changes you can copy", "No write function, by design", "Draft: tested on a simulator, not yet on a real PLC"]),
      ("Calc, Access, Notes, Parts", "Four small tools for the daily routine.", [
@@ -251,7 +254,8 @@ def features():
 
 def equipment():
     drives = [("Hitachi WL200", "USB cable, or USB-RS485 adapter", "Yes", "Yes", "Yes"),
-              ("Hitachi WJ200", "USB-RS485 adapter on the RS-485 terminals (USB cable not working yet)", "Yes", "Yes", "Yes"),
+              ("Hitachi WJ200", "USB-RS485 adapter on the RS-485 terminals, or the ServMod Box (USB cable not working yet)", "Yes", "Yes", "Yes"),
+              ("Hitachi WJ-C1", "RS-485 through the ServMod Box (checked on one drive); phone USB cable not working yet", "Yes", "Yes", "Yes"),
               ("Allen-Bradley PowerFlex 520 / 525", "USB-RS485 adapter on the DSI port", "Yes", "Yes", "Yes"),
               ("Danfoss VLT FC 280", "USB-RS485 adapter on terminals 68 and 69", "Yes", "Yes", "Yes"),
               ("Omron 3G3MX2 (MX2-V2)", "USB-RS485 adapter (USB port later)", "Yes", "Yes", "Yes")]
@@ -427,7 +431,7 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 <li>This software and its data may not be copied, redistributed or reverse engineered without the author's written permission.</li>
 </ol>
 <p>ServMod is not a safety function and must never be used as an emergency stop.</p>"""
-PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself.</p>
+PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
 <p>The Device ID shown in the app is a code derived from your phone. It is used only to create your activation code. The update check downloads one small file and sends no identifier.</p>
 <h2>This website</h2><p>The site uses no advertising cookies and no analytics scripts. Fonts are served from this site, not from a third party. Cloudflare delivers the site and may process technical request data such as IP address to protect and speed it up.</p>
 <h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to send you one email when the first public version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
