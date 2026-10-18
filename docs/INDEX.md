@@ -46,3 +46,5 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - `APP_VERSION` = 0.60, MODULES = 18 (added Backup; ServMod Box now 'In field testing').
 - Features: Backup card, USB Tools fake-size/recover, Box description; equipment table: Hitachi WJ-C1 via Box; privacy: Backup writes an encrypted copy to a user-chosen cloud folder.
 - Status source for the site: `_komunikacja/STATUS.md` (mirror docs/komunikacja/). On a new app/firmware version: update build.py MODULES and features cards, build, push.
+
+- 2026-10-18: removed the bio section from the home page; new page About (`about()` in build.py, nav item 'About', /about.html) with a short bio (30 years: moulding, petrochemicals/refineries, robotics, cars, food production and fast packing lines, solar panels). Home keeps a short 'Ordering' block.

@@ -9,7 +9,7 @@ TODAY = datetime.date.today().isoformat()
 
 NAV = [("features", "/features.html", "Modules"), ("equipment", "/equipment.html", "Equipment"),
        ("guides", "/guides.html", "Connection guides"), ("manuals", "/manuals/", "Fault codes"), ("pricing", "/pricing.html", "Pricing"),
-       ("support", "/support.html", "Support")]
+       ("about", "/about.html", "About"), ("support", "/support.html", "Support")]
 
 def page(key, title, desc, body, path, extra_head="", noindex=False):
     nav = "".join(f'<a href="{h}"{" aria-current=page" if k == key else ""}>{t}</a>' for k, h, t in NAV)
@@ -208,11 +208,11 @@ def home():
 
 <section><div class="wrap split">
   <div>
-    <h2>Made on the shop floor</h2>
-    <p class="intro">ServMod is built by one maintenance engineer, Dariusz Grabowski, after 30 years across injection moulding, petrochemicals, refineries, robotics and car systems. Every module exists because a job needed it.</p>
+    <h2>Ordering</h2>
+    <p class="intro">Not open yet. The app is in testing on real equipment.</p>
   </div>
   <div class="stack">
-    <p style="margin:0;color:#d4d4d4">The app is in testing on real equipment now. Ordering is not open yet, and prices will be published here before it opens. Each licence will be tied to your account email, so a lost or replaced phone does not cost you the licence.</p>
+    <p style="margin:0;color:#d4d4d4">Prices will be published here before ordering opens. Each licence will be tied to your account email, so a lost or replaced phone does not cost you the licence.</p>
     <div class="actions"><a class="btn" href="/pricing.html">How ordering will work</a><a class="btn ghost" href="/support.html">Ask a question</a></div>
   </div>
 </div></section>"""
@@ -336,6 +336,15 @@ FAQ = [
  ("Will it support my drive or PLC?", "More models are planned. Tell us what you need through the support form. Tell us the exact model and the protocol, if you know it."),
  ("What if I lose my phone?", "Each licence will be tied to your account email. Sign in, enter the Device ID of the new phone and get a new activation code."),
 ]
+def about():
+    body = """<div class="wrap page"><div class="prose">
+<h1>About</h1>
+<p class="intro">ServMod is built by one maintenance engineer, Dariusz Grabowski, in the United Kingdom.</p>
+<p>I have worked in maintenance for about 30 years: injection moulding, petrochemicals and refineries, robotics, car systems, food production with fast packing lines, and solar panels. Every module in ServMod exists because a job needed it, and I test it on real equipment before I call it ready.</p>
+<p>Questions, a drive you would like supported or a fault that is not in the guides are welcome on the <a href="/support.html">support page</a>.</p>
+</div></div>"""
+    return page("about", "About", "Who builds ServMod: a maintenance engineer with about 30 years of experience across industry.", body, "/about.html")
+
 def support():
     faq = "".join(f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>' for q, a in FAQ)
     body = f"""<div class="wrap page"><div class="split rev"><div>
@@ -454,7 +463,7 @@ def not_found():
 
 PAGES = {
  "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(),
- "pricing.html": pricing(), "support.html": support(),
+ "pricing.html": pricing(), "support.html": support(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
  "waitlist.html": waitlist(),
  "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY),
