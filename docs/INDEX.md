@@ -50,3 +50,5 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - 2026-10-18: removed the bio section from the home page; new page About (`about()` in build.py, nav item 'About', /about.html) with a short bio (30 years: moulding, petrochemicals/refineries, robotics, cars, food production and fast packing lines, solar panels). Home keeps a short 'Ordering' block.
 
 - 2026-10-25: personal name removed from the site and docs; the author is shown as "DG" (footer, About, Terms, Privacy). Future wording: "we"/team. Note: Privacy/Terms name the controller as "DG, United Kingdom" - before sales open these need the proper trading name and address (UK rules for businesses selling online).
+
+- 2026-10-25 (APP-011): content refreshed to app 0.75: 20 modules (+Thermocontrollers, OBD2 Draft), equipment table now Drive/Connection/Status (tested vs not yet tried), plans Free/Pro/Subscription described on Pricing (no prices yet), brand strip and disclaimer extended. Tested on hardware per handoff `servmod-hardware-verified.md`: WL200, WJ200/C1 (via Box), PowerFlex 525, FC 280, VLT 2800, Lenze 8400.

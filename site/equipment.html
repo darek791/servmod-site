@@ -30,9 +30,9 @@
 <main id="main">
 <div class="wrap page">
 <h1>Supported equipment</h1>
-<p class="intro">Every drive uses the same screens: Backup, Parameters, Control, Settings and Faults.</p>
+<p class="intro">Every drive uses the same screens: Backup, Parameters, Control, Settings and Faults. Reading, backup and compare are free. Writing, restore and manual control are part of the Pro plan.</p>
 <h2 style="margin-top:48px;font-size:1.6rem">Inverters</h2>
-<div class="scroll" style="margin-top:16px"><table class="tbl"><thead><tr><th>Drive</th><th>Connection</th><th>Read</th><th>Backup and write</th><th>Control</th></tr></thead><tbody><tr><td>Hitachi WL200</td><td>USB cable, or USB-RS485 adapter</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td>Hitachi WJ200</td><td>USB-RS485 adapter on the RS-485 terminals, or the ServMod Box (USB cable not working yet)</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td>Hitachi WJ-C1</td><td>RS-485 through the ServMod Box (checked on one drive); phone USB cable not working yet</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td>Allen-Bradley PowerFlex 520 / 525</td><td>USB-RS485 adapter on the DSI port</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td>Danfoss VLT FC 280</td><td>USB-RS485 adapter on terminals 68 and 69</td><td>Yes</td><td>Yes</td><td>Yes</td></tr><tr><td>Omron 3G3MX2 (MX2-V2)</td><td>USB-RS485 adapter (USB port later)</td><td>Yes</td><td>Yes</td><td>Yes</td></tr></tbody></table></div>
+<div class="scroll" style="margin-top:16px"><table class="tbl"><thead><tr><th>Drive</th><th>Connection</th><th>Status</th></tr></thead><tbody><tr><td>Hitachi WL200</td><td>USB cable (mini-USB) or USB-RS485 adapter</td><td>Tested on a drive</td></tr><tr><td>Hitachi WJ200 / WJ-C1</td><td>USB-RS485 adapter on the RS-485 terminals, or USB through the ServMod Box. The phone's own USB port does not power it yet.</td><td>Tested on a drive</td></tr><tr><td>Allen-Bradley PowerFlex 520 / 525</td><td>USB-RS485 adapter on the DSI port</td><td>Tested on a drive (525)</td></tr><tr><td>Danfoss VLT FC 280</td><td>USB cable, or USB-RS485 adapter on terminals 68 and 69</td><td>Tested on a drive</td></tr><tr><td>Danfoss VLT 2800</td><td>USB-RS485 adapter on terminals 68 and 69</td><td>Tested on a drive</td></tr><tr><td>Lenze 8400 StateLine C</td><td>CAN through the ServMod Box</td><td>Tested on a drive</td></tr><tr><td>Omron 3G3MX2 (MX2-V2)</td><td>USB-RS485 adapter</td><td>Not yet tried on a drive</td></tr><tr><td>Mitsubishi FR-D700</td><td>RS-485 adapter</td><td>Not yet tried on a drive</td></tr><tr><td>Schneider ATV320</td><td>RS-485 adapter, Modbus RTU</td><td>Not yet tried on a drive</td></tr><tr><td>Siemens SINAMICS V20</td><td>RS-485 adapter on terminals P+ and N- (6 and 7)</td><td>Not yet tried on a drive</td></tr><tr><td>Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500, Yaskawa GA500</td><td>RS-485 adapter, Modbus RTU</td><td>Not yet tried on a drive</td></tr></tbody></table></div>
 <p class="intro" style="margin-top:16px">More models and brands will follow. Tell us which drive you need on the <a href="/support.html">support page</a>.</p>
 <h2 style="margin-top:56px;font-size:1.6rem">PLCs, read only</h2>
 <div class="scroll" style="margin-top:16px"><table class="tbl"><thead><tr><th>Controller</th><th>Protocol</th><th>Notes</th></tr></thead><tbody>
@@ -48,7 +48,7 @@
 <li><b>RS-485:</b> a USB-RS485 adapter with an FTDI, CP210x, CH34x or CH343 chip.</li>
 <li><b>Ethernet:</b> any USB-C Ethernet adapter. Android handles it natively.</li>
 <li><b>One USB-C port:</b> a phone has only one, so for Ethernet and RS-485 together use a powered USB-C hub.</li>
-<li><b>CAN:</b> not supported yet. It is planned through the ServMod Box.</li></ul></div>
+<li><b>CAN:</b> through the ServMod Box. Lenze 8400 is tested this way.</li></ul></div>
 <p class="intro" style="margin-top:20px">Wiring for each drive is on the <a href="/guides.html">connection guides</a>.</p>
 </div>
 </main>
@@ -59,7 +59,7 @@
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
-  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release 0.60, in testing. Created by DG, United Kingdom.</p>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Lenze, Siemens, Schneider Electric, Mitsubishi Electric, Delta, ABB, Inovance, Yaskawa, INVT, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release 0.75, in testing. Created by DG, United Kingdom.</p>
 </div></footer>
 <script src="/site.js" defer></script>
 </body>
