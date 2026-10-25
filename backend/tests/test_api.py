@@ -191,3 +191,17 @@ def test_app_checkout_claim_flow(c, monkeypatch):
     ok = c.get("/api/shop/claim", params={"device": "ABCD-1234-EF", "token": tok}).json()
     assert ok["status"] == "ready" and ok["code"].startswith("WL1.")
     assert c.get("/api/shop/claim", params={"device": "ABCD-1234-EF", "token": "x" * 24}).json()["status"] == "pending"
+
+
+def test_app_claim_sub_returns_sub_code_and_errors_have_detail(c, monkeypatch):
+    from servmod_api import licence, shop
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x"); monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", "whsec_x")
+    tok = "s" * 24
+    obj = {"id": "cs_sub1", "payment_status": "paid", "amount_total": 2000, "currency": "gbp", "customer_details": {"email": "sub@x.com"},
+           "metadata": {"product": "sub", "device_id": "SUBDEV-0001", "claim": shop._claim_hash(tok)}}
+    raw, h = _stripe_event("whsec_x", obj)
+    assert c.post("/api/pay/stripe", content=raw, headers=h).status_code == 200
+    r = c.get("/api/shop/claim", params={"device": "SUBDEV-0001", "token": tok}).json()
+    assert r["status"] == "ready" and licence.code_features(r["code"]).startswith("SUB:")
+    bad = c.post("/api/shop/checkout", json={"product": "nope"}, headers=H)
+    assert bad.status_code == 400 and "detail" in bad.json()
