@@ -50,7 +50,7 @@ def _features_after(old, product, now):
         parts = [p for p in parts if not p.startswith("SUB:")] + ["SUB:" + _sub_date(old, now)]
     return ",".join(parts)
 
-def fulfil(provider, ext_id, email, product, pence, currency="gbp", device_id=""):
+def fulfil(provider, ext_id, email, product, pence, currency="gbp", device_id="", claim=""):
     """Grant what was bought. Returns 'new', 'duplicate' or 'ignored'. Safe to call twice for the same payment."""
     email = core.norm_email(email)
     if not email or product not in products():
@@ -66,7 +66,7 @@ def fulfil(provider, ext_id, email, product, pence, currency="gbp", device_id=""
         core.q("INSERT INTO entitlements(user_id,product,features,seats,source,created) VALUES(?,?,?,?,?,?)", (u["id"], "servmod", feats, 1, "shop", now))
     dev = (device_id or "").strip().upper()
     dev = dev if core.DEVICE_RE.match(dev) else ""
-    core.q("INSERT INTO orders(provider,ext_id,email,product,pence,currency,created,device_id) VALUES(?,?,?,?,?,?,?,?)", (provider, ext_id, email, product, pence, currency, now, dev or None))
+    core.q("INSERT INTO orders(provider,ext_id,email,product,pence,currency,created,device_id,note) VALUES(?,?,?,?,?,?,?,?,?)", (provider, ext_id, email, product, pence, currency, now, dev or None, ("claim:" + claim) if (claim and dev) else None))
     core.audit("shop", "order", f"{provider}:{ext_id}:{email}:{product}:{pence}")
     code = ""
     if dev:
@@ -90,6 +90,26 @@ def _receipt(email, product, pence, feats, dev, code):
     lines += ["Questions: reply to this e-mail or write to support@servmod.com.", "", "ServMod"]
     mail.send(email, f"Your ServMod {'code' if code else 'licence'}", "\n".join(lines))
 
+def _claim_hash(token):
+    """The app sends a random secret per purchase; only its hash is stored."""
+    import hashlib
+    token = token.strip()
+    return hashlib.sha256(token.encode()).hexdigest() if 16 <= len(token) <= 128 else ""
+
+@router.get("/api/shop/claim")
+def claim(request: Request, device: str = "", token: str = ""):
+    """App polls this after payment. Returns the activation code once the order is paid; the code is bound to the Device ID."""
+    from .app import ip
+    if not core.rate_ok("cl:" + ip(request), 120, 3600): raise HTTPException(429, "too many requests")
+    dev = device.strip().upper(); h = _claim_hash(token)
+    if not core.DEVICE_RE.match(dev) or not h: raise HTTPException(400, "bad request")
+    o = core.q("SELECT * FROM orders WHERE device_id=? AND note=? ORDER BY id DESC LIMIT 1", (dev, "claim:" + h)).fetchone()
+    if not o: return {"status": "pending"}
+    u = core._user_for(o["email"])
+    try: code = issuing.issue(u, dev, "bought")
+    except HTTPException as e: return {"status": "error", "detail": e.detail}
+    return {"status": "ready", "code": code}
+
 # ---------- Stripe
 STRIPE = "https://api.stripe.com/v1"
 
@@ -104,16 +124,23 @@ async def checkout(req: Request):
     if product not in P: raise HTTPException(400, "unknown product")
     from .app import ip
     if not core.rate_ok("co:" + ip(req), 20, 3600): raise HTTPException(429, "too many requests")
+    dev = str(d.get("device_id") or "").strip().upper()
+    if dev and not core.DEVICE_RE.match(dev): raise HTTPException(400, "invalid Device ID")
+    claim = _claim_hash(str(d.get("claim") or "")) if dev else ""
+    if dev and not claim: raise HTTPException(400, "claim token required (16-128 characters)")
     form = {
-        "mode": "payment", "success_url": f"{core.SITE_URL}/pricing.html#paid=1", "cancel_url": f"{core.SITE_URL}/pricing.html",
+        "mode": "payment", "success_url": f"{core.SITE_URL}/pricing.html#paid={'app' if dev else '1'}", "cancel_url": f"{core.SITE_URL}/pricing.html",
         "line_items[0][quantity]": "1", "line_items[0][price_data][currency]": "gbp",
         "line_items[0][price_data][unit_amount]": str(P[product]["pence"]),
         "line_items[0][price_data][product_data][name]": P[product]["name"],
         "metadata[product]": product, "payment_intent_data[metadata][product]": product,
-        "custom_fields[0][key]": "device_id", "custom_fields[0][type]": "text", "custom_fields[0][optional]": "true",
-        "custom_fields[0][label][type]": "custom", "custom_fields[0][label][custom]": "Device ID (optional)",
         "custom_text[submit][message]": "By paying you accept the Terms of use and Refunds policy on servmod.com.",
     }
+    if dev:
+        form["metadata[device_id]"] = dev; form["metadata[claim]"] = claim
+    else:
+        form.update({"custom_fields[0][key]": "device_id", "custom_fields[0][type]": "text", "custom_fields[0][optional]": "true",
+                     "custom_fields[0][label][type]": "custom", "custom_fields[0][label][custom]": "Device ID (optional)"})
     email = core.norm_email(d.get("email"))
     if email: form["customer_email"] = email
     try:
@@ -143,11 +170,12 @@ async def stripe_webhook(req: Request):
     typ = ev.get("type", ""); obj = (ev.get("data") or {}).get("object") or {}
     if typ in ("checkout.session.completed", "checkout.session.async_payment_succeeded") and obj.get("payment_status") == "paid":
         cd = obj.get("customer_details") or {}
-        dev = ""
+        md = obj.get("metadata") or {}
+        dev = md.get("device_id") or ""
         for f in obj.get("custom_fields") or []:
             if f.get("key") == "device_id": dev = ((f.get("text") or {}).get("value")) or ""
         res = fulfil("stripe", obj.get("id", ""), cd.get("email") or obj.get("customer_email") or "", (obj.get("metadata") or {}).get("product", ""),
-                     int(obj.get("amount_total") or 0), obj.get("currency") or "gbp", dev)
+                     int(obj.get("amount_total") or 0), obj.get("currency") or "gbp", dev, md.get("claim") or "")
         return {"ok": True, "result": res}
     if typ in ("charge.refunded", "charge.dispute.created"):
         core.audit("stripe", typ, str(obj.get("id", "")))

@@ -21,3 +21,7 @@ The shop is CLOSED until `/etc/servmod/pay.env` contains `STRIPE_SECRET_KEY` and
 ## Not done
 - PayPal as a separate integration (only if PayPal cannot be enabled inside Stripe Checkout).
 - UK VAT / tax handling and invoices; legal texts (Terms, Refunds) need the owner's approval before real sales.
+
+## Zakup z aplikacji (od 2026-10-25)
+Aplikacja generuje sekret zakupu (16-128 znaków), wywołuje `POST /api/shop/checkout` z `{product, device_id, claim}` i otwiera zwrócony adres Stripe w Custom Tab. W sesji Stripe lądują `metadata[device_id]` i `metadata[claim]` (sam hash SHA-256, po stronie serwera zapisany w `orders.note` jako `claim:<hash>`); pole Device ID w formularzu Stripe jest wtedy wyłączone. Webhook wydaje kod (`issuing.issue`), a aplikacja odpytuje `GET /api/shop/claim?device=&token=` (`pending` / `ready`+`code` / `error`). Mail z paragonem zostaje jako kopia. Zakup ze strony (bez aplikacji) działa jak dotąd: Device ID opcjonalnie w formularzu Stripe, inaczej przez konto.
+Zadanie dla APP: WWW-001 w `_komunikacja/inbox/APP.md`.

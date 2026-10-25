@@ -62,3 +62,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Test purchase of Pro with card 4242 OK: receipt e-mail sent from no-reply@servmod.com (no Device ID entered, so e-mail has sign-in steps).
 - Fix: CSS/JS now get ?v=<hash> (build.py) because Cloudflare/browser cached an old site.js for 4 h. Pricing hides "not open yet" text when the shop is open.
 - TODO before real sales: live keys + live webhook, decide separate Stripe account, PayPal check, confirm prices, legal drafts, home page "Ordering" block text, test with Device ID (code in e-mail) and refund path.
+
+## 2026-10-25 – Purchase from the app
+- /api/shop/checkout accepts device_id + claim; new GET /api/shop/claim (pending/ready/error). Test added (14 tests pass). Task WWW-001 sent to APP. Thank-you page text differs when the buyer came from the app (#paid=app).

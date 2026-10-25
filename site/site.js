@@ -38,9 +38,10 @@
   }
   var shop = document.getElementById('shop');
   if (shop) {
-    if (location.hash === '#paid=1') {
+    if (location.hash === '#paid=1' || location.hash === '#paid=app') {
+      var fromApp = location.hash === '#paid=app';
       history.replaceState(null, '', location.pathname);
-      shop.hidden = false; shop.innerHTML = '<h2>Thank you</h2><p>Your payment went through. We are sending an email with your licence details; it usually arrives within a minute. Check the spam folder if you do not see it, or write to support@servmod.com.</p>';
+      shop.hidden = false; shop.innerHTML = '<h2>Thank you</h2><p>' + (fromApp ? 'Your payment went through. Go back to the ServMod app: it activates by itself within a few seconds. A receipt is also sent by email.' : 'Your payment went through.') + ' We are sending an email with your licence details; it usually arrives within a minute. Check the spam folder if you do not see it, or write to support@servmod.com.</p>';
     } else {
       fetch('/api/shop/config').then(function (r) { return r.json(); }).then(function (c) {
         if (!c.open) return;

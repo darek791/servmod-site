@@ -167,3 +167,27 @@ def test_stripe_webhook_rejects_bad_signature_and_old_events(c, monkeypatch):
     raw, h = _stripe_event("whsec_x", dict(obj, payment_status="unpaid"))
     assert c.post("/api/pay/stripe", content=raw, headers=h).json()["ok"] is True
     assert c.get("/api/me").status_code == 401
+
+
+def test_app_checkout_claim_flow(c, monkeypatch):
+    import json, time, hmac, hashlib
+    from servmod_api import shop
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x"); monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", "whsec_x")
+    sent = {}
+    class R:
+        def raise_for_status(self): pass
+        def json(self): return {"url": "https://checkout.stripe.test/x"}
+    def fake_post(url, data=None, **kw): sent.update(data); return R()
+    monkeypatch.setattr(shop.httpx, "post", fake_post)
+    assert c.post("/api/shop/checkout", json={"product": "pro", "device_id": "ABCD-1234-EF"}, headers=H).status_code == 400
+    tok = "t" * 24
+    r = c.post("/api/shop/checkout", json={"product": "pro", "device_id": "abcd-1234-ef", "claim": tok}, headers=H)
+    assert r.status_code == 200 and sent["metadata[device_id]"] == "ABCD-1234-EF" and "custom_fields[0][key]" not in sent
+    assert c.get("/api/shop/claim", params={"device": "ABCD-1234-EF", "token": tok}).json()["status"] == "pending"
+    ev = {"type": "checkout.session.completed", "data": {"object": {"id": "cs_app1", "payment_status": "paid", "amount_total": 4000, "currency": "gbp",
+          "customer_details": {"email": "buyer@example.com"}, "metadata": {"product": "pro", "device_id": sent["metadata[device_id]"], "claim": sent["metadata[claim]"]}}}}
+    raw, h = _stripe_event("whsec_x", ev["data"]["object"])
+    assert c.post("/api/pay/stripe", content=raw, headers=h).status_code == 200
+    ok = c.get("/api/shop/claim", params={"device": "ABCD-1234-EF", "token": tok}).json()
+    assert ok["status"] == "ready" and ok["code"].startswith("WL1.")
+    assert c.get("/api/shop/claim", params={"device": "ABCD-1234-EF", "token": "x" * 24}).json()["status"] == "pending"
