@@ -25,3 +25,9 @@ The shop is CLOSED until `/etc/servmod/pay.env` contains `STRIPE_SECRET_KEY` and
 ## Zakup z aplikacji (od 2026-10-25)
 Aplikacja generuje sekret zakupu (16-128 znaków), wywołuje `POST /api/shop/checkout` z `{product, device_id, claim}` i otwiera zwrócony adres Stripe w Custom Tab. W sesji Stripe lądują `metadata[device_id]` i `metadata[claim]` (sam hash SHA-256, po stronie serwera zapisany w `orders.note` jako `claim:<hash>`); pole Device ID w formularzu Stripe jest wtedy wyłączone. Webhook wydaje kod (`issuing.issue`), a aplikacja odpytuje `GET /api/shop/claim?device=&token=` (`pending` / `ready`+`code` / `error`). Mail z paragonem zostaje jako kopia. Zakup ze strony (bez aplikacji) działa jak dotąd: Device ID opcjonalnie w formularzu Stripe, inaczej przez konto.
 Zadanie dla APP: WWW-001 w `_komunikacja/inbox/APP.md`.
+
+## PayPal (od 2026-10-25, osobna integracja, bo Stripe konta UK nie pokazuje PayPal)
+- `POST /api/shop/checkout` przyjmuje `"provider":"stripe"|"paypal"` (domyślnie stripe). PayPal: tworzy zamówienie Orders v2 (GBP), zapisuje `pending_orders`, zwraca adres zatwierdzenia.
+- Po zatwierdzeniu PayPal przekierowuje na `/api/pay/paypal/return?token=<order>`; serwer sam robi capture, sprawdza status COMPLETED i dopiero wtedy `fulfil("paypal", ...)` (to samo co Stripe: licencja, kod dla Device ID, mail, `/api/shop/claim`). Błąd capture = mail do admina i `#paid=problem`.
+- Klucze: `tools\install_paypal_keys.cmd` (tryb sandbox lub live, Client ID i Secret wpisywane tylko w oknie na PC; dopisuje do /etc/servmod/pay.env, linie Stripe zostają).
+- Strona: przy każdym planie dwa przyciski (karta, PayPal), gdy oba włączone. Zwroty i spory PayPal: ręcznie w panelu PayPal (bez webhooka).

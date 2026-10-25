@@ -205,3 +205,37 @@ def test_app_claim_sub_returns_sub_code_and_errors_have_detail(c, monkeypatch):
     assert r["status"] == "ready" and licence.code_features(r["code"]).startswith("SUB:")
     bad = c.post("/api/shop/checkout", json={"product": "nope"}, headers=H)
     assert bad.status_code == 400 and "detail" in bad.json()
+
+
+def test_paypal_flow_create_capture_claim(c, monkeypatch):
+    from servmod_api import shop
+    monkeypatch.setenv("PAYPAL_CLIENT_ID", "x" * 24); monkeypatch.setenv("PAYPAL_SECRET", "y" * 24); monkeypatch.setenv("PAYPAL_ENV", "sandbox")
+    monkeypatch.delenv("STRIPE_SECRET_KEY", raising=False); monkeypatch.delenv("STRIPE_WEBHOOK_SECRET", raising=False)
+    cfg = c.get("/api/shop/config").json()
+    assert cfg["open"] and cfg["paypal"] and not cfg["stripe"]
+    class R:
+        def __init__(s, j, code=200): s._j, s.status_code, s.text = j, code, str(j)
+        def raise_for_status(s): pass
+        def json(s): return s._j
+    calls = []
+    def fake_post(url, **kw):
+        calls.append(url)
+        if url.endswith("/token"): return R({"access_token": "AT"})
+        if url.endswith("/v2/checkout/orders"):
+            assert kw["json"]["purchase_units"][0]["amount"] == {"currency_code": "GBP", "value": "40.00"}
+            return R({"id": "PPORDER1", "links": [{"rel": "payer-action", "href": "https://paypal.test/approve"}]})
+        if url.endswith("/capture"):
+            return R({"status": "COMPLETED", "payer": {"email_address": "pp@x.com"}, "purchase_units": [{"payments": {"captures": [{"status": "COMPLETED", "amount": {"value": "40.00"}}]}}]})
+        raise AssertionError(url)
+    monkeypatch.setattr(shop.httpx, "post", fake_post)
+    tok = "p" * 24
+    assert c.post("/api/shop/checkout", json={"product": "pro", "provider": "stripe"}, headers=H).status_code == 503   # stripe off
+    r = c.post("/api/shop/checkout", json={"product": "pro", "provider": "paypal", "device_id": "PPDEV-0001", "claim": tok}, headers=H)
+    assert r.json()["url"] == "https://paypal.test/approve"
+    assert c.get("/api/shop/claim", params={"device": "PPDEV-0001", "token": tok}).json()["status"] == "pending"
+    rr = c.get("/api/pay/paypal/return", params={"token": "PPORDER1", "PayerID": "Z"}, follow_redirects=False)
+    assert rr.status_code in (302, 307) and rr.headers["location"].endswith("/pricing.html#paid=app")
+    ok = c.get("/api/shop/claim", params={"device": "PPDEV-0001", "token": tok}).json()
+    assert ok["status"] == "ready" and ok["code"].startswith("WL1.")
+    again = c.get("/api/pay/paypal/return", params={"token": "PPORDER1"}, follow_redirects=False)   # replay: pending row is gone
+    assert again.headers["location"].endswith("/pricing.html")

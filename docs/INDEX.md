@@ -65,3 +65,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## 2026-10-25 – Purchase from the app
 - /api/shop/checkout accepts device_id + claim; new GET /api/shop/claim (pending/ready/error). Test added (14 tests pass). Task WWW-001 sent to APP. Thank-you page text differs when the buyer came from the app (#paid=app).
+
+## 2026-10-25 – PayPal
+- Separate PayPal integration (Orders v2, capture on return) next to Stripe; keys via tools/install_paypal_keys.cmd; site shows card and PayPal buttons when both on. 16 backend tests pass.

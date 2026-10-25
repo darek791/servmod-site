@@ -4,6 +4,7 @@ Prices come from the environment (pence), so they can change without a release."
 import hashlib, hmac, json, logging, os, re, time
 import httpx
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from . import core, mail, issuing
 
 log = logging.getLogger("servmod.shop")
@@ -19,14 +20,20 @@ def products():
         "sub": {"name": "ServMod Subscription (1 year)", "pence": _pence("PRICE_SUB_PENCE", 2000)},
     }
 
-def is_open():
+def stripe_on():
     return bool(os.environ.get("STRIPE_SECRET_KEY") and os.environ.get("STRIPE_WEBHOOK_SECRET"))
+
+def paypal_on():
+    return bool(os.environ.get("PAYPAL_CLIENT_ID") and os.environ.get("PAYPAL_SECRET"))
+
+def is_open():
+    return stripe_on() or paypal_on()
 
 def _fmt(p): return f"£{p / 100:.2f}".replace(".00", "")
 
 @router.get("/api/shop/config")
 def config():
-    return {"open": is_open(), "currency": "gbp", "products": {k: {"name": v["name"], "pence": v["pence"], "price": _fmt(v["pence"])} for k, v in products().items()}}
+    return {"open": is_open(), "stripe": stripe_on(), "paypal": paypal_on(), "currency": "gbp", "products": {k: {"name": v["name"], "pence": v["pence"], "price": _fmt(v["pence"])} for k, v in products().items()}}
 
 # ---------- fulfilment (provider independent, idempotent)
 def _sub_date(existing_features, now):
@@ -110,6 +117,54 @@ def claim(request: Request, device: str = "", token: str = ""):
     except HTTPException as e: return {"status": "error", "detail": e.detail}
     return {"status": "ready", "code": code}
 
+# ---------- PayPal (Orders v2: create -> buyer approves -> we capture on return -> fulfil)
+def _pp_base():
+    return "https://api-m.paypal.com" if os.environ.get("PAYPAL_ENV", "sandbox") == "live" else "https://api-m.sandbox.paypal.com"
+
+def _pp_token():
+    r = httpx.post(_pp_base() + "/v1/oauth2/token", data={"grant_type": "client_credentials"}, timeout=20,
+                   auth=(os.environ["PAYPAL_CLIENT_ID"], os.environ["PAYPAL_SECRET"]))
+    r.raise_for_status(); return r.json()["access_token"]
+
+def _paypal_create(product, p, dev, claim):
+    try:
+        tok = _pp_token()
+        body = {"intent": "CAPTURE", "purchase_units": [{"description": p["name"], "amount": {"currency_code": "GBP", "value": f"{p['pence'] / 100:.2f}"}}],
+                "payment_source": {"paypal": {"experience_context": {"brand_name": "ServMod", "user_action": "PAY_NOW", "shipping_preference": "NO_SHIPPING",
+                                  "return_url": f"{core.SITE_URL}/api/pay/paypal/return", "cancel_url": f"{core.SITE_URL}/pricing.html"}}}}
+        r = httpx.post(_pp_base() + "/v2/checkout/orders", json=body, timeout=20, headers={"Authorization": "Bearer " + tok})
+        r.raise_for_status(); o = r.json()
+        url = next(l["href"] for l in o["links"] if l["rel"] in ("payer-action", "approve"))
+    except Exception as e:
+        log.error("paypal create failed: %s", e); raise HTTPException(502, "payment provider error, try again later")
+    core.q("INSERT OR REPLACE INTO pending_orders(ext_id,provider,product,device_id,claim,created) VALUES(?,?,?,?,?,?)", (o["id"], "paypal", product, dev or None, claim or None, core.now()))
+    return url
+
+@router.get("/api/pay/paypal/return")
+def paypal_return(token: str = ""):
+    """PayPal sends the buyer here after approval. We capture the payment server side and only then fulfil."""
+    p = core.q("SELECT * FROM pending_orders WHERE ext_id=? AND provider='paypal'", (token,)).fetchone() if token else None
+    dest = f"{core.SITE_URL}/pricing.html"
+    if not p: return RedirectResponse(dest)
+    try:
+        tok = _pp_token()
+        r = httpx.post(f"{_pp_base()}/v2/checkout/orders/{token}/capture", timeout=30, headers={"Authorization": "Bearer " + tok, "Content-Type": "application/json"}, content=b"{}")
+        o = r.json()
+        if r.status_code == 422 and "ORDER_ALREADY_CAPTURED" in r.text:
+            r = httpx.get(f"{_pp_base()}/v2/checkout/orders/{token}", timeout=20, headers={"Authorization": "Bearer " + tok}); o = r.json()
+        elif r.status_code >= 400: raise RuntimeError(r.text[:200])
+        cap = o["purchase_units"][0]["payments"]["captures"][0]
+        if o.get("status") != "COMPLETED" or cap.get("status") != "COMPLETED": raise RuntimeError("not completed: %s/%s" % (o.get("status"), cap.get("status")))
+        email = (o.get("payer") or {}).get("email_address", "")
+        pence = int(round(float(cap["amount"]["value"]) * 100))
+        if fulfil("paypal", token, email, p["product"], pence, "gbp", p["device_id"] or "", p["claim"] or "") == "ignored": raise RuntimeError("payment captured but not granted (no payer e-mail?)")
+    except Exception as e:
+        log.error("paypal capture failed for %s: %s", token, e)
+        for a in core.ADMIN_EMAILS: mail.send(a, "ServMod: PayPal capture problem", f"Order {token}: {e}")
+        return RedirectResponse(dest + "#paid=problem")
+    core.q("DELETE FROM pending_orders WHERE ext_id=?", (token,))
+    return RedirectResponse(dest + ("#paid=app" if p["device_id"] else "#paid=1"))
+
 # ---------- Stripe
 STRIPE = "https://api.stripe.com/v1"
 
@@ -122,12 +177,16 @@ async def checkout(req: Request):
     product = str(d.get("product", ""))
     P = products()
     if product not in P: raise HTTPException(400, "unknown product")
+    provider = str(d.get("provider") or "stripe")
+    if provider not in ("stripe", "paypal"): raise HTTPException(400, "unknown payment provider")
+    if (provider == "paypal" and not paypal_on()) or (provider == "stripe" and not stripe_on()): raise HTTPException(503, "this payment method is not available")
     from .app import ip
     if not core.rate_ok("co:" + ip(req), 20, 3600): raise HTTPException(429, "too many requests")
     dev = str(d.get("device_id") or "").strip().upper()
     if dev and not core.DEVICE_RE.match(dev): raise HTTPException(400, "invalid Device ID")
     claim = _claim_hash(str(d.get("claim") or "")) if dev else ""
     if dev and not claim: raise HTTPException(400, "claim token required (16-128 characters)")
+    if provider == "paypal": return {"url": _paypal_create(product, P[product], dev, claim)}
     form = {
         "mode": "payment", "success_url": f"{core.SITE_URL}/pricing.html#paid={'app' if dev else '1'}", "cancel_url": f"{core.SITE_URL}/pricing.html",
         "line_items[0][quantity]": "1", "line_items[0][price_data][currency]": "gbp",
