@@ -38,13 +38,16 @@
   }
   var shop = document.getElementById('shop');
   if (shop) {
-    if (location.hash === '#paid=problem') {
+    var ph = location.hash;
+    if (ph === '#paid=problem' || ph === '#paid=1' || ph === '#paid=app') {
       history.replaceState(null, '', location.pathname);
-      shop.hidden = false; shop.innerHTML = '<h2>Payment check</h2><p>We could not confirm your payment automatically. If money left your account, write to support@servmod.com and we will fix it by hand.</p>';
-    } else if (location.hash === '#paid=1' || location.hash === '#paid=app') {
-      var fromApp = location.hash === '#paid=app';
-      history.replaceState(null, '', location.pathname);
-      shop.hidden = false; shop.innerHTML = '<h2>Thank you</h2><p>' + (fromApp ? 'Your payment went through. Go back to the ServMod app: it activates by itself within a few seconds. A receipt is also sent by email.' : 'Your payment went through.') + ' We are sending an email with your licence details; it usually arrives within a minute. Check the spam folder if you do not see it, or write to support@servmod.com.</p>';
+      var mainEl = document.getElementById('main'), T;
+      if (ph === '#paid=app') T = ['ok', 'Thank you!', 'Your licence is being activated.', 'Go back to the ServMod app. It activates by itself in a few seconds, you do not need to do anything else.', 'A receipt is also on its way to your email.', '<a class="btn ghost" href="/">Back to servmod.com</a>'];
+      else if (ph === '#paid=1') T = ['ok', 'Thank you!', 'Your payment went through.', 'To activate the app: open Settings, Subscription, copy your Device ID and paste it on your account page. Your code appears there and is sent to your email.', 'A receipt is also on its way to your email.', '<a class="btn" href="/account/">Open my account</a>'];
+      else T = ['warn', 'One moment', 'We could not confirm your payment automatically.', 'If money left your account, write to support@servmod.com and we will sort it out by hand.', '', '<a class="btn" href="/support.html">Contact support</a>'];
+      var card = '<div class="wrap page"><div class="thanks ' + T[0] + '"><div class="mark" aria-hidden="true">' + (T[0] === 'ok' ? '&#10003;' : '!') + '</div><h1>' + T[1] + '</h1><p class="lead2">' + T[2] + '</p><p>' + T[3] + '</p>' + (T[4] ? '<p class="fine">' + T[4] + '</p>' : '') + '<div class="actions" style="justify-content:center">' + T[5] + '</div></div></div>';
+      if (mainEl) mainEl.innerHTML = card;
+      document.title = T[1] + ' - ServMod'; window.scrollTo(0, 0);
     } else {
       fetch('/api/shop/config').then(function (r) { return r.json(); }).then(function (c) {
         if (!c.open) return;
