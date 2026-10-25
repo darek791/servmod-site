@@ -56,3 +56,9 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - 2026-10-25: shop built but CLOSED by default: `backend/servmod_api/shop.py` (Stripe Checkout + signed webhook `/api/pay/stripe`, idempotent `orders`, auto-issue of codes via `issuing.py`), pricing page shows buy buttons only when `/api/shop/config` says open. Setup and rules: `docs/PAYMENTS.md`. Owner decision: main licence key lives on the server (`/etc/servmod/license_private.key`), Stripe first, PayPal inside Stripe if possible.
 
 - 2026-10-25: Privacy now describes real shop data (email, Device ID, code, order record; Stripe handles cards; no customer files kept), Licence page describes Free/Pro/Subscription. Terms/Refunds/Licence still carry the 'Draft' banner until the owner accepts. Owner decision: no business registration until sales approach GBP 1000 (check HMRC trading allowance and the ICO data protection fee when the first sale happens).
+
+## 2026-10-25 – Shop tested in Stripe sandbox
+- Webhook `servmod-site` (sandbox Qubivibe) -> /api/pay/stripe; keys installed on the server with install_payment_keys.cmd (test keys); shop open in TEST mode.
+- Test purchase of Pro with card 4242 OK: receipt e-mail sent from no-reply@servmod.com (no Device ID entered, so e-mail has sign-in steps).
+- Fix: CSS/JS now get ?v=<hash> (build.py) because Cloudflare/browser cached an old site.js for 4 h. Pricing hides "not open yet" text when the shop is open.
+- TODO before real sales: live keys + live webhook, decide separate Stripe account, PayPal check, confirm prices, legal drafts, home page "Ordering" block text, test with Device ID (code in e-mail) and refund path.
