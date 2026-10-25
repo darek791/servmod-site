@@ -322,7 +322,7 @@ def guides():
 def pricing():
     body = """<div class="wrap page"><div class="split"><div>
 <h1>Pricing</h1>
-<p class="intro">Ordering is not open yet. The app is in testing on real equipment, and prices will be published on this page before the shop opens.</p>
+<p class="intro" id="shop-closed">Ordering is not open yet. The app is in testing on real equipment, and prices will be published on this page before the shop opens.</p>
 <div class="actions" style="margin-top:28px"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
 </div><div class="prose">
 <h2 style="margin-top:0">How a licence will work</h2>
@@ -336,7 +336,7 @@ def pricing():
 <ul><li><b>Free:</b> connect, read, monitor, fault history, backup to a file, compare, and all the field tools. No code needed.</li>
 <li><b>Pro:</b> a one-time purchase that adds writing parameters, restore, manual control, fault and factory reset, and unlocking writes on the ServMod Box. It stays with the version you own.</li>
 <li><b>Subscription:</b> yearly, for modules and drive brands released after you buy, and for updates of parameter lists and profiles.</li></ul>
-<p>Prices will be published before ordering opens. Stop always works, in every plan.</p>
+<p><span id="shop-closed2">Prices will be published before ordering opens. </span>Stop always works, in every plan.</p>
 <div id="shop" hidden></div>
 <h2>What stays the same</h2>
 <ul><li>The app has no ads and no tracking.</li><li>Update checks only download a small version file.</li><li>Refund, VAT and licence terms will be final before ordering opens. Drafts are on the <a href="/refunds.html">refunds</a> and <a href="/licence.html">licence</a> pages.</li></ul>
@@ -499,7 +499,13 @@ def main():
         if f == "servmod": continue
         if f in ("fonts", "assets"): continue
         if os.path.isfile(p): os.remove(p)
+    import hashlib, re
+    def _ver(f): return hashlib.sha1(open(os.path.join(HERE, f), "rb").read()).hexdigest()[:8]
+    VERS = {f: _ver(f) for f in ("style.css", "site.js", "account.js", "manuals.js")}
+    def _bust(html):
+        return re.sub(r'(["\'])/(style\.css|site\.js|account\.js|manuals\.js)\1', lambda m: f'{m.group(1)}/{m.group(2)}?v={VERS[m.group(2)]}{m.group(1)}', html)
     for name, content in PAGES.items():
+        content = _bust(content)
         os.makedirs(os.path.dirname(os.path.join(OUT, name)), exist_ok=True)
         open(os.path.join(OUT, name), "w", encoding="utf-8").write(content)
     shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "style.css"))
