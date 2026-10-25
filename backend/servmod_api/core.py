@@ -1,6 +1,17 @@
 """Config, SQLite, hashing, sessions, rate limiting."""
 import hashlib, hmac, os, secrets, sqlite3, time, threading, re
 
+def _load_env_file(path):
+    """Secrets typed on the PC land in /etc/servmod/pay.env (not in the repo). Real environment variables win."""
+    try:
+        for line in open(path, encoding="utf-8"):
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1); os.environ.setdefault(k.strip(), v.strip())
+    except OSError:
+        pass
+_load_env_file(os.environ.get("PAY_ENV", "/etc/servmod/pay.env"))
+
 DATA_DIR = os.environ.get("SERVMOD_DATA", "/var/lib/servmod")
 SITE_URL = os.environ.get("SITE_URL", "https://servmod.com")
 ADMIN_EMAILS = {e.strip().lower() for e in os.environ.get("ADMIN_EMAILS", "").split(",") if e.strip()}
@@ -23,6 +34,7 @@ CREATE TABLE IF NOT EXISTS entitlements(id INTEGER PRIMARY KEY, user_id INTEGER 
 CREATE TABLE IF NOT EXISTS licences(id INTEGER PRIMARY KEY, entitlement_id INTEGER NOT NULL, device_id TEXT NOT NULL, label TEXT, code TEXT NOT NULL, created INTEGER NOT NULL, released INTEGER);
 CREATE TABLE IF NOT EXISTS tickets(id INTEGER PRIMARY KEY, created INTEGER NOT NULL, user_id INTEGER, email TEXT NOT NULL, subject TEXT, message TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open');
 CREATE TABLE IF NOT EXISTS waitlist(id INTEGER PRIMARY KEY, email TEXT UNIQUE NOT NULL, created INTEGER NOT NULL, confirmed INTEGER NOT NULL DEFAULT 0, tok TEXT UNIQUE NOT NULL, source TEXT, notified INTEGER);
+CREATE TABLE IF NOT EXISTS orders(id INTEGER PRIMARY KEY, provider TEXT NOT NULL, ext_id TEXT NOT NULL, email TEXT NOT NULL, product TEXT NOT NULL, pence INTEGER NOT NULL, currency TEXT NOT NULL, created INTEGER NOT NULL, device_id TEXT, note TEXT, UNIQUE(provider, ext_id));
 CREATE TABLE IF NOT EXISTS rate(k TEXT NOT NULL, ts INTEGER NOT NULL);
 CREATE INDEX IF NOT EXISTS ix_rate ON rate(k, ts);
 CREATE TABLE IF NOT EXISTS audit(ts INTEGER NOT NULL, actor TEXT, action TEXT, detail TEXT);

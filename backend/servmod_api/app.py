@@ -1,7 +1,7 @@
 import os, json, logging, secrets, threading, time
 from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
-from . import core, mail, licence
+from . import core, mail, licence, issuing, shop
 
 log = logging.getLogger("servmod")
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
@@ -13,7 +13,7 @@ def ip(req: Request) -> str:
 
 @app.middleware("http")
 async def security(request: Request, call_next):
-    if request.method not in ("GET", "HEAD", "OPTIONS"):
+    if request.method not in ("GET", "HEAD", "OPTIONS") and not request.url.path.startswith("/api/pay/"):  # /api/pay/* is signed by the provider
         origin = request.headers.get("origin")
         ok_origin = origin is None or origin.rstrip("/") == core.SITE_URL.rstrip("/")
         if request.headers.get("x-requested-with") != "servmod" or not ok_origin:
@@ -125,23 +125,7 @@ async def add_device(req: Request):
     label = str(d.get("label", ""))[:60]
     if not core.DEVICE_RE.match(dev): raise HTTPException(400, "invalid Device ID")
     if not core.rate_ok("dev:" + str(u["id"]), 20, 3600): raise HTTPException(429, "too many requests")
-    ent_rows = core.q("SELECT * FROM entitlements WHERE user_id=? AND revoked=0 ORDER BY id", (u["id"],)).fetchall()
-    if not ent_rows: raise HTTPException(402, "no licence on this account")
-    for e in ent_rows:  # same device again -> same code
-        ex = core.q("SELECT * FROM licences WHERE entitlement_id=? AND device_id=? AND released IS NULL", (e["id"], dev)).fetchone()
-        if ex: return {"code": ex["code"], "device_id": dev}
-    for e in ent_rows:
-        active = core.q("SELECT COUNT(*) c FROM licences WHERE entitlement_id=? AND released IS NULL", (e["id"],)).fetchone()["c"]
-        if active < e["seats"]:
-            if core.q("SELECT 1 FROM licences WHERE entitlement_id=?", (e["id"],)).fetchone() and moves_used(e["id"]) >= core.MOVES_PER_YEAR:
-                raise HTTPException(409, "device move limit reached; contact support")
-            try: key = licence.load_key()
-            except Exception: raise HTTPException(503, "licence signing is not configured yet")
-            code = licence.make_code(key, dev, e["features"], 0, u["email"])
-            core.q("INSERT INTO licences(entitlement_id,device_id,label,code,created) VALUES(?,?,?,?,?)", (e["id"], dev, label, code, core.now()))
-            core.audit(u["email"], "licence", dev)
-            return {"code": code, "device_id": dev}
-    raise HTTPException(409, "all seats are in use; release a device first")
+    return {"code": issuing.issue(u, dev, label), "device_id": dev}
 
 @app.post("/api/devices/release")
 async def release_device(req: Request):
@@ -299,3 +283,5 @@ async def ticket(req: Request):
     admin(req); d = await body(req)
     core.q("UPDATE tickets SET status=? WHERE id=?", ("closed" if d.get("status") == "closed" else "open", d.get("id")))
     return {"ok": True}
+
+app.include_router(shop.router)

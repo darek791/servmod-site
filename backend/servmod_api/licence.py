@@ -27,3 +27,8 @@ def verify_code(pub, code):
         return tag == "WL1"
     except Exception:
         return False
+
+def code_features(code: str) -> str:
+    """FEATURES field of a code's payload ('' when the code cannot be parsed)."""
+    try: return unb64u(code.split(".")[1]).decode().split("|")[1]
+    except Exception: return ""

@@ -337,6 +337,7 @@ def pricing():
 <li><b>Pro:</b> a one-time purchase that adds writing parameters, restore, manual control, fault and factory reset, and unlocking writes on the ServMod Box. It stays with the version you own.</li>
 <li><b>Subscription:</b> yearly, for modules and drive brands released after you buy, and for updates of parameter lists and profiles.</li></ul>
 <p>Prices will be published before ordering opens. Stop always works, in every plan.</p>
+<div id="shop" hidden></div>
 <h2>What stays the same</h2>
 <ul><li>The app has no ads and no tracking.</li><li>Update checks only download a small version file.</li><li>Refund, VAT and licence terms will be final before ordering opens. Drafts are on the <a href="/refunds.html">refunds</a> and <a href="/licence.html">licence</a> pages.</li></ul>
 </div></div></div>"""

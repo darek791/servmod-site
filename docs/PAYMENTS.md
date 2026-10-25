@@ -1,0 +1,23 @@
+# Payments and automatic activation codes (built 2026-10-25)
+
+Flow: pricing page -> `/api/shop/checkout` -> Stripe Checkout (hosted, we never see cards) -> Stripe calls `/api/pay/stripe` (signed webhook) -> `shop.fulfil()` grants Pro / Subscription on the buyer's e-mail account -> e-mail with the activation code (when the buyer typed a Device ID at checkout) or with sign-in steps (code appears on the account page).
+The shop is CLOSED until `/etc/servmod/pay.env` contains `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` (`GET /api/shop/config` shows `open`).
+
+## One-time setup (owner, on the PC)
+1. Stripe dashboard (start in TEST mode): Developers > Webhooks > add endpoint `https://servmod.com/api/pay/stripe`, events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `charge.refunded`, `charge.dispute.created`. Copy the signing secret (`whsec_...`).
+2. Settings > Payment methods: turn on PayPal (if offered for the UK account) and wallets.
+3. Double-click `tools\install_payment_keys.cmd` (copy is in `web\install_backend\`): type the secret key, the signing secret and the prices in pence. The keys go to `/etc/servmod/pay.env` on the server only.
+4. Licence key on the server: `install_licence_key.cmd` (already exists). The server signs codes with it.
+5. Test with a Stripe test card (4242 4242 4242 4242), then switch to live keys by running the script again.
+
+## Rules in the code
+- Products and prices (pence, env): `pro` `PRICE_PRO_PENCE` (default 4000), `sub` `PRICE_SUB_PENCE` (default 2000, +365 days from today or from the current end date).
+- One shop entitlement per account (`source='shop'`): features `PRO` and/or `SUB:YYYYMMDD`; 1 seat (one device), moves limited by `MOVES_PER_YEAR`.
+- Idempotent: table `orders` has UNIQUE(provider, ext_id), so a repeated webhook does nothing.
+- A changed plan re-signs the code for an already activated device the next time the account page requests it.
+- Refund or dispute events only e-mail the admins and write the audit log; revoke the licence by hand in the account admin panel.
+- `/api/pay/*` skips the CSRF header (the provider signature, 5 minute tolerance, protects it).
+
+## Not done
+- PayPal as a separate integration (only if PayPal cannot be enabled inside Stripe Checkout).
+- UK VAT / tax handling and invoices; legal texts (Terms, Refunds) need the owner's approval before real sales.

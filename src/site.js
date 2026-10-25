@@ -36,6 +36,28 @@
       else wlMsg(wst, 'This link is not valid any more. If you want to join, use the form below.', 'err');
     }).catch(function () { wlMsg(wst, 'Could not complete that. Please try again later.', 'err'); });
   }
+  var shop = document.getElementById('shop');
+  if (shop) {
+    if (location.hash === '#paid=1') {
+      history.replaceState(null, '', location.pathname);
+      shop.hidden = false; shop.innerHTML = '<h2>Thank you</h2><p>Your payment went through. We are sending an email with your licence details; it usually arrives within a minute. Check the spam folder if you do not see it, or write to support@servmod.com.</p>';
+    } else {
+      fetch('/api/shop/config').then(function (r) { return r.json(); }).then(function (c) {
+        if (!c.open) return;
+        var rows = [['pro', 'Pro', 'one-time', 'Write parameters, restore, manual control, fault and factory reset.'], ['sub', 'Subscription', 'per year', 'Modules and drive brands released after you buy, and updated parameter lists.']];
+        var h = '<h2>Buy</h2><p class="fine">Pay by card or PayPal on a secure page of our payment provider. We never see your card. If you know your Device ID (app: Settings, Subscription) you can enter it there and the code is emailed at once.</p><div class="actions">';
+        rows.forEach(function (x) { var p = c.products[x[0]]; h += '<button class="btn" type="button" data-product="' + x[0] + '">' + x[1] + ' ' + p.price + ' ' + x[2] + '</button>'; });
+        shop.innerHTML = h + '</div><p class="fine" id="shop-msg"></p>'; shop.hidden = false;
+        shop.addEventListener('click', function (e) {
+          var b = e.target.closest('button[data-product]'); if (!b) return;
+          var m = document.getElementById('shop-msg'); b.disabled = true; m.textContent = 'Opening the payment page...';
+          fetch('/api/shop/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'servmod' }, body: JSON.stringify({ product: b.dataset.product }) })
+            .then(function (r) { return r.json(); }).then(function (d) { if (d.url) location.href = d.url; else throw 0; })
+            .catch(function () { m.textContent = 'Could not open the payment page. Please try again later.'; b.disabled = false; });
+        });
+      }).catch(function () {});
+    }
+  }
   var form = document.getElementById('support-form');
   if (!form) return;
   var msg = document.getElementById('form-msg');

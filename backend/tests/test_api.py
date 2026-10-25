@@ -126,3 +126,44 @@ def test_waitlist_account_toggle_and_admin_notify(c, monkeypatch):
     assert mail.OUTBOX[-1][0] == "u@x.com" and "Unsubscribe" in mail.OUTBOX[-1][2]
     assert core.q("SELECT notified FROM waitlist").fetchone()[0] is not None
     assert c.post("/api/admin/waitlist/notify", json={"subject": "Released", "text": "ServMod is out now", "confirm": True}, headers=H).json()["queued"] == 0
+
+
+def _stripe_event(secret, obj, typ="checkout.session.completed", t=None):
+    import hmac, hashlib, json, time
+    raw = json.dumps({"type": typ, "data": {"object": obj}}).encode()
+    t = int(t or time.time())
+    sig = hmac.new(secret.encode(), f"{t}.".encode() + raw, hashlib.sha256).hexdigest()
+    return raw, {"Stripe-Signature": f"t={t},v1={sig}", "Content-Type": "application/json"}
+
+def test_shop_closed_by_default(c):
+    assert c.get("/api/shop/config").json()["open"] is False
+    assert c.post("/api/shop/checkout", json={"product": "pro"}, headers=H).status_code == 503
+
+def test_stripe_webhook_grants_and_issues_code(c, monkeypatch):
+    from servmod_api import licence, mail
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x"); monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", "whsec_x")
+    obj = {"id": "cs_1", "payment_status": "paid", "amount_total": 4000, "currency": "gbp", "metadata": {"product": "pro"},
+           "customer_details": {"email": "Buyer@x.com"}, "custom_fields": [{"key": "device_id", "text": {"value": "abcdef123"}}]}
+    raw, h = _stripe_event("whsec_x", obj)
+    assert c.post("/api/pay/stripe", content=raw, headers=h).json()["result"] == "new"   # no CSRF header needed, signature instead
+    code = re.search(r"(WL1\.\S+)", mail.OUTBOX[-1][2]).group(1)
+    assert licence.verify_code(c.key.public_key(), code) and licence.code_features(code) == "PRO"
+    assert c.post("/api/pay/stripe", content=raw, headers=h).json()["result"] == "duplicate"   # replayed event
+    # subscription later extends and re-issues the code for the same device
+    obj2 = dict(obj, id="cs_2", amount_total=2000, metadata={"product": "sub"}, custom_fields=[])
+    raw2, h2 = _stripe_event("whsec_x", obj2)
+    assert c.post("/api/pay/stripe", content=raw2, headers=h2).json()["result"] == "new"
+    tok, _ = login(c, "buyer@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    new = c.post("/api/devices", json={"device_id": "ABCDEF123"}, headers=H).json()["code"]
+    assert licence.code_features(new).startswith("PRO,SUB:") and licence.verify_code(c.key.public_key(), new)
+
+def test_stripe_webhook_rejects_bad_signature_and_old_events(c, monkeypatch):
+    monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", "whsec_x")
+    obj = {"id": "cs_9", "payment_status": "paid", "metadata": {"product": "pro"}, "customer_details": {"email": "a@b.com"}}
+    raw, h = _stripe_event("wrong", obj)
+    assert c.post("/api/pay/stripe", content=raw, headers=h).status_code == 400
+    raw, h = _stripe_event("whsec_x", obj, t=1000)
+    assert c.post("/api/pay/stripe", content=raw, headers=h).status_code == 400
+    raw, h = _stripe_event("whsec_x", dict(obj, payment_status="unpaid"))
+    assert c.post("/api/pay/stripe", content=raw, headers=h).json()["ok"] is True
+    assert c.get("/api/me").status_code == 401
