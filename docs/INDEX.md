@@ -4,7 +4,7 @@ Last updated: 2026-10-15. Keep this file current: when something is added/change
 Mirror on the PC: `C:\Users\grabo\Desktop\Arduino\ServMod\handoff\website\` (copy of `docs/`). Master copy = this repo.
 
 ## What it is
-Static marketing site + small FastAPI backend for **ServMod** (Android toolbox for maintenance engineers), live at https://servmod.com. Site and app GUI are **English only**; the owner (Dariusz) talks Polish.
+Static marketing site + small FastAPI backend for **ServMod** (Android toolbox for maintenance engineers), live at https://servmod.com. Site and app GUI are **English only**; the owner (DG) talks Polish.
 
 ## Repo map (github.com/darek791/servmod-site, branch `main`)
 | Path | What |
@@ -32,13 +32,13 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Domain servmod.com on Cloudflare DNS -> Hetzner server (167.233.108.235; the box formerly ran the trading bots – bot files still there, do not delete without asking). nginx + certbot TLS.
 - Server paths: site `/var/www/servmod/`, **update feed** `/var/www/servmod/servmod/` (never touched by sync), backend `/opt/servmod-app`, data `/var/lib/servmod` (SQLite), licence signing key `/etc/servmod/license_private.key`, repo checkout `/var/lib/servmod-repo`, sync log `/var/log/servmod-sync.log`.
 - Mail: Resend (MAIL_MODE=resend, key in server env, never in repo); inbound support@servmod.com via Cloudflare Email Routing (delivery confirmed 2026-10-11).
-- Update feed: `/servmod/version.json`, `/servmod/beta/version.json`, `/servmod/history.json`, `/servmod/releases/*.apk`. **APK downloads are locked in nginx until Dariusz says "unlock".**
+- Update feed: `/servmod/version.json`, `/servmod/beta/version.json`, `/servmod/history.json`, `/servmod/releases/*.apk`. **APK downloads are locked in nginx until the owner says "unlock".**
 
 ## Current status / open items
 - 2026-10-15 content refresh to app 0.55: `APP_VERSION` 0.55, `MODULES` list now 17 tools (added Tools, USB Tools, NFC & Barcode, Zodiac Printers, ServMod Box, Steppers, My Stuff; Danfoss FC 280 in Inverters; Printers cable check), features/equipment/guides updated (Hitachi: WL200 USB ok, WJ200 via RS-485 only). When the app gets new modules, edit `MODULES`, the `features()` cards and `equipment()`/`guides()` in src/build.py.
 - Done: full static site, manuals search, account login, support form (works), licence activation codes, visible Sign-in button.
 - Waiting list built 2026-10-12: send the release e-mail from the account page (admin) when the first public version is published, together with the "unlock".
-- Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for Dariusz to show those files), automatic licence e-mail after purchase, publishing the APK (only on "unlock").
+- Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for the owner to show those files), automatic licence e-mail after purchase, publishing the APK (only on "unlock").
 - Known gotcha: do not reuse DOM id `acct` (account page uses it) – header link is `acct-link`.
 
 
@@ -48,3 +48,5 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Status source for the site: `_komunikacja/STATUS.md` (mirror docs/komunikacja/). On a new app/firmware version: update build.py MODULES and features cards, build, push.
 
 - 2026-10-18: removed the bio section from the home page; new page About (`about()` in build.py, nav item 'About', /about.html) with a short bio (30 years: moulding, petrochemicals/refineries, robotics, cars, food production and fast packing lines, solar panels). Home keeps a short 'Ordering' block.
+
+- 2026-10-25: personal name removed from the site and docs; the author is shown as "DG" (footer, About, Terms, Privacy). Future wording: "we"/team. Note: Privacy/Terms name the controller as "DG, United Kingdom" - before sales open these need the proper trading name and address (UK rules for businesses selling online).

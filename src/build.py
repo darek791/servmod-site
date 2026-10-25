@@ -60,7 +60,7 @@ FOOTER = f"""<footer><div class="wrap">
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
-  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release {APP_VERSION}, in testing. Created by Dariusz Grabowski, United Kingdom.</p>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release {APP_VERSION}, in testing. Created by DG, United Kingdom.</p>
 </div></footer>"""
 
 HERO_SVG = """<svg viewBox="0 40 600 390" role="img" aria-label="Diagram: an Android phone connects through a USB to RS-485 adapter to the RS+ and RS- terminals of an inverter">
@@ -339,8 +339,8 @@ FAQ = [
 def about():
     body = """<div class="wrap page"><div class="prose">
 <h1>About</h1>
-<p class="intro">ServMod is built by one maintenance engineer, Dariusz Grabowski, in the United Kingdom.</p>
-<p>I have worked in maintenance for about 30 years: injection moulding, petrochemicals and refineries, robotics, car systems, food production with fast packing lines, and solar panels. Every module in ServMod exists because a job needed it, and I test it on real equipment before I call it ready.</p>
+<p class="intro">ServMod is made by DG, a maintenance engineer in the United Kingdom.</p>
+<p>DG has worked in maintenance for about 30 years: injection moulding, petrochemicals and refineries, robotics, car systems, food production with fast packing lines, and solar panels. Every module in ServMod exists because a job needed it, and it is tested on real equipment before it is called ready.</p>
 <p>Questions, a drive you would like supported or a fault that is not in the guides are welcome on the <a href="/support.html">support page</a>.</p>
 </div></div>"""
     return page("about", "About", "Who builds ServMod: a maintenance engineer with about 30 years of experience across industry.", body, "/about.html")
@@ -435,7 +435,7 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 <li>Starting a motor or changing parameters can cause machinery to move unexpectedly, damage equipment, stop production or injure people. You must make sure that the machine, the area around it and the people near it are safe before you do either.</li>
 <li>You will make and check a backup of the equipment parameters before writing anything. You are responsible for verifying every written value on the drive.</li>
 <li>You use this software entirely at your own risk. It is provided "as is" with no warranty of any kind, express or implied, including fitness for a particular purpose and accuracy of parameter data.</li>
-<li>To the maximum extent permitted by law, the author, Dariusz Grabowski, accepts no liability for any damage, loss, injury, downtime, data loss or warranty claims arising from the use or misuse of this software. Nothing here limits liability that cannot be limited by law.</li>
+<li>To the maximum extent permitted by law, the author (DG) accepts no liability for any damage, loss, injury, downtime, data loss or warranty claims arising from the use or misuse of this software. Nothing here limits liability that cannot be limited by law.</li>
 <li>This is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation or any other manufacturer. Product and company names belong to their owners. Using it may affect your equipment's manufacturer warranty.</li>
 <li>This software and its data may not be copied, redistributed or reverse engineered without the author's written permission.</li>
 </ol>
@@ -446,7 +446,7 @@ PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your par
 <h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to send you one email when the first public version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
 <h2>Support messages</h2><p>If you write to support, we keep your name, email address and message to answer you and to help with later questions.</p>
 <h2>Ordering</h2><p>When ordering opens, we will store your email address, your Device ID and your order details to issue and re-issue your activation code and to handle payment, tax and support. Card and PayPal payments are handled by the payment providers, and we do not see your card details. This section will be completed with the full list of providers, retention periods and your rights before ordering opens.</p>
-<h2>Contact</h2><p>The controller of the data is Dariusz Grabowski, United Kingdom. Contact: <a href="mailto:support@servmod.com">support@servmod.com</a>.</p>"""
+<h2>Contact</h2><p>The controller of the data is DG, United Kingdom. Contact: <a href="mailto:support@servmod.com">support@servmod.com</a>.</p>"""
 REFUNDS = """<p>This is a plan for how refunds will work, not final terms.</p>
 <h2>Digital delivery</h2><p>ServMod is delivered digitally and the activation code is issued straight after payment. UK and EU consumers can normally cancel a digital purchase within 14 days, unless they agree that delivery starts at once and acknowledge that they lose the right to cancel once it has started. The final checkout wording will say exactly this.</p>
 <h2>If it does not work for you</h2><p>If the app does not work with your equipment, contact support within 30 days of purchase and describe the problem. We will try to fix it or, if we cannot, refund you.</p>

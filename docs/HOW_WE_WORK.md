@@ -1,16 +1,16 @@
 # How we work on ServMod (workflow, deploy, PC, GitHub)
 
 ## People and language
-Dariusz writes Polish, usually from a phone. Claude answers in Polish; **website and app GUI text is English only**. Keep replies short: what was done, what to check, next step.
+The owner writes Polish, usually from a phone. Claude answers in Polish; **website and app GUI text is English only**. Keep replies short: what was done, what to check, next step.
 
 ## Where Claude works
 1. **Website** – in the cloud container clone `/home/claude/servmod-site` (remote `origin` = github.com/darek791/servmod-site, push works from there). Flow: edit `src/*` or `backend/*` -> `cd src && python3 build.py` (regenerates `site/`) -> `git add -A && git commit` -> `git push`. Server pulls `main` every minute (`servmod-sync`): rsyncs `site/`, applies nginx conf if valid, syncs backend and restarts `servmod-api`. Live in ~60 s. Check: `curl -s https://servmod.com/...` or `git ls-remote origin main` = HEAD.
 2. **Android app** – on the user's PC through the device bridge: source `C:\Users\grabo\Desktop\Arduino\wl200_android`, shared folder `...\Arduino\ServMod` (releases\, handoff\, web\ = old local site copy, do not use as master). Edit with `device_bash` (python/sed in `$HOME/mnt/Arduino/...`), build in Android Studio by computer use (see `handoff/03_BUILD_RELEASE_HOWTO.md`: open app -> Build menu -> Assemble; wait <=50 s per call; read result by zoom on Build panel), copy APK to `ServMod\releases\ServMod-<ver>-<tag>.apk`, bump versionCode/versionName each delivery, stage and **send APK in chat** (SendUserFile, <=30 MiB).
-3. **Server (Hetzner)** – no ssh from the bridge. Changes go through the repo (auto-sync). One-off server actions are done by `.cmd` scripts that Dariusz double-clicks on the PC (`tools/install_backend.cmd`, `tools/release.py`).
+3. **Server (Hetzner)** – no ssh from the bridge. Changes go through the repo (auto-sync). One-off server actions are done by `.cmd` scripts that the owner double-clicks on the PC (`tools/install_backend.cmd`, `tools/release.py`).
 
 ## Rules
 1. Work autonomously; ask only when a decision is irreversible or truly ambiguous.
-2. Secrets (API keys, passwords, Resend key) only typed by Dariusz in PC prompts, never in chat or repo. Never commit keys, .env, APKs, `license_private.key`, `servmod-release.jks`. These two key files never leave the PC.
+2. Secrets (API keys, passwords, Resend key) only typed by the owner in PC prompts, never in chat or repo. Never commit keys, .env, APKs, `license_private.key`, `servmod-release.jks`. These two key files never leave the PC.
 3. Downloads stay locked until he writes "unlock". Publishing a release only on his command (`tools/release.py` from the PC).
 4. Scripts for him = double-click `.cmd` files, not pasted commands.
 5. Don't delete the old trading-bot files on the server without asking.
