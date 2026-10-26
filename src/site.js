@@ -74,6 +74,7 @@
       if (!v || !v.apkUrl) throw 0;
       $('dl-status').hidden = true; $('dl-main').hidden = false; $('dl-meta').hidden = false;
       var mb = v.size ? (v.size / 1048576).toFixed(1) + ' MB' : '';
+      if (/^https:\/\/servmod\.com\/servmod\/releases\//.test(v.apkUrl)) $('dl-btn').href = v.apkUrl;
       $('dl-meta').textContent = 'Version ' + (v.versionName || '') + (mb ? ' · ' + mb : '') + ' · Android 7.0 or newer';
       if (v.sha256) $('dl-sha').textContent = v.sha256;
     }).catch(function () { $('dl-status').hidden = true; $('dl-none').hidden = false; });

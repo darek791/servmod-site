@@ -19,7 +19,7 @@ PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/var/lib/servmod
-ReadOnlyPaths=/etc/servmod
+ReadOnlyPaths=/etc/servmod /var/www/servmod/servmod
 
 [Install]
 WantedBy=multi-user.target
