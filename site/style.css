@@ -245,3 +245,6 @@ figure.appshot figcaption{font-size:.9rem;opacity:.8;margin-top:.5rem}
 .nav .btn{white-space:nowrap}
 
 figure.instshot{margin:10px 0 18px;max-width:380px}figure.instshot img{width:100%;height:auto;border:1px solid var(--line,#2a2a2a);border-radius:10px;display:block}figure.instshot figcaption{font-size:.82rem;opacity:.7;margin-top:4px}
+
+table.plans{border-collapse:collapse;width:100%;margin-top:34px;font-size:.92rem}table.plans th,table.plans td{border-bottom:1px solid #2a2a2a;padding:9px 8px;text-align:center}table.plans th[scope=row]{text-align:left;font-weight:500}table.plans thead th{vertical-align:bottom;font-weight:700}table.plans small{font-weight:400;opacity:.75}table.plans td.y{color:#eb8a00;font-weight:700}table.plans td.n{opacity:.35}
+@media(max-width:600px){table.plans{font-size:.82rem}table.plans th,table.plans td{padding:7px 4px}}
