@@ -10,6 +10,6 @@ if ($sk -notmatch '^sk_(live|test)_[\w]+$') { throw "that does not look like a S
 if ($wh -notmatch '^whsec_[\w]+$') { throw "that does not look like a webhook signing secret" }
 if ($pro -notmatch '^\d{3,6}$' -or $sub -notmatch '^\d{3,6}$') { throw "prices must be whole numbers of pence" }
 $body = "STRIPE_SECRET_KEY=$sk`nSTRIPE_WEBHOOK_SECRET=$wh`nPRICE_PRO_PENCE=$pro`nPRICE_SUB_PENCE=$sub`n"
-$cmd = "umask 077; cat > /etc/servmod/pay.env; chown root:servmod /etc/servmod/pay.env; chmod 640 /etc/servmod/pay.env; systemctl restart servmod-api; sleep 2; systemctl is-active servmod-api; curl -fsS http://127.0.0.1:8100/api/shop/config; echo"
+$cmd = "umask 077; touch /etc/servmod/pay.env; sed -i '/^STRIPE_/d;/^PRICE_/d' /etc/servmod/pay.env; cat >> /etc/servmod/pay.env; chown root:servmod /etc/servmod/pay.env; chmod 640 /etc/servmod/pay.env; systemctl restart servmod-api; sleep 2; systemctl is-active servmod-api; curl -fsS http://127.0.0.1:8100/api/shop/config; echo"
 ($body -replace "`r","") | ssh -i $key $srv $cmd
 Write-Host "`nDone. Ordering is now open on servmod.com/pricing.html (use test keys first)." -ForegroundColor Green
