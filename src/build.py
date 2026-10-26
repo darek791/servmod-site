@@ -99,7 +99,7 @@ def hero():
     <div class="actions"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works fully offline</li><li><a href="/download.html#install">How to install</a></li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
-  <figure class="heroimg"><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
+  <figure class="heroimg"><p class="herobadge"><b>One app.</b> 20+ tools.</p><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
 </div></section>"""
 
 def strip():

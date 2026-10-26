@@ -248,3 +248,5 @@ figure.instshot{margin:10px 0 18px;max-width:380px}figure.instshot img{width:100
 
 table.plans{border-collapse:collapse;width:100%;margin-top:34px;font-size:.92rem}table.plans th,table.plans td{border-bottom:1px solid #2a2a2a;padding:9px 8px;text-align:center}table.plans th[scope=row]{text-align:left;font-weight:500}table.plans thead th{vertical-align:bottom;font-weight:700}table.plans small{font-weight:400;opacity:.75}table.plans td.y{color:#eb8a00;font-weight:700}table.plans td.n{opacity:.35}
 @media(max-width:600px){table.plans{font-size:.82rem}table.plans th,table.plans td{padding:7px 4px}}
+
+.herobadge{margin:0 0 14px;font-family:'Rajdhani','Saira Condensed',inherit;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:.02em;line-height:1.1}.herobadge b{color:#eb8a00}
