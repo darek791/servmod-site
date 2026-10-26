@@ -6,7 +6,7 @@ $sk = Secret "Stripe secret or restricted key (sk_live_..., rk_live_... or *_tes
 $wh = Secret "Stripe webhook signing secret (whsec_...)"
 $pro = Read-Host "Pro price in pence [4000]";  if ([string]::IsNullOrWhiteSpace($pro)) { $pro = "4000" }
 $sub = Read-Host "Subscription price in pence [2000]"; if ([string]::IsNullOrWhiteSpace($sub)) { $sub = "2000" }
-if ($sk -notmatch '^sk_(live|test)_[\w]+$') { throw "that does not look like a Stripe secret key" }
+if ($sk -notmatch '^(sk|rk)_(live|test)_[\w]+$') { throw "that does not look like a Stripe secret or restricted key" }
 if ($wh -notmatch '^whsec_[\w]+$') { throw "that does not look like a webhook signing secret" }
 if ($pro -notmatch '^\d{3,6}$' -or $sub -notmatch '^\d{3,6}$') { throw "prices must be whole numbers of pence" }
 $body = "STRIPE_SECRET_KEY=$sk`nSTRIPE_WEBHOOK_SECRET=$wh`nPRICE_PRO_PENCE=$pro`nPRICE_SUB_PENCE=$sub`n"
