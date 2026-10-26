@@ -93,8 +93,8 @@ HERO_SVG = """<svg viewBox="0 40 600 390" role="img" aria-label="Diagram: an And
 def hero():
     return f"""<section class="hero"><div class="wrap">
   <div>
-    <h1>Back up the drive before you touch it.</h1>
-    <p class="lead">ServMod reads, saves and compares inverter parameters from your Android phone, over a USB-RS485 adapter. No laptop, no mobile signal, no software to install on a PC.</p>
+    <h1>Fix it faster. The app remembers for you.</h1>
+    <p class="lead">Save the settings of every drive on your phone, then swap a faulty one in minutes: read, store, write to the new drive. Wiring and fault codes are in the app too, so there is less to look up. No laptop, no mobile signal, no software to install on a PC.</p>
     <div class="actions"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
@@ -117,7 +117,7 @@ GALLERY = f"""<section id="app"><div class="wrap">
   <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus a pocket cheat sheet for the cable work around it.</p>
   <div class="shots appshots">
     {_card("inv", "ServMod list of supported inverters: Hitachi, Allen-Bradley, Omron, Danfoss, Lenze, Mitsubishi, Delta, INVT, ABB, Inovance", "Choose the drive")}
-    {_card("backup", "ServMod backup screen with Create backup, Import CSV and a list of saved backups", "Back up before you touch it")}
+    {_card("backup", "ServMod backup screen with Create backup, Import CSV and a list of saved backups", "Save the settings, swap the drive")}
     {_card("lenze", "ServMod Compare and write dialog listing three differences between a backup and the inverter, each with a tick box", "Compare, then write only what you tick")}
     {_card("home", "ServMod home screen with a grid of tools: Inverters, Thermocontrollers, Printers, Condition, Network, Calc, Access, Notes, Parts, PLC, HMI, Manuals and more", "One app for the toolbox")}
     {_card("wiring", "ServMod cheat sheet showing the T568B Ethernet wiring colours and pin functions", "Wiring cheat sheet")}
