@@ -4,7 +4,7 @@ Source: wl200_android (Modules.kt), ServMod\handoff\*.md (servmod-handoff, 06_SE
 
 ## Home screen: 20 module tiles
 Inverters, Thermocontrollers, Printers, Condition, Network, Calc, Access, Notes, Parts, PLC, HMI, Manuals, NFC & Barcode, Tools, Zodiac Printers, USB Tools, Steppers, OBD2 Scanner, Siemens OP17, ESP32 Loader. Plus Settings (screen on, Backup, Subscription, Support, About with updates, terms, open-source licences) and a FREE/PRO/FULL badge.
-"Tools" holds about 13 sub-tools: Level, Magnet, Tacho (camera/magnet/vibration/light/gyro), Slow-mo (frame-by-frame video, delay A to B, speed), Loupe, Strobe (LED sync), Leak finder (ultrasonic via mic), Ruler, Picture measure, Height, Colour (RAL names), Sensors explorer, Solar (panel aiming, best tilt, energy estimate). So "20+ tools" is true.
+"Tools" holds about 13 sub-tools: Level, Magnet, Tacho (camera/magnet/vibration/light/gyro), Slow-mo (frame-by-frame video, delay A to B, speed), Loupe, Strobe (LED sync), Leak finder (ultrasonic via mic), Ruler, Picture measure, Height, Colour (RAL names), Sensors explorer, Solar (panel aiming, best tilt, energy estimate). Counting tools, not tiles (drive brands count as one Inverters tool): 19 other tiles + 13 sub-tools in Tools = 32, so the site says "30+ tools".
 
 ## Inverters: every drive module has the same tabs
 Backup | Parameters | Control | Settings | Faults. Also Compare, fault-cause lookup, "How to connect" per model (a thumbnail photo marks a model that was physically tested).
