@@ -160,6 +160,8 @@ MODULES = [
  ("ServMod Box", "Our own ESP32-S3 interface with RS-485, RS-232, CAN, USB host and Ethernet, reached over Wi-Fi or Bluetooth. Reads Danfoss FC 280 as fast as a USB adapter, and a restore keeps running inside the Box if the phone link drops. The hardware is still a prototype.", "test", "In field testing"),
  ("Backup", "Encrypted copy of the app's own data (settings, drive backups, notes, photos, tags) to a folder you choose, such as Google Drive, with restore on a new phone and an optional daily copy.", "test", "In field testing"),
  ("Steppers", "Stepper motor test bench through the ServMod Box: run, jog, moves, speed and acceleration ladders, resonance sweep and endurance tests. A simulator is included.", "draft", "Draft, bench only"),
+ ("HMI", "Remote operator panel for PLCs: live inputs, outputs, analog values, timers, counters, setpoints, trends and alarms. It runs on a built-in simulator for now; real protocols are added step by step.", "draft", "Draft, simulator only"),
+ ("Siemens OP17", "Loader for Siemens OP17 operator panels: record a ProTool / ProSave transfer into a backup file and write it to a spare panel. Experimental, for spare panels only.", "draft", "Draft, bench only"),
  ("PLC", "Read Omron (FINS over UDP) and Allen-Bradley (EtherNet/IP) controllers with live values and a change list. It never writes to the PLC.", "draft", "Draft, bench only"),
  ("Condition", "Vibration and sound checks with history, to compare before and after service.", "test", "In field testing"),
  ("Network", "Wi-Fi, Ethernet and Bluetooth analyser, ping, port scan and Modbus TCP read.", "test", "In field testing"),
