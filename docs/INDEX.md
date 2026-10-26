@@ -68,3 +68,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## 2026-10-25 – PayPal
 - Separate PayPal integration (Orders v2, capture on return) next to Stripe; keys via tools/install_paypal_keys.cmd; site shows card and PayPal buttons when both on. 16 backend tests pass.
+
+## 2026-10-26 – PayPal tested in sandbox
+- PayPal sandbox keys installed (app "ServMod", Merchant); buttons live on Pricing; test purchase of Pro from the website with a sandbox buyer OK (capture + thank-you view). Pending: PayPal button in the app (WWW-003), live keys for Stripe and PayPal.
