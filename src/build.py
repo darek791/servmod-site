@@ -6,6 +6,7 @@ OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
 DOMAIN = "https://servmod.com"
 APP_VERSION = "0.75"
 TODAY = datetime.date.today().isoformat()
+ICON_SVG = '<svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 NAV = [("features", "/features.html", "Modules"), ("equipment", "/equipment.html", "Equipment"),
        ("guides", "/guides.html", "Connection guides"), ("manuals", "/manuals/", "Fault codes"), ("pricing", "/pricing.html", "Pricing"),
@@ -41,7 +42,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 <header class="top"><div class="wrap">
   <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
   <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
-  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" href="/waitlist.html">Get notified</a></nav>
+  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download</a></nav>
   <a class="acct" id="acct-link" href="/account/">Sign in</a>
 </div></header>
 <main id="main">
@@ -56,7 +57,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 FOOTER = f"""<footer><div class="wrap">
   <div class="block">
     <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
-    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/waitlist.html">Waiting list</a></li></ul></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/waitlist.html">Update news</a></li></ul></div>
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li><li><a href="/requests.html">Requests</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
@@ -95,7 +96,7 @@ def hero():
   <div>
     <h1>Fix it faster. The app remembers for you.</h1>
     <p class="lead">Save the settings of every drive on your phone, then swap a faulty one in minutes: read, store, write to the new drive. Wiring and fault codes are in the app too, so there is less to look up. No laptop, no mobile signal, no software to install on a PC.</p>
-    <div class="actions"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="#job">See how a job goes</a></div>
+    <div class="actions"><a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
   <figure class="heroimg"><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
@@ -221,10 +222,10 @@ def home():
 
 <section><div class="wrap split">
   <div>
-    <h2>Be first to know</h2>
-    <p class="intro">The first public version is not out yet. Leave your email and we will tell you the day it is.</p>
+    <h2>Start with the free version</h2>
+    <p class="intro">The Free plan needs no account and no code. Pro and Subscription are one tap away in the app when you need to write to a drive.</p>
   </div>
-  <div>{wl_form("home")}<p class="hint" style="margin-top:10px">One message at release, nothing else. You confirm your address first. <a href="/waitlist.html">More</a></p></div>
+  <div><p><a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a></p><p class="hint" style="margin-top:10px">Android 7.0 or newer. Prefer an e-mail when a new version ships? <a href="/waitlist.html">Update news</a></p></div>
 </div></section>
 
 <section><div class="wrap split">
@@ -350,7 +351,7 @@ def pricing():
     body = """<div class="wrap page"><div class="split"><div>
 <h1>Pricing</h1>
 <p class="intro" id="shop-closed">Ordering is not open yet. Join the waiting list and we will write to you when it is.</p>
-<div class="actions" style="margin-top:28px"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
+<div class="actions" style="margin-top:28px"><a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
 </div><div class="prose">
 <h2 style="margin-top:0">How a licence works</h2>
 <ol>
@@ -435,6 +436,34 @@ def requests_page():
 <p>Need help with a drive that is already supported? Use the <a href="/support.html">support page</a> instead.</p>
 </div></div></div>"""
     return page("requests", "Requests", "Tell ServMod which drives, protocols and features you need next.", body, "/requests.html")
+
+def download():
+    body = """<div class="wrap page"><div class="split"><div>
+<h1>Download ServMod</h1>
+<p class="intro">The free version for Android 7.0 or newer. It needs no account and no code, and it works without a mobile signal.</p>
+<div class="dlcard" id="dl-card">
+  <p id="dl-status" class="hint">Checking the latest version...</p>
+  <p id="dl-main" hidden><a class="btn" id="dl-btn" href="/servmod/latest.apk">__ICON__ Download free version</a></p>
+  <p id="dl-meta" class="hint" hidden></p>
+  <div id="dl-none" hidden><p>The first public version is being published. Leave your e-mail and we will tell you the day it is ready.</p><p><a class="btn ghost" href="/waitlist.html">Update news</a></p></div>
+</div>
+<h2 style="font-size:1.4rem;margin-top:34px">What the free version does</h2>
+<p>Reads and saves drive parameters, compares a backup with a drive, shows faults, and has the cable and wiring cheat sheets. Writing parameters back, restore and manual control are in Pro or Subscription, which you buy inside the app. <a href="/pricing.html">Plans and prices</a>.</p>
+</div><div class="prose">
+<h2 style="margin-top:0">Install in four steps</h2>
+<ol>
+<li>Tap <b>Download free version</b> on your phone and wait for the file (about 22 MB).</li>
+<li>Open the downloaded file. If Android asks, allow your browser or Files app to install apps from this source.</li>
+<li>If Google Play Protect says the app is unknown, choose <b>More details</b>, then <b>Install anyway</b>. The app is not on Google Play yet.</li>
+<li>Open ServMod, read the terms and start. Plug in your OTG adapter and cable when you reach a drive.</li>
+</ol>
+<h2>Updates</h2>
+<p>The app checks this site for a new version and tells you. It downloads only a small version file. Nothing else is sent.</p>
+<h2>Check the file</h2>
+<p class="hint">SHA-256 of the current file, to compare after the download:</p><p id="dl-sha" class="mono" style="word-break:break-all;font-size:.85rem"></p>
+<p>Questions? See the <a href="/guides.html">connection guides</a> or <a href="/support.html">support</a>.</p>
+</div></div></div>""".replace("__ICON__", ICON_SVG)
+    return page("", "Download", "Download the free version of ServMod for Android: parameter backup and compare for inverters, with cable and wiring cheat sheets.", body, "/download.html")
 
 def manuals():
     body = """<div class="wrap page"><h1>Fault codes and parameters</h1>
@@ -541,7 +570,7 @@ PAGES = {
  "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(),
  "pricing.html": pricing(), "support.html": support(), "requests.html": requests_page(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
- "waitlist.html": waitlist(),
+ "waitlist.html": waitlist(), "download.html": download(),
  "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY, draft=False),
  "refunds.html": doc("", "Refunds", "How refunds for ServMod licences work.", "/refunds.html", REFUNDS, draft=False),
  "licence.html": doc("", "Licence", "How the ServMod licence and activation work.", "/licence.html", LICENCE, draft=False),

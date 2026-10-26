@@ -237,3 +237,9 @@ figure.appshot figcaption{font-size:.9rem;opacity:.8;margin-top:.5rem}
 .photos.adapters{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));max-width:none}
 .photos.adapters figcaption{opacity:.9;font-size:.9rem}
 .photos.adapters figcaption b{color:#fff}
+
+.btn .ico{vertical-align:-4px;margin-right:6px}
+.dlcard{border:1px solid var(--line);border-radius:10px;padding:22px 24px;margin-top:26px;max-width:34em}
+.dlcard .btn{font-size:1.1rem;padding:16px 26px}
+
+.nav .btn{white-space:nowrap}
