@@ -195,7 +195,7 @@ async def waitlist_join(req: Request):
     tok = row["tok"] if row else secrets.token_urlsafe(24)
     if not row: core.q("INSERT INTO waitlist(email,created,tok,source) VALUES(?,?,?,?)", (email, core.now(), tok, "web"))
     mail.send(email, "Confirm your place on the ServMod waiting list",
-              f"Someone (hopefully you) asked to be told when the first public version of ServMod is released.\n\nConfirm here:\n{_wl_url('confirm', tok)}\n\n"
+              f"Someone (hopefully you) asked to be told when a new version of ServMod is released.\n\nConfirm here:\n{_wl_url('confirm', tok)}\n\n"
               "If it was not you, ignore this e-mail and nothing will happen. We send one e-mail when ServMod is released, and nothing else.\n")
     return {"ok": True}
 

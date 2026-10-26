@@ -188,17 +188,17 @@ def waitlist():
     body = f"""<div class="wrap page"><div class="split"><div>
 <h1>Be first to know</h1>
 <div id="wl-status" class="msg" role="status"></div>
-<p class="intro">ServMod is in testing on real equipment and is not on sale yet. Leave your email address and we will send you one message when the first public version is available. Nothing else.</p>
+<p class="intro">ServMod is out: the free version is on the <a href="/download.html">download page</a>. Leave your email address and we will write to you only when a new version or an important change is released. Nothing else.</p>
 {wl_form("page")}
 <p class="hint" style="margin-top:14px">We first send a message to confirm that the address is yours. Unsubscribe with the link in any message from us. See the <a href="/privacy.html">privacy page</a>.</p>
 </div><div class="prose">
 <h2 style="margin-top:0">Prefer an account?</h2>
-<p>Create an account (it only needs your email address and a one-time code, no password) and tick <b>Email me once when the first public version is released</b> on the account page. It does the same thing, and the account will also hold your licence when ordering opens.</p>
+<p>Create an account (it only needs your email address and a one-time code, no password) and tick <b>Email me when a new version is released</b> on the account page. It does the same thing, and the account will also hold your licence when ordering opens.</p>
 <p><a class="btn ghost" href="/account/">Create an account or sign in</a></p>
 <h2>What you get</h2>
 <ul><li>One email when ServMod is released.</li><li>No newsletter, no ads, no sharing of your address.</li></ul>
 </div></div></div>"""
-    return page("", "Waiting list", "Join the ServMod waiting list and get one email when the first public version is released.", body, "/waitlist.html")
+    return page("", "Update news", "Get an email when a new version of ServMod is released. Rare, no marketing.", body, "/waitlist.html")
 
 def home():
     body = hero() + strip() + GALLERY + JOB + f"""
@@ -509,7 +509,7 @@ def account():
   <h2 style="font-size:1.5rem;margin:30px 0 10px">Your phones</h2>
   <div id="a-devs"></div>
   <h2 style="font-size:1.5rem;margin:30px 0 10px">Release news</h2>
-  <p><label><input type="checkbox" id="a-wl"> Email me once when the first public version of ServMod is released.</label></p>
+  <p><label><input type="checkbox" id="a-wl"> Email me when a new version of ServMod is released (rarely, no marketing).</label></p>
   <h2 style="font-size:1.5rem;margin:30px 0 10px">Your data</h2>
   <p><a class="btn ghost" href="/api/me/export" download="servmod-account.json">Download my data</a> <button class="btn ghost" id="a-del" type="button">Delete my account</button></p>
 </section>
@@ -549,7 +549,7 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
 <p>The Device ID shown in the app is a code derived from your phone. It is used only to create your activation code. The update check downloads one small file and sends no identifier.</p>
 <h2>This website</h2><p>The site uses no advertising cookies and no third-party analytics. To see whether anyone visits, our own server counts page views and download clicks: it stores the page, the date and a one-way hash of your IP address and browser that changes every day, so a visitor cannot be followed from one day to the next, and it never stores the IP address itself. Fonts are served from this site, not from a third party. Cloudflare delivers the site and may process technical request data such as IP address to protect and speed it up.</p>
-<h2>Requests</h2><p>If you send a request for a drive, protocol or feature we store what you wrote, the time, and your email address only if you gave one. We use it to decide what to build and to reply if you asked for a reply. We do not add you to any list and we do not share requests.</p><h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to send you one email when the first public version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
+<h2>Requests</h2><p>If you send a request for a drive, protocol or feature we store what you wrote, the time, and your email address only if you gave one. We use it to decide what to build and to reply if you asked for a reply. We do not add you to any list and we do not share requests.</p><h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to tell you when a new version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
 <h2>Support messages</h2><p>If you write to support, we keep your name, email address and message to answer you and to help with later questions.</p>
 <h2>Ordering and licences</h2><p>When you buy, we store your email address, the Device ID you give us, the activation code we issue and a record of the order (what you bought, when and for how much). We use them only to issue and re-issue your code, to send you receipts and to answer support. Card and PayPal payments are handled by our payment providers, Stripe and PayPal, and we never see your card details; they keep their own records under their own privacy policies.</p>
 <p>We keep order records for as long as accounting rules require. You can sign in and delete your account at any time, which removes your login, licences and activation codes, or write to support to ask us to delete the rest.</p>
