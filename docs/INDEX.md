@@ -76,3 +76,8 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Refunds, Licence, Privacy and Terms rewritten as final (Draft banner removed on the owner's instruction; not legal advice): 14-day cancellation waiver for digital content, 30-day "does not work" refund, one-year Subscription without auto-renew, "Buying a licence" section in Terms. Checkout consent text (Stripe and under the site buy buttons).
 - Home "Ordering" block and Pricing "How a licence works" describe buying from the app; hero button still "Get notified at release" until APK download is unlocked.
 - Stripe LIVE (restricted key, Checkout Sessions Write) and PayPal LIVE keys on the server; tools/set_prices.cmd changes prices only.
+
+## 2026-10-26 – Images and Requests page
+- Home hero = three real app screenshots in phone frames on a factory background (ComfyUI SDXL backgrounds on the owner's PC; screenshots composited with Pillow). New "In the app" gallery (6 cards, site/assets/app/). Bench photos stay in Connection guides only. New "Cables and adapters" section in Connection guides (site/assets/adapters/: OTG, USB-A mini/micro, USB-C to USB-B, USB-RS232). Still missing: a clean photo of the USB-RS485 adapter.
+- New page /requests.html: form for drives, protocols and features customers need (POST /api/requests, table `requests`, e-mail to SUPPORT_TO/admin, rate-limited, honeypot, e-mail optional). Admin panel lists requests with status new/planned/done/declined (POST /api/admin/request). Privacy page mentions requests. 17 backend tests pass.
+- Web-only endpoint, not used by the app; KONTRAKT.md unchanged.
