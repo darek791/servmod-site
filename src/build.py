@@ -445,16 +445,18 @@ def download():
   <p id="dl-status" class="hint">Checking the latest version...</p>
   <p id="dl-main" hidden><a class="btn" id="dl-btn" href="/servmod/latest.apk">__ICON__ Download free version</a></p>
   <p id="dl-meta" class="hint" hidden></p>
+  <p class="hint">Chrome will warn that the file "might be harmful": tap <b>Download anyway</b>. <a href="#install">How to install</a></p>
   <div id="dl-none" hidden><p>The first public version is being published. Leave your e-mail and we will tell you the day it is ready.</p><p><a class="btn ghost" href="/waitlist.html">Update news</a></p></div>
 </div>
 <h2 style="font-size:1.4rem;margin-top:34px">What the free version does</h2>
 <p>Reads and saves drive parameters, compares a backup with a drive, shows faults, and has the cable and wiring cheat sheets. Writing parameters back, restore and manual control are in Pro or Subscription, which you buy inside the app. <a href="/pricing.html">Plans and prices</a>.</p>
 </div><div class="prose">
-<h2 style="margin-top:0">Install in four steps</h2>
+<h2 id="install" style="margin-top:0">Install in four steps</h2>
+<p class="hint">You will see two or three warnings from Android. They appear for every app installed outside Google Play. If you already downloaded this file before, Chrome may also ask "Download file again?"; tap Download again.</p>
 <ol>
-<li>Tap <b>Download free version</b> on your phone and wait for the file (about 22 MB).</li>
-<li>Open the downloaded file. If Android asks, allow your browser or Files app to install apps from this source.</li>
-<li>If Google Play Protect says the app is unknown, choose <b>More details</b>, then <b>Install anyway</b>. The app is not on Google Play yet.</li>
+<li>Tap <b>Download free version</b> and wait for the file (about 22 MB). Chrome warns that an APK file might be harmful. This is normal for any app that is not from Google Play: tap <b>Download anyway</b>.<figure class="instshot"><img src="/assets/install/chrome-warning.jpg" width="520" height="306" loading="lazy" alt="Chrome: tap Download anyway"><figcaption>Chrome: tap Download anyway</figcaption></figure></li>
+<li>Tap <b>Open</b> on the "File downloaded" message (or open it from Downloads). If Android asks, allow your browser or Files app to install apps from this source, then tap <b>Install</b>.<figure class="instshot"><img src="/assets/install/install.jpg" width="520" height="239" loading="lazy" alt="Android: tap Install"><figcaption>Android: tap Install</figcaption></figure></li>
+<li>Google Play Protect says the app is unknown, because it is not on Google Play yet. Choose <b>Send this time</b> or <b>Don't send</b>; both continue the installation. If it blocks the install, choose <b>More details</b>, then <b>Install anyway</b>.<figure class="instshot"><img src="/assets/install/play-protect.jpg" width="520" height="841" loading="lazy" alt="Play Protect: Send this time or Don't send"><figcaption>Play Protect: Send this time or Don't send</figcaption></figure></li>
 <li>Open ServMod, read the terms and start. Plug in your OTG adapter and cable when you reach a drive.</li>
 </ol>
 <h2>Updates</h2>
