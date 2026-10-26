@@ -252,3 +252,15 @@ def test_requests_form_and_admin_view(c):
     assert c.post("/api/requests", json={"device": "Spam", "website": "x"}, headers={"X-Requested-With": "servmod"}).status_code == 200
     assert core.q("SELECT COUNT(*) c FROM requests").fetchone()["c"] == 2
     assert any("[ServMod request]" in m[1] and m[0] == "boss@x.com" for m in mail.OUTBOX)
+
+
+def test_hit_counter_and_admin_stats(c):
+    ua = {"User-Agent": "Mozilla/5.0 (Linux; Android 14)"}
+    h = {**H, **ua}
+    assert c.post("/api/hit", json={"p": "/pricing.html", "r": "https://google.com/x"}, headers=h).status_code == 200
+    c.post("/api/hit", json={"p": "/download.html", "e": "download"}, headers=h)
+    c.post("/api/hit", json={"p": "/"}, headers={**H, "User-Agent": "Googlebot/2.1"})
+    from servmod_api import app as A
+    s = A.visit_stats()
+    assert s["today"]["views"] == 1 and s["today"]["visitors"] == 1 and s["today"]["downloads"] == 1
+    assert s["pages"][0]["path"] == "/pricing.html" and s["refs"][0]["ref"] == "google.com"

@@ -1,4 +1,5 @@
-import os, json, logging, secrets, threading, time
+import os, json, logging, secrets, threading, time, re
+from urllib.parse import urlparse
 from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
 from . import core, mail, licence, issuing, shop
@@ -277,10 +278,47 @@ async def request_idea(req: Request):
     return {"ok": True}
 
 # ---------- admin
+BOT = re.compile(r"bot|crawl|spider|slurp|preview|headless|python|curl|wget|monitor|uptime|lighthouse|facebookexternalhit", re.I)
+
+@app.post("/api/hit")
+async def hit(req: Request):
+    """Cookie-free visit counter. Stores no IP: the visitor id is a hash of IP+browser+day, so it cannot be followed across days."""
+    ua = req.headers.get("user-agent", "")
+    if not ua or BOT.search(ua): return {"ok": True}
+    vip = req.headers.get("cf-connecting-ip") or ip(req)
+    if not core.rate_ok("hit-" + vip, 400, 3600): return {"ok": True}
+    d = await body(req)
+    path = str(d.get("p") or "/")[:80]
+    if not path.startswith("/") or "?" in path or "#" in path: path = path.split("?")[0].split("#")[0] or "/"
+    ev = "download" if d.get("e") == "download" else "view"
+    ref = ""
+    try:
+        host = (urlparse(str(d.get("r") or "")).hostname or "").lower()
+        if host and host != urlparse(core.SITE_URL).hostname: ref = host[:60]
+    except Exception: pass
+    t = core.now(); day = time.strftime("%Y-%m-%d", time.gmtime(t))
+    vid = core.h(f"{day}|{vip}|{ua}")[:16]
+    core.q("INSERT INTO hits(ts,day,path,ev,vid,ref) VALUES(?,?,?,?,?,?)", (t, day, path, ev, vid, ref or None))
+    if t % 50 == 0: core.q("DELETE FROM hits WHERE ts<?", (t - 400 * 86400,))
+    return {"ok": True}
+
+def visit_stats():
+    t = core.now(); today = time.strftime("%Y-%m-%d", time.gmtime(t))
+    days = [time.strftime("%Y-%m-%d", time.gmtime(t - i * 86400)) for i in range(13, -1, -1)]
+    rows = {r["day"]: r for r in core.q("SELECT day, SUM(ev='view') v, COUNT(DISTINCT CASE WHEN ev='view' THEN vid END) u, SUM(ev='download') d FROM hits WHERE day>=? GROUP BY day", (days[0],)).fetchall()}
+    daily = [{"day": x, "views": (rows[x]["v"] or 0) if x in rows else 0, "visitors": (rows[x]["u"] or 0) if x in rows else 0, "downloads": (rows[x]["d"] or 0) if x in rows else 0} for x in days]
+    d7 = time.strftime("%Y-%m-%d", time.gmtime(t - 6 * 86400)); d30 = time.strftime("%Y-%m-%d", time.gmtime(t - 29 * 86400))
+    def tot(since):
+        r = core.q("SELECT COALESCE(SUM(ev='view'),0) v, COUNT(DISTINCT CASE WHEN ev='view' THEN vid END) u, COALESCE(SUM(ev='download'),0) d FROM hits WHERE day>=?", (since,)).fetchone()
+        return {"views": r["v"], "visitors": r["u"], "downloads": r["d"]}
+    return {"since": (core.q("SELECT MIN(day) m FROM hits").fetchone()["m"]), "today": tot(today), "d7": tot(d7), "d30": tot(d30), "daily": daily,
+            "pages": [dict(r) for r in core.q("SELECT path, COUNT(*) n FROM hits WHERE ev='view' AND day>=? GROUP BY path ORDER BY n DESC LIMIT 12", (d30,)).fetchall()],
+            "refs": [dict(r) for r in core.q("SELECT ref, COUNT(*) n FROM hits WHERE ev='view' AND ref IS NOT NULL AND day>=? GROUP BY ref ORDER BY n DESC LIMIT 8", (d30,)).fetchall()]}
+
 @app.get("/api/admin/overview")
 def overview(req: Request):
     admin(req)
-    return {"users": [dict(r) for r in core.q("SELECT id,email,created,last_login FROM users ORDER BY id DESC LIMIT 200")],
+    return {"visits": visit_stats(), "users": [dict(r) for r in core.q("SELECT id,email,created,last_login FROM users ORDER BY id DESC LIMIT 200")],
             "tickets": [dict(r) for r in core.q("SELECT * FROM tickets ORDER BY id DESC LIMIT 200")],
             "requests": [dict(r) for r in core.q("SELECT * FROM requests ORDER BY id DESC LIMIT 300")],
             "entitlements": [dict(r) for r in core.q("SELECT e.*,u.email FROM entitlements e JOIN users u ON u.id=e.user_id ORDER BY e.id DESC LIMIT 200")],

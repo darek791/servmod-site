@@ -87,3 +87,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Hero slogan changed to "Fix it faster. The app remembers for you."
 - APK to publish: ServMod-0.76.3-clean.apk (versionCode 198, com.servmod.app, not debuggable, signed with the owner's own certificate, valid to 2056). Publishing is done by the owner on the PC: web\install_backend\publish_release.cmd (dry run first, then types PUBLISH). Until then the feed is 404 and the download page shows the waiting-list fallback.
 - After publishing: check https://servmod.com/download.html, then close APP-014 in inbox/WWW.md. Waiting-list e-mail only from the admin panel and only with the owner's consent.
+
+## Visit counter (2026-10-26)
+- Own cookie-free counter: `site.js` posts `/api/hit` (page, referrer host, view or download click); table `hits` (day, path, event, daily salted hash of IP+browser, no IP stored). Bots and the admin's own browser (localStorage `sm_me`) are skipped. Admin panel has a "Visits" section: today/7/30 days, 14-day bar chart, top pages, referrers. Privacy text updated. Real visitor IP from `CF-Connecting-IP`.

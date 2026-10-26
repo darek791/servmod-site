@@ -1,4 +1,12 @@
 (function () {
+  function hit(e) {
+    try {
+      if (localStorage.getItem('sm_me')) return;
+      fetch('/api/hit', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'servmod' }, body: JSON.stringify({ p: location.pathname, r: document.referrer, e: e }) }).catch(function () {});
+    } catch (x) {}
+  }
+  hit('view');
+  document.addEventListener('click', function (ev) { var a = ev.target.closest && ev.target.closest('#dl-btn'); if (a) hit('download'); });
   var acct = document.getElementById('acct-link');
   if (acct && window.fetch) fetch('/api/me', { credentials: 'same-origin' }).then(function (r) { if (r.ok) acct.textContent = 'My account'; }).catch(function () {});
   var btn = document.querySelector('.menu'), nav = document.getElementById('nav');
