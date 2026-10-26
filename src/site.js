@@ -6,7 +6,7 @@
     } catch (x) {}
   }
   hit('view');
-  document.addEventListener('click', function (ev) { var a = ev.target.closest && ev.target.closest('#dl-btn'); if (a) hit('download'); });
+  document.addEventListener('click', function (ev) { var a = ev.target.closest && ev.target.closest('#dl-btn, a[data-dl]'); if (a && (a.id === 'dl-btn' || /\.apk$/.test(a.href))) hit('download'); });
   var acct = document.getElementById('acct-link');
   if (acct && window.fetch) fetch('/api/me', { credentials: 'same-origin' }).then(function (r) { if (r.ok) acct.textContent = 'My account'; }).catch(function () {});
   var btn = document.querySelector('.menu'), nav = document.getElementById('nav');
@@ -74,6 +74,12 @@
         });
       }).catch(function () {});
     }
+  }
+  var dls = document.querySelectorAll('a[data-dl]');
+  if (dls.length && /Android/i.test(navigator.userAgent)) {
+    fetch('/servmod/version.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (v) {
+      if (v && /^https:\/\/servmod\.com\/servmod\/releases\//.test(v.apkUrl)) dls.forEach(function (a) { a.href = v.apkUrl; });
+    }).catch(function () {});
   }
   var dl = document.getElementById('dl-card');
   if (dl) {

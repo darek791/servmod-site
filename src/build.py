@@ -42,7 +42,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 <header class="top"><div class="wrap">
   <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
   <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
-  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download</a></nav>
+  <nav class="nav" id="nav" aria-label="Main">{nav}<a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download</a></nav>
   <a class="acct" id="acct-link" href="/account/">Sign in</a>
 </div></header>
 <main id="main">
@@ -96,8 +96,8 @@ def hero():
   <div>
     <h1>Fix it faster. The app remembers for you.</h1>
     <p class="lead">Save the settings of every drive on your phone, then swap a faulty one in minutes: read, store, write to the new drive. Wiring and fault codes are in the app too, so there is less to look up. No laptop, no mobile signal, no software to install on a PC.</p>
-    <div class="actions"><a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a><a class="btn ghost" href="#job">See how a job goes</a></div>
-    <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
+    <div class="actions"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a><a class="btn ghost" href="#job">See how a job goes</a></div>
+    <ul class="facts"><li>Works fully offline</li><li><a href="/download.html#install">How to install</a></li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
   <figure class="heroimg"><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
 </div></section>"""
@@ -225,7 +225,7 @@ def home():
     <h2>Start with the free version</h2>
     <p class="intro">The Free plan needs no account and no code. Pro and Subscription are one tap away in the app when you need to write to a drive.</p>
   </div>
-  <div><p><a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a></p><p class="hint" style="margin-top:10px">Android 7.0 or newer. Prefer an e-mail when a new version ships? <a href="/waitlist.html">Update news</a></p></div>
+  <div><p><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a></p><p class="hint" style="margin-top:10px">Android 7.0 or newer. Prefer an e-mail when a new version ships? <a href="/waitlist.html">Update news</a></p></div>
 </div></section>
 
 <section><div class="wrap split">
@@ -351,7 +351,7 @@ def pricing():
     body = """<div class="wrap page"><div class="split"><div>
 <h1>Pricing</h1>
 <p class="intro" id="shop-closed">Ordering is not open yet. Join the waiting list and we will write to you when it is.</p>
-<div class="actions" style="margin-top:28px"><a class="btn" href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
+<div class="actions" style="margin-top:28px"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
 </div><div class="prose">
 <h2 style="margin-top:0">How a licence works</h2>
 <ol>
