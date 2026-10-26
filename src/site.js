@@ -55,7 +55,7 @@
         var h = '<h2>Buy</h2><p class="fine">Pay by card' + (c.stripe && c.paypal ? ' or PayPal' : '') + ' on a secure page of our payment provider. We never see your card. With a card you can enter your Device ID (app: Settings, Subscription) and the code is emailed at once; with PayPal, or if you leave it empty, you get the code on your account page.</p><div class="actions">';
         var provs = []; if (c.stripe) provs.push(['stripe', 'card']); if (c.paypal) provs.push(['paypal', 'PayPal']);
         rows.forEach(function (x) { var p = c.products[x[0]]; provs.forEach(function (v) { h += '<button class="btn' + (v[0] === 'paypal' ? ' ghost' : '') + '" type="button" data-product="' + x[0] + '" data-provider="' + v[0] + '">' + x[1] + ' ' + p.price + ' ' + x[2] + ' (' + v[1] + ')</button> '; }); });
-        shop.innerHTML = h + '</div><p class="fine" id="shop-msg"></p>'; shop.hidden = false;
+        shop.innerHTML = h + '</div><p class="fine">By buying you accept the <a href="/terms.html">Terms</a> and <a href="/refunds.html">Refunds policy</a>. You ask us to deliver your activation code at once and you accept that you then lose the 14-day right to cancel.</p><p class="fine" id="shop-msg"></p>'; shop.hidden = false;
         ['shop-closed', 'shop-closed2'].forEach(function (id) { var el = document.getElementById(id); if (el) el.hidden = true; });
         shop.addEventListener('click', function (e) {
           var b = e.target.closest('button[data-product]'); if (!b) return;

@@ -211,11 +211,11 @@ def home():
 <section><div class="wrap split">
   <div>
     <h2>Ordering</h2>
-    <p class="intro">Not open yet. The app is in testing on real equipment.</p>
+    <p class="intro">Free to use. Pro and Subscription are one tap away in the app.</p>
   </div>
   <div class="stack">
-    <p style="margin:0;color:#d4d4d4">Prices will be published here before ordering opens. Each licence will be tied to your account email, so a lost or replaced phone does not cost you the licence.</p>
-    <div class="actions"><a class="btn" href="/pricing.html">How ordering will work</a><a class="btn ghost" href="/support.html">Ask a question</a></div>
+    <p style="margin:0;color:#d4d4d4">Buy Pro once, or take the yearly Subscription, from the app or from the pricing page. Pay by card or PayPal and the app activates by itself. Each licence is tied to your email, so a lost or replaced phone does not cost you the licence.</p>
+    <div class="actions"><a class="btn" href="/pricing.html">See plans and prices</a><a class="btn ghost" href="/support.html">Ask a question</a></div>
   </div>
 </div></section>"""
     return page("home", "ServMod - service toolbox for maintenance engineers on Android",
@@ -322,26 +322,26 @@ def guides():
 def pricing():
     body = """<div class="wrap page"><div class="split"><div>
 <h1>Pricing</h1>
-<p class="intro" id="shop-closed">Ordering is not open yet. The app is in testing on real equipment, and prices will be published on this page before the shop opens.</p>
+<p class="intro" id="shop-closed">Ordering is not open yet. Join the waiting list and we will write to you when it is.</p>
 <div class="actions" style="margin-top:28px"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
 </div><div class="prose">
-<h2 style="margin-top:0">How a licence will work</h2>
+<h2 style="margin-top:0">How a licence works</h2>
 <ol>
-<li>You order with your email address and create an account.</li>
-<li>The app shows a Device ID. You enter it on your account page.</li>
-<li>You receive an activation code by email, and it also stays on your account page.</li>
-<li>If you lose or replace your phone, sign in and move the licence to the new Device ID.</li></ol>
+<li>In the app open Settings, Subscription, and tap Buy (or buy here on this page).</li>
+<li>Pay by card or PayPal on the payment provider's secure page.</li>
+<li>Go back to the app. It activates by itself in a few seconds.</li>
+<li>A receipt arrives by email. If you lose or replace your phone, sign in with that email and move the licence to the new Device ID.</li></ol>
 <p>The code is checked inside the app, so ServMod keeps working with no internet connection.</p>
 <h2>The plans</h2>
 <ul><li><b>Free:</b> connect, read, monitor, fault history, backup to a file, compare, and all the field tools. No code needed.</li>
 <li><b>Pro:</b> a one-time purchase that adds writing parameters, restore, manual control, fault and factory reset, and unlocking writes on the ServMod Box. It stays with the version you own.</li>
 <li><b>Subscription:</b> yearly, for modules and drive brands released after you buy, and for updates of parameter lists and profiles.</li></ul>
-<p><span id="shop-closed2">Prices will be published before ordering opens. </span>Stop always works, in every plan.</p>
+<p><span id="shop-closed2">Prices will be published before ordering opens. </span>Stop always works, in every plan. Prices include all taxes; we are not VAT registered.</p>
 <div id="shop" hidden></div>
 <h2>What stays the same</h2>
-<ul><li>The app has no ads and no tracking.</li><li>Update checks only download a small version file.</li><li>Refund, VAT and licence terms will be final before ordering opens. Drafts are on the <a href="/refunds.html">refunds</a> and <a href="/licence.html">licence</a> pages.</li></ul>
+<ul><li>The app has no ads and no tracking.</li><li>Update checks only download a small version file.</li><li>You can try the Free plan before you buy. Read the <a href="/refunds.html">refunds</a> and <a href="/licence.html">licence</a> terms.</li></ul>
 </div></div></div>"""
-    return page("pricing", "Pricing", "ServMod ordering is not open yet. How licences, activation codes and accounts will work.", body, "/pricing.html")
+    return page("pricing", "Pricing", "ServMod plans and prices: Free, Pro (one-time) and yearly Subscription. How licences, activation codes and accounts work.", body, "/pricing.html")
 
 FAQ = [
  ("Do I need internet to use ServMod?", "No. Everything works offline. The app only goes online if you choose About, Check for updates."),
@@ -455,21 +455,25 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 <li>This is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation or any other manufacturer. Product and company names belong to their owners. Using it may affect your equipment's manufacturer warranty.</li>
 <li>This software and its data may not be copied, redistributed or reverse engineered without the author's written permission.</li>
 </ol>
-<p>ServMod is not a safety function and must never be used as an emergency stop.</p>"""
+<p>ServMod is not a safety function and must never be used as an emergency stop.</p>
+<h2>Buying a licence</h2><p>Pro and Subscription are digital licences sold by the author (DG, United Kingdom) through servmod.com and the app, paid by card or PayPal. Prices are shown before you pay and include all taxes. The licence terms are on the <a href="/licence.html">licence page</a> and refunds are covered on the <a href="/refunds.html">refunds page</a>. The Free plan never expires. These terms are governed by the laws of the United Kingdom, and nothing in them takes away your statutory consumer rights.</p>"""
 PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
 <p>The Device ID shown in the app is a code derived from your phone. It is used only to create your activation code. The update check downloads one small file and sends no identifier.</p>
 <h2>This website</h2><p>The site uses no advertising cookies and no analytics scripts. Fonts are served from this site, not from a third party. Cloudflare delivers the site and may process technical request data such as IP address to protect and speed it up.</p>
 <h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to send you one email when the first public version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
 <h2>Support messages</h2><p>If you write to support, we keep your name, email address and message to answer you and to help with later questions.</p>
-<h2>Ordering and licences</h2><p>When you buy, we store your email address, the Device ID you give us, the activation code we issue and a record of the order (what you bought, when and for how much). We use them only to issue and re-issue your code, to send you receipts and to answer support. Card and PayPal payments are handled by our payment provider, Stripe, and we never see your card details; Stripe keeps its own records under its privacy policy.</p>
+<h2>Ordering and licences</h2><p>When you buy, we store your email address, the Device ID you give us, the activation code we issue and a record of the order (what you bought, when and for how much). We use them only to issue and re-issue your code, to send you receipts and to answer support. Card and PayPal payments are handled by our payment providers, Stripe and PayPal, and we never see your card details; they keep their own records under their own privacy policies.</p>
 <p>We keep order records for as long as accounting rules require. You can sign in and delete your account at any time, which removes your login, licences and activation codes, or write to support to ask us to delete the rest.</p>
 <h2>What we do not keep</h2><p>We do not store your parameter backups, photos, notes, printer lists, passwords or any other files from the app. They stay on your phone or in the cloud folder you choose yourself. Beyond your email address and the items above, we hold no customer data.</p>
 <h2>Contact</h2><p>The controller of the data is DG, United Kingdom. Contact: <a href="mailto:support@servmod.com">support@servmod.com</a>.</p>"""
-REFUNDS = """<p>This is a plan for how refunds will work, not final terms.</p>
-<h2>Digital delivery</h2><p>ServMod is delivered digitally and the activation code is issued straight after payment. UK and EU consumers can normally cancel a digital purchase within 14 days, unless they agree that delivery starts at once and acknowledge that they lose the right to cancel once it has started. The final checkout wording will say exactly this.</p>
-<h2>If it does not work for you</h2><p>If the app does not work with your equipment, contact support within 30 days of purchase and describe the problem. We will try to fix it or, if we cannot, refund you.</p>
+REFUNDS = """<p>Last updated 26 October 2026. These terms do not affect your statutory rights.</p>
+<h2>Try before you buy</h2><p>The Free plan needs no code and no payment. Please try it with your equipment before you buy Pro or Subscription.</p>
+<h2>Digital delivery and the 14-day right to cancel</h2><p>ServMod licences are digital content. The activation code is issued straight after payment. UK consumers can normally cancel a digital purchase within 14 days, but when you buy you ask us to start delivery at once and you accept that you lose the right to cancel once the code has been issued. We show this wording at checkout.</p>
+<h2>If it does not work for you</h2><p>If the app does not work with your equipment, write to <a href="mailto:support@servmod.com">support@servmod.com</a> within 30 days of purchase and describe the problem. We will try to fix it. If we cannot, we will refund the licence in full.</p>
+<h2>How refunds are paid</h2><p>Refunds go back to the card or PayPal account you paid with, normally within 5 working days of us agreeing the refund. When a refund is paid, the licence for that purchase is withdrawn.</p>
+<h2>Subscription</h2><p>Subscription is a one-year pass. It does not renew by itself and we never charge you again without you buying again.</p>
 <h2>Lost or replaced phone</h2><p>This is not a refund case. Move your licence to the new Device ID from your account page.</p>"""
-LICENCE = """<p>This is a plan for the licence terms, not final terms.</p>
+LICENCE = """<p>Last updated 26 October 2026.</p>
 <h2>Plans</h2><p><b>Free</b> needs no code. <b>Pro</b> is a one-time purchase that unlocks writing parameters, restore, manual control, fault and factory reset, and keeps working for the version you own. <b>Subscription</b> is yearly and covers modules and drive brands released after you buy, and updates of the parameter lists and profiles. Prices are shown on the <a href="/pricing.html">pricing page</a>.</p>
 <h2>What you get</h2><p>A personal, non-transferable licence to use ServMod on one Android device at a time. The licence belongs to your account email, not to one phone.</p>
 <h2>Activation</h2><p>An activation code is created from your Device ID and signed. The app checks the signature offline. You can move the licence to a new Device ID from your account page if the old phone is lost, broken or replaced; a few moves per year are included.</p>
@@ -483,9 +487,9 @@ PAGES = {
  "pricing.html": pricing(), "support.html": support(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
  "waitlist.html": waitlist(),
- "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY),
- "refunds.html": doc("", "Refunds", "How refunds for ServMod will work.", "/refunds.html", REFUNDS),
- "licence.html": doc("", "Licence", "How the ServMod licence and activation will work.", "/licence.html", LICENCE),
+ "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY, draft=False),
+ "refunds.html": doc("", "Refunds", "How refunds for ServMod licences work.", "/refunds.html", REFUNDS, draft=False),
+ "licence.html": doc("", "Licence", "How the ServMod licence and activation work.", "/licence.html", LICENCE, draft=False),
  "manuals/index.html": manuals(),
  "account/index.html": account(),
  "404.html": not_found(),

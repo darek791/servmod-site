@@ -193,7 +193,7 @@ async def checkout(req: Request):
         "line_items[0][price_data][unit_amount]": str(P[product]["pence"]),
         "line_items[0][price_data][product_data][name]": P[product]["name"],
         "metadata[product]": product, "payment_intent_data[metadata][product]": product,
-        "custom_text[submit][message]": "By paying you accept the Terms of use and Refunds policy on servmod.com.",
+        "custom_text[submit][message]": "By paying you accept the Terms of use and Refunds policy on servmod.com. You ask us to deliver your activation code at once and you accept that you then lose the 14-day right to cancel.",
     }
     if dev:
         form["metadata[device_id]"] = dev; form["metadata[claim]"] = claim

@@ -71,3 +71,8 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## 2026-10-26 – PayPal tested in sandbox
 - PayPal sandbox keys installed (app "ServMod", Merchant); buttons live on Pricing; test purchase of Pro from the website with a sandbox buyer OK (capture + thank-you view). Pending: PayPal button in the app (WWW-003), live keys for Stripe and PayPal.
+
+## 2026-10-26 – Launch wording
+- Refunds, Licence, Privacy and Terms rewritten as final (Draft banner removed on the owner's instruction; not legal advice): 14-day cancellation waiver for digital content, 30-day "does not work" refund, one-year Subscription without auto-renew, "Buying a licence" section in Terms. Checkout consent text (Stripe and under the site buy buttons).
+- Home "Ordering" block and Pricing "How a licence works" describe buying from the app; hero button still "Get notified at release" until APK download is unlocked.
+- Stripe LIVE (restricted key, Checkout Sessions Write) and PayPal LIVE keys on the server; tools/set_prices.cmd changes prices only.
