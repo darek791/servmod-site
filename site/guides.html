@@ -17,7 +17,7 @@
 
 <link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/style.css?v=9e986a4c">
+<link rel="stylesheet" href="/style.css?v=0c20c8a6">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -35,8 +35,10 @@
 <dl class="kv"><dt>Adapter A (D+)</dt><dd>to RS+ on the control terminals</dd><dt>Adapter B (D-)</dt><dd>to RS- on the control terminals</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd><dt>Termination</dt><dd>Switch on the 120 ohm termination on the last drive</dd></dl>
 <p>The RJ45 is for the remote operator only, not for ServMod. Changes to C071 to C075 apply after a power cycle.</p>
 <h2>Hitachi WJ200 and WL200</h2>
+<div class="photos"><figure class="photo"><img src="/assets/photos/wl200-usb-port.jpg" width="900" height="1125" loading="lazy" alt="Close-up of the mini-USB port and RJ45 socket on the front of a Hitachi WL200 inverter"><figcaption>WL200: mini-USB port above the RJ45</figcaption></figure><figure class="photo"><img src="/assets/photos/wl200-terminals.jpg" width="900" height="1125" loading="lazy" alt="Close-up of the control terminals of a Hitachi WL200 inverter"><figcaption>WL200 control terminals</figcaption></figure></div>
 <dl class="kv"><dt>WL200</dt><dd>USB cable (mini-USB) from the inverter, or a USB-RS485 adapter on the RS-485 terminals</dd><dt>WJ200</dt><dd>USB-RS485 adapter on the RS-485 terminals. The USB cable of the WJ200 does not work with ServMod yet.</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd></dl>
 <h2>Danfoss VLT FC 280</h2>
+<div class="photos"><figure class="photo"><img src="/assets/photos/danfoss-terminals-68-69.jpg" width="900" height="1125" loading="lazy" alt="Two wires connected to terminals 68 and 69 of a Danfoss VLT FC 280"><figcaption>FC 280: wires on terminals 68 (P) and 69 (N)</figcaption></figure><figure class="photo"><img src="/assets/photos/rs485-adapter.jpg" width="900" height="1125" loading="lazy" alt="A USB-RS485 adapter plugged into the phone, with two wires on its screw terminal"><figcaption>USB-RS485 adapter with two wires</figcaption></figure></div>
 <dl class="kv"><dt>Adapter A (D+)</dt><dd>to terminal 68 (P)</dd><dt>Adapter B (D-)</dt><dd>to terminal 69 (N)</dd><dt>Defaults</dt><dd>Address 1, 9600 baud, 8 data bits, even parity, 1 stop bit (8-E-1)</dd></dl>
 <p>Use an isolated adapter if you can, and check the drive's bus parameters (group 8) if it does not answer.</p>
 <h2>Allen-Bradley PowerFlex 520 and 525</h2>

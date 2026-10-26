@@ -216,3 +216,11 @@ footer{padding:56px 0 40px}
 .thanks .lead2{font-size:1.2rem;font-weight:600;margin:0 0 14px}
 .thanks p{color:var(--muted);margin:0 0 12px}
 .thanks .actions{margin-top:22px}
+
+/* real photos */
+figure.photo{margin:0}
+figure.photo img{display:block;width:100%;height:auto;border-radius:8px;background:#222}
+figure.photo figcaption{font-size:.85rem;opacity:.75;margin-top:.4rem}
+.sheet.photo img{border-radius:6px;max-height:560px;object-fit:cover;object-position:center}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.2rem}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,260px));gap:1rem;margin:1rem 0}

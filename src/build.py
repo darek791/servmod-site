@@ -98,13 +98,27 @@ def hero():
     <div class="actions"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
-  <figure class="sheet" style="margin:0">{HERO_SVG}<figcaption><span>Fig. 1 Phone to drive over RS-485</span><span>Omron MX2 shown</span></figcaption></figure>
+  <figure class="sheet photo" style="margin:0"><img src="/assets/photos/hero-wl200-control.jpg" width="900" height="1125" alt="An Android phone running ServMod on its Control screen, connected by USB to a Hitachi WL200 inverter on a bench; the inverter display reads 15.0 Hz" fetchpriority="high"><figcaption><span>Fig. 1 ServMod on a Hitachi WL200, bench test</span><span>15.0 Hz</span></figcaption></figure>
 </div></section>"""
 
 def strip():
     items = [("Hitachi", "WJ200, WL200"), ("Allen-Bradley", "PowerFlex 520, 525"), ("Danfoss", "VLT FC 280, VLT 2800"), ("Lenze", "8400 over CAN"),
                      ("And more", "Omron, Siemens, Schneider, ABB, Delta"), ("Label printers", "Honeywell PM45")]
     return '<div class="strip"><div class="wrap">' + "".join(f"<div><b>{a}</b><span>{b}</span></div>" for a, b in items) + "</div></div>"
+
+def _ph(src, alt, cap, w=900, h=1125):
+    return f'<figure class="photo"><img src="/assets/photos/{src}" width="{w}" height="{h}" loading="lazy" alt="{alt}"><figcaption>{cap}</figcaption></figure>'
+
+GALLERY = f"""<section id="real"><div class="wrap">
+  <h2>On real drives</h2>
+  <p class="intro">Photos from the bench: an Android phone, a USB-RS485 adapter and the drives ServMod has been tested on so far.</p>
+  <div class="shots">
+    {_ph("wl200-app-home.jpg", "The ServMod home screen on a phone next to a Hitachi WL200 inverter", "ServMod home screen, Hitachi WL200 on the bench")}
+    {_ph("wl200-parameters.jpg", "The ServMod parameter list showing V/f settings, with a Hitachi WL200 inverter behind the phone", "Parameter list of a Hitachi WL200 over USB")}
+    {_ph("danfoss-fc280-parameters.jpg", "The ServMod parameter list of a Danfoss VLT FC 280 on a phone with a USB-RS485 adapter plugged in", "Danfoss VLT FC 280 parameters over RS-485")}
+    {_ph("danfoss-fc280-control.jpg", "The ServMod Control screen for a Danfoss FC 280 with the RS-485 adapter below the phone", "Control screen: run, jog and monitor")}
+  </div>
+</div></section>"""
 
 JOB = """<section id="job"><div class="wrap split">
   <div>
@@ -181,7 +195,7 @@ def waitlist():
     return page("", "Waiting list", "Join the ServMod waiting list and get one email when the first public version is released.", body, "/waitlist.html")
 
 def home():
-    body = hero() + strip() + JOB + f"""
+    body = hero() + strip() + GALLERY + JOB + f"""
 <section><div class="wrap">
   <h2>One app, {len(MODULES)} tools</h2>
   <p class="intro">Inverters and printers come first. The rest are tools that live in the same app, so one phone covers the service bag.</p>
@@ -295,16 +309,21 @@ def equipment():
 </div>"""
     return page("equipment", "Supported equipment", "Inverters, PLCs and printers ServMod works with, plus the USB-RS485 and Ethernet adapters you need.", body, "/equipment.html")
 
+HITACHI_PH = _ph("wl200-usb-port.jpg", "Close-up of the mini-USB port and RJ45 socket on the front of a Hitachi WL200 inverter", "WL200: mini-USB port above the RJ45", 900, 1125) + _ph("wl200-terminals.jpg", "Close-up of the control terminals of a Hitachi WL200 inverter", "WL200 control terminals", 900, 1125)
+DANFOSS_PH = _ph("danfoss-terminals-68-69.jpg", "Two wires connected to terminals 68 and 69 of a Danfoss VLT FC 280", "FC 280: wires on terminals 68 (P) and 69 (N)", 900, 1125) + _ph("rs485-adapter.jpg", "A USB-RS485 adapter plugged into the phone, with two wires on its screw terminal", "USB-RS485 adapter with two wires", 900, 1125)
+
 def guides():
-    body = """<div class="wrap page"><div class="prose" style="max-width:48em">
+    body = f"""<div class="wrap page"><div class="prose" style="max-width:48em">
 <h1>Connection guides</h1>
 <p class="intro">Wire the drive to the phone with a USB-RS485 adapter. Bench-test before you touch a production machine.</p>
 <h2>Omron 3G3MX2 over USB-RS485</h2>
 <dl class="kv"><dt>Adapter A (D+)</dt><dd>to RS+ on the control terminals</dd><dt>Adapter B (D-)</dt><dd>to RS- on the control terminals</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd><dt>Termination</dt><dd>Switch on the 120 ohm termination on the last drive</dd></dl>
 <p>The RJ45 is for the remote operator only, not for ServMod. Changes to C071 to C075 apply after a power cycle.</p>
 <h2>Hitachi WJ200 and WL200</h2>
+<div class="photos">{HITACHI_PH}</div>
 <dl class="kv"><dt>WL200</dt><dd>USB cable (mini-USB) from the inverter, or a USB-RS485 adapter on the RS-485 terminals</dd><dt>WJ200</dt><dd>USB-RS485 adapter on the RS-485 terminals. The USB cable of the WJ200 does not work with ServMod yet.</dd><dt>Defaults</dt><dd>Slave 1, 9600 baud, 8-N-1</dd></dl>
 <h2>Danfoss VLT FC 280</h2>
+<div class="photos">{DANFOSS_PH}</div>
 <dl class="kv"><dt>Adapter A (D+)</dt><dd>to terminal 68 (P)</dd><dt>Adapter B (D-)</dt><dd>to terminal 69 (N)</dd><dt>Defaults</dt><dd>Address 1, 9600 baud, 8 data bits, even parity, 1 stop bit (8-E-1)</dd></dl>
 <p>Use an isolated adapter if you can, and check the drive's bus parameters (group 8) if it does not answer.</p>
 <h2>Allen-Bradley PowerFlex 520 and 525</h2>
