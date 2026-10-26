@@ -67,6 +67,29 @@
       }).catch(function () {});
     }
   }
+  var rform = document.getElementById('request-form');
+  if (rform) {
+    var rmsg = document.getElementById('form-msg');
+    var rshow = function (t, cls) { rmsg.textContent = t; rmsg.className = 'msg show ' + cls; };
+    rform.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var d = {}; new FormData(rform).forEach(function (v, k) { d[k] = v; });
+      if (d.website) return;
+      if (!d.device || d.device.trim().length < 2) { rshow('Please say which drive, protocol or feature you need.', 'err'); return; }
+      if (d.email && !/^\S+@\S+\.\S+$/.test(d.email)) { rshow('That email address does not look right. Leave it empty if you prefer.', 'err'); return; }
+      var rb = rform.querySelector('button'); rb.disabled = true; rshow('Sending...', 'ok');
+      fetch('/api/requests', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'servmod' }, body: JSON.stringify(d) })
+        .then(function (r) {
+          if (r.ok) { rform.reset(); rshow('Thank you. Your request is saved.', 'ok'); return; }
+          if (r.status === 429) { rshow('Too many requests from this address. Please try again later.', 'err'); return; }
+          if (r.status === 400) { rshow('Please check the drive name and the email address.', 'err'); return; }
+          throw new Error(r.status);
+        })
+        .catch(function () { rshow('The request could not be sent. Please try again later or write to support@servmod.com.', 'err'); })
+        .then(function () { rb.disabled = false; });
+    });
+    return;
+  }
   var form = document.getElementById('support-form');
   if (!form) return;
   var msg = document.getElementById('form-msg');

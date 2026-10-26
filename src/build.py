@@ -57,7 +57,7 @@ FOOTER = f"""<footer><div class="wrap">
   <div class="block">
     <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
     <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/waitlist.html">Waiting list</a></li></ul></div>
-    <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li></ul></div>
+    <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li><li><a href="/requests.html">Requests</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
   <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Lenze, Siemens, Schneider Electric, Mitsubishi Electric, Delta, ABB, Inovance, Yaskawa, INVT, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release {APP_VERSION}, in testing. Created by DG, United Kingdom.</p>
@@ -294,7 +294,7 @@ def equipment():
 <p class="intro">Every drive uses the same screens: Backup, Parameters, Control, Settings and Faults. Reading, backup and compare are free. Writing, restore and manual control are part of the Pro plan.</p>
 <h2 style="margin-top:48px;font-size:1.6rem">Inverters</h2>
 <div class="scroll" style="margin-top:16px"><table class="tbl"><thead><tr><th>Drive</th><th>Connection</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table></div>
-<p class="intro" style="margin-top:16px">More models and brands will follow. Tell us which drive you need on the <a href="/support.html">support page</a>.</p>
+<p class="intro" style="margin-top:16px">More models and brands will follow. Tell us which drive you need on the <a href="/requests.html">requests page</a>.</p>
 <h2 style="margin-top:56px;font-size:1.6rem">PLCs, read only</h2>
 <div class="scroll" style="margin-top:16px"><table class="tbl"><thead><tr><th>Controller</th><th>Protocol</th><th>Notes</th></tr></thead><tbody>
 <tr><td>Omron</td><td>FINS over UDP, port 9600</td><td>DM, CIO, W, H and A areas. Types WORD, INT, DWORD, DINT, REAL, BOOL.</td></tr>
@@ -384,7 +384,7 @@ def about():
 <h1>About</h1>
 <p class="intro">ServMod is made by DG, a maintenance engineer in the United Kingdom.</p>
 <p>DG has worked in maintenance for about 30 years: injection moulding, petrochemicals and refineries, robotics, car systems, food production with fast packing lines, and solar panels. Every module in ServMod exists because a job needed it, and it is tested on real equipment before it is called ready.</p>
-<p>Questions, a drive you would like supported or a fault that is not in the guides are welcome on the <a href="/support.html">support page</a>.</p>
+<p>Questions and faults that are not in the guides are welcome on the <a href="/support.html">support page</a>. A drive or protocol you would like supported goes on the <a href="/requests.html">requests page</a>.</p>
 </div></div>"""
     return page("about", "About", "Who builds ServMod: a maintenance engineer with about 30 years of experience across industry.", body, "/about.html")
 
@@ -408,6 +408,33 @@ def support():
 {faq}
 </div></div></div>"""
     return page("support", "Support", "Contact ServMod support and read answers to common questions about phones, adapters, drives and licences.", body, "/support.html")
+
+def requests_page():
+    body = """<div class="wrap page"><div class="split rev"><div>
+<h1>Requests</h1>
+<p class="intro">Tell us which drive, protocol or feature you need. We read the requests and use them to decide what ServMod learns next. A request is not a promise that a model will be added.</p>
+<form class="f" id="request-form" novalidate style="margin-top:30px">
+  <div><label for="r-kind">What are you asking for?</label><select id="r-kind" name="kind"><option value="device">A drive or device to support</option><option value="protocol">A communication protocol</option><option value="feature">A new feature</option><option value="other">Something else</option></select></div>
+  <div><label for="r-device">Drive, device or feature</label><input id="r-device" name="device" maxlength="120" placeholder="For example: Siemens G120, Schneider ATV320" required></div>
+  <div class="row"><div><label for="r-protocol">Protocol</label><input id="r-protocol" name="protocol" maxlength="120" placeholder="Modbus RTU, CAN, USS"><div class="hint">If you know it.</div></div>
+  <div><label for="r-conn">How it connects</label><input id="r-conn" name="connection" maxlength="120" placeholder="RS-485, USB, RJ45, Bluetooth..."><div class="hint">If you know it.</div></div></div>
+  <div><label for="r-details">What would you do with it?</label><textarea id="r-details" name="details" maxlength="3000" placeholder="For example: back up and compare parameters on 20 drives in a plant"></textarea></div>
+  <div><label for="r-email">Email (optional)</label><input id="r-email" name="email" type="email" autocomplete="email"><div class="hint">Only if you want a reply or to hear when it is added. We do not add you to any list.</div></div>
+  <div class="hp" aria-hidden="true"><label>Leave empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
+  <div><button class="btn" type="submit">Send request</button></div>
+  <div class="msg" id="form-msg" role="status"></div>
+</form>
+</div><div>
+<h2 style="font-size:1.6rem;margin-bottom:18px">Helpful to include</h2>
+<ul>
+<li>The exact model and series, for example VLT FC 280 rather than only Danfoss.</li>
+<li>The port you use: RS-485 terminals, RJ45, USB, CAN.</li>
+<li>A link to the communication manual, if you have one.</li>
+<li>Whether you need to read parameters, write them, run the drive or read faults.</li>
+</ul>
+<p>Need help with a drive that is already supported? Use the <a href="/support.html">support page</a> instead.</p>
+</div></div></div>"""
+    return page("requests", "Requests", "Tell ServMod which drives, protocols and features you need next.", body, "/requests.html")
 
 def manuals():
     body = """<div class="wrap page"><h1>Fault codes and parameters</h1>
@@ -462,6 +489,7 @@ def account():
     <div><label for="ad-ws-txt">Message (an unsubscribe link is added automatically)</label><textarea id="ad-ws-txt"></textarea></div>
     <div class="actions"><button class="btn ghost" id="ad-wt" type="button">Send test to me</button> <button class="btn" id="ad-ws" type="button">Send to the waiting list</button></div>
   </form>
+  <h3 style="margin:24px 0 8px">Requests</h3><div id="ad-r"></div>
   <h3 style="margin:24px 0 8px">Support messages</h3><div id="ad-t"></div>
   <h3 style="margin:24px 0 8px">Users and licences</h3><div id="ad-u"></div>
 </section></div>"""
@@ -487,7 +515,7 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
 <p>The Device ID shown in the app is a code derived from your phone. It is used only to create your activation code. The update check downloads one small file and sends no identifier.</p>
 <h2>This website</h2><p>The site uses no advertising cookies and no analytics scripts. Fonts are served from this site, not from a third party. Cloudflare delivers the site and may process technical request data such as IP address to protect and speed it up.</p>
-<h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to send you one email when the first public version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
+<h2>Requests</h2><p>If you send a request for a drive, protocol or feature we store what you wrote, the time, and your email address only if you gave one. We use it to decide what to build and to reply if you asked for a reply. We do not add you to any list and we do not share requests.</p><h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to send you one email when the first public version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
 <h2>Support messages</h2><p>If you write to support, we keep your name, email address and message to answer you and to help with later questions.</p>
 <h2>Ordering and licences</h2><p>When you buy, we store your email address, the Device ID you give us, the activation code we issue and a record of the order (what you bought, when and for how much). We use them only to issue and re-issue your code, to send you receipts and to answer support. Card and PayPal payments are handled by our payment providers, Stripe and PayPal, and we never see your card details; they keep their own records under their own privacy policies.</p>
 <p>We keep order records for as long as accounting rules require. You can sign in and delete your account at any time, which removes your login, licences and activation codes, or write to support to ask us to delete the rest.</p>
@@ -511,7 +539,7 @@ def not_found():
 
 PAGES = {
  "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(),
- "pricing.html": pricing(), "support.html": support(), "about.html": about(),
+ "pricing.html": pricing(), "support.html": support(), "requests.html": requests_page(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
  "waitlist.html": waitlist(),
  "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY, draft=False),

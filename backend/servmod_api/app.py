@@ -247,12 +247,42 @@ async def waitlist_notify(req: Request):
     if rows: threading.Thread(target=_wl_send_all, args=(rows, subject, text), daemon=True).start()
     return {"ok": True, "queued": len(rows)}
 
+
+# ---------- feature / device requests ("tell us what you need")
+REQ_KINDS = {"device", "protocol", "feature", "other"}
+
+@app.post("/api/requests")
+async def request_idea(req: Request):
+    d = await body(req)
+    if d.get("website"): return {"ok": True}  # honeypot
+    kind = str(d.get("kind", "device")).lower()
+    if kind not in REQ_KINDS: kind = "other"
+    device = str(d.get("device", "")).strip()[:120]
+    protocol = str(d.get("protocol", "")).strip()[:120]
+    connection = str(d.get("connection", "")).strip()[:120]
+    details = str(d.get("details", "")).strip()[:3000]
+    email_raw = str(d.get("email", "")).strip()
+    email = core.norm_email(email_raw) if email_raw else None
+    if email_raw and not email: raise HTTPException(400, "invalid email")
+    if len(device) < 2: raise HTTPException(400, "please say which device, protocol or feature you need")
+    if not core.rate_ok("req-ip:" + ip(req), 10, 3600) or (email and not core.rate_ok("req-em:" + email, 10, 86400)):
+        raise HTTPException(429, "too many requests, try later")
+    core.q("INSERT INTO requests(created,email,kind,device,protocol,connection,details) VALUES(?,?,?,?,?,?,?)",
+           (core.now(), email, kind, device, protocol, connection, details))
+    to = os.environ.get("SUPPORT_TO") or (sorted(core.ADMIN_EMAILS)[0] if core.ADMIN_EMAILS else None)
+    if to:
+        mail.send(to, f"[ServMod request] {kind}: {device}"[:150],
+                  f"Kind: {kind}\nDevice / feature: {device}\nProtocol: {protocol or '-'}\nConnection: {connection or '-'}\nFrom: {email or '(no e-mail given)'}\n\n{details}",
+                  reply_to=email)
+    return {"ok": True}
+
 # ---------- admin
 @app.get("/api/admin/overview")
 def overview(req: Request):
     admin(req)
     return {"users": [dict(r) for r in core.q("SELECT id,email,created,last_login FROM users ORDER BY id DESC LIMIT 200")],
             "tickets": [dict(r) for r in core.q("SELECT * FROM tickets ORDER BY id DESC LIMIT 200")],
+            "requests": [dict(r) for r in core.q("SELECT * FROM requests ORDER BY id DESC LIMIT 300")],
             "entitlements": [dict(r) for r in core.q("SELECT e.*,u.email FROM entitlements e JOIN users u ON u.id=e.user_id ORDER BY e.id DESC LIMIT 200")],
             "waitlist": {"confirmed": core.q("SELECT COUNT(*) c FROM waitlist WHERE confirmed=1").fetchone()["c"],
                          "pending": core.q("SELECT COUNT(*) c FROM waitlist WHERE confirmed=0").fetchone()["c"],
@@ -282,6 +312,13 @@ async def revoke(req: Request):
 async def ticket(req: Request):
     admin(req); d = await body(req)
     core.q("UPDATE tickets SET status=? WHERE id=?", ("closed" if d.get("status") == "closed" else "open", d.get("id")))
+    return {"ok": True}
+
+@app.post("/api/admin/request")
+async def request_status(req: Request):
+    admin(req); d = await body(req)
+    st = d.get("status") if d.get("status") in ("new", "planned", "done", "declined") else "new"
+    core.q("UPDATE requests SET status=? WHERE id=?", (st, d.get("id")))
     return {"ok": True}
 
 app.include_router(shop.router)

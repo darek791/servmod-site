@@ -239,3 +239,16 @@ def test_paypal_flow_create_capture_claim(c, monkeypatch):
     assert ok["status"] == "ready" and ok["code"].startswith("WL1.")
     again = c.get("/api/pay/paypal/return", params={"token": "PPORDER1"}, follow_redirects=False)   # replay: pending row is gone
     assert again.headers["location"].endswith("/pricing.html")
+
+
+def test_requests_form_and_admin_view(c):
+    from servmod_api import core, mail
+    r = c.post("/api/requests", json={"kind": "protocol", "device": "Siemens G120", "protocol": "USS", "connection": "RS-485", "details": "Need parameter backup", "email": "cust@example.com"}, headers={"X-Requested-With": "servmod"})
+    assert r.status_code == 200
+    # no e-mail is fine, a too short device name is not, honeypot is silently ignored
+    assert c.post("/api/requests", json={"device": "ABB ACS580"}, headers={"X-Requested-With": "servmod"}).status_code == 200
+    assert c.post("/api/requests", json={"device": "x"}, headers={"X-Requested-With": "servmod"}).status_code == 400
+    assert c.post("/api/requests", json={"device": "ABB ACS580", "email": "nope"}, headers={"X-Requested-With": "servmod"}).status_code == 400
+    assert c.post("/api/requests", json={"device": "Spam", "website": "x"}, headers={"X-Requested-With": "servmod"}).status_code == 200
+    assert core.q("SELECT COUNT(*) c FROM requests").fetchone()["c"] == 2
+    assert any("[ServMod request]" in m[1] and m[0] == "boss@x.com" for m in mail.OUTBOX)
