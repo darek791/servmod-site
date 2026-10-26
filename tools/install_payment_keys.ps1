@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 $srv = "root@167.233.108.235"; $key = "$env:USERPROFILE\.ssh\id_ed25519"
 function Secret($q) { $s = Read-Host $q -AsSecureString; [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($s)) }
-$sk = Secret "Stripe secret key (sk_live_... or sk_test_...)"
+$sk = Secret "Stripe secret or restricted key (sk_live_..., rk_live_... or *_test_...)"
 $wh = Secret "Stripe webhook signing secret (whsec_...)"
 $pro = Read-Host "Pro price in pence [4000]";  if ([string]::IsNullOrWhiteSpace($pro)) { $pro = "4000" }
 $sub = Read-Host "Subscription price in pence [2000]"; if ([string]::IsNullOrWhiteSpace($sub)) { $sub = "2000" }
