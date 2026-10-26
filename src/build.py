@@ -98,7 +98,7 @@ def hero():
     <div class="actions"><a class="btn" href="/waitlist.html">Get notified at release</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works fully offline</li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
-  <figure class="sheet photo" style="margin:0"><img src="/assets/photos/hero-wl200-control.jpg" width="900" height="1125" alt="An Android phone running ServMod on its Control screen, connected by USB to a Hitachi WL200 inverter on a bench; the inverter display reads 15.0 Hz" fetchpriority="high"><figcaption><span>Fig. 1 ServMod on a Hitachi WL200, bench test</span><span>15.0 Hz</span></figcaption></figure>
+  <figure class="heroimg"><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
 </div></section>"""
 
 def strip():
@@ -106,17 +106,22 @@ def strip():
                      ("And more", "Omron, Siemens, Schneider, ABB, Delta"), ("Label printers", "Honeywell PM45")]
     return '<div class="strip"><div class="wrap">' + "".join(f"<div><b>{a}</b><span>{b}</span></div>" for a, b in items) + "</div></div>"
 
+def _card(k, alt, cap):
+    return f'<figure class="appshot"><img src="/assets/app/card-{k}.jpg" width="900" height="1125" loading="lazy" alt="{alt}"><figcaption>{cap}</figcaption></figure>'
+
 def _ph(src, alt, cap, w=900, h=1125):
     return f'<figure class="photo"><img src="/assets/photos/{src}" width="{w}" height="{h}" loading="lazy" alt="{alt}"><figcaption>{cap}</figcaption></figure>'
 
-GALLERY = f"""<section id="real"><div class="wrap">
-  <h2>On real drives</h2>
-  <p class="intro">Photos from the bench: an Android phone, a USB-RS485 adapter and the drives ServMod has been tested on so far.</p>
-  <div class="shots">
-    {_ph("wl200-app-home.jpg", "The ServMod home screen on a phone next to a Hitachi WL200 inverter", "ServMod home screen, Hitachi WL200 on the bench")}
-    {_ph("wl200-parameters.jpg", "The ServMod parameter list showing V/f settings, with a Hitachi WL200 inverter behind the phone", "Parameter list of a Hitachi WL200 over USB")}
-    {_ph("danfoss-fc280-parameters.jpg", "The ServMod parameter list of a Danfoss VLT FC 280 on a phone with a USB-RS485 adapter plugged in", "Danfoss VLT FC 280 parameters over RS-485")}
-    {_ph("danfoss-fc280-control.jpg", "The ServMod Control screen for a Danfoss FC 280 with the RS-485 adapter below the phone", "Control screen: run, jog and monitor")}
+GALLERY = f"""<section id="app"><div class="wrap">
+  <h2>In the app</h2>
+  <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus a pocket cheat sheet for the cable work around it.</p>
+  <div class="shots appshots">
+    {_card("inv", "ServMod list of supported inverters: Hitachi, Allen-Bradley, Omron, Danfoss, Lenze, Mitsubishi, Delta, INVT, ABB, Inovance", "Choose the drive")}
+    {_card("backup", "ServMod backup screen with Create backup, Import CSV and a list of saved backups", "Back up before you touch it")}
+    {_card("lenze", "ServMod Compare and write dialog listing three differences between a backup and the inverter, each with a tick box", "Compare, then write only what you tick")}
+    {_card("home", "ServMod home screen with a grid of tools: Inverters, Thermocontrollers, Printers, Condition, Network, Calc, Access, Notes, Parts, PLC, HMI, Manuals and more", "One app for the toolbox")}
+    {_card("wiring", "ServMod cheat sheet showing the T568B Ethernet wiring colours and pin functions", "Wiring cheat sheet")}
+    {_card("resistor", "ServMod resistor colour band calculator showing 4.7 kilohm with 5 percent tolerance", "Resistor colour codes")}
   </div>
 </div></section>"""
 
