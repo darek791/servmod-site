@@ -265,3 +265,10 @@ a.wd{display:block;border:1px solid var(--line,#2a2a2a);border-radius:10px;overf
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.chips a{border:1px solid var(--line,#2a2a2a);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none}.chips a:hover{border-color:#eb8a00}
 
 article.rel{margin:28px 0;padding-bottom:18px;border-bottom:1px solid var(--line,#2a2a2a)}article.rel h2{margin:0 0 8px}article.rel h2 small{font-size:.9rem;font-weight:400;opacity:.65;margin-left:8px}
+
+ol.isteps{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:16px}
+li.istep{display:grid;grid-template-columns:44px 1fr;gap:14px;border:1px solid var(--line,#2a2a2a);border-radius:12px;padding:16px;background:rgba(255,255,255,.02)}
+li.istep .inum{width:40px;height:40px;border-radius:50%;background:#eb8a00;color:#000;font-weight:800;font-size:1.2rem;display:flex;align-items:center;justify-content:center}
+li.istep h3{margin:2px 0 6px;font-size:1.15rem}li.istep p{margin:0 0 10px}
+li.istep figure.instshot{margin:12px 0 0;max-width:340px}
+@media(max-width:520px){li.istep{grid-template-columns:1fr;gap:8px}li.istep .inum{width:34px;height:34px;font-size:1rem}li.istep figure.instshot{max-width:100%}}
