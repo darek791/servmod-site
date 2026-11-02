@@ -272,3 +272,8 @@ li.istep .inum{width:40px;height:40px;border-radius:50%;background:#eb8a00;color
 li.istep h3{margin:2px 0 6px;font-size:1.15rem}li.istep p{margin:0 0 10px}
 li.istep figure.instshot{margin:12px 0 0;max-width:340px}
 @media(max-width:520px){li.istep{grid-template-columns:1fr;gap:8px}li.istep .inum{width:34px;height:34px;font-size:1rem}li.istep figure.instshot{max-width:100%}}
+
+.ishots{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px}
+li.istep .ishots figure.instshot{margin:0;flex:0 1 250px;max-width:250px}
+li.istep figure.instshot figcaption{text-align:center}
+@media(max-width:520px){li.istep .ishots figure.instshot{flex:1 1 100%;max-width:300px;margin:0 auto}}
