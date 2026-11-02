@@ -100,3 +100,7 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 ## Device pages for search (2026-11-02)
 - 18 landing pages `/equipment/<slug>.html` generated from `src/devices.py` (DEVICES list: name, status T/N/D, ways to connect, facts, wiring files). Each has its own title/description, H1 "<device> parameter backup and restore from an Android phone", BreadcrumbList JSON-LD, wiring diagrams, what is free vs Pro, canonical URL; all in sitemap.xml. Linked from Equipment (Device pages list) and from the Wiring page (Device page button). Facts only from app docs, diagrams and servmod-hardware-verified; when a drive gets tested change `st` in devices.py.
 - Google Search Console: add property servmod.com (DNS TXT verification, done by the owner), then submit https://servmod.com/sitemap.xml.
+
+## What's new page and site check (2026-11-02)
+- `/whats-new.html`: release notes. A static copy of 0.76.3 is built in; `site.js` replaces it with the stable entries of `/servmod/history.json` (written by tools/release.py). Linked from the footer and the Download page. History entries need clear English `notes`.
+- Local check of all 37 pages: no broken internal links, no missing alt text, unique titles and descriptions, LCP under 0.5 s on a mobile viewport. Not measured on the live site (not reachable from the container).

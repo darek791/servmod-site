@@ -58,7 +58,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 FOOTER = f"""<footer><div class="wrap">
   <div class="block">
     <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
-    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/wiring.html">Wiring diagrams</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/waitlist.html">Update news</a></li></ul></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/wiring.html">Wiring diagrams</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/whats-new.html">What's new</a></li><li><a href="/waitlist.html">Update news</a></li></ul></div>
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li><li><a href="/requests.html">Requests</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
@@ -495,7 +495,7 @@ def download():
 <li>Open ServMod, read the terms and start. Plug in your OTG adapter and cable when you reach a drive.</li>
 </ol>
 <h2>Updates</h2>
-<p>The app checks this site for a new version and tells you. It downloads only a small version file. Nothing else is sent.</p>
+<p>See <a href="/whats-new.html">what is new</a> in each version. The app checks this site for a new version and tells you. It downloads only a small version file. Nothing else is sent.</p>
 <h2>Check the file</h2>
 <p class="hint">SHA-256 of the current file, to compare after the download:</p><p id="dl-sha" class="mono" style="word-break:break-all;font-size:.85rem"></p>
 <p>Questions? See the <a href="/guides.html">connection guides</a> or <a href="/support.html">support</a>.</p>
@@ -701,8 +701,21 @@ def device_pages():
         out[f"equipment/{d['slug']}.html"] = page("equipment", title, desc, body, path, extra_head=ld)
     return out
 
+def whatsnew():
+    body = """<div class="wrap page"><div class="prose" style="max-width:48em">
+<h1>What's new</h1>
+<p class="intro">Every public version of ServMod and what changed in it. <a href="/download.html">Download the latest version</a>.</p>
+<div id="rel"><article class="rel"><h2>0.76.3 <small>26 October 2026</small></h2><ul>
+<li>First public release</li>
+<li>Free plan: read, save and compare drive parameters, faults, cable and wiring cheat sheets</li>
+<li>Pro and Subscription add writing, restore and manual control (bought in the app)</li>
+<li>Some drives and modules are not yet verified on hardware</li></ul></article></div>
+<p class="hint">Want an email when a new version comes out? <a href="/waitlist.html">Update news</a>. Something missing? <a href="/requests.html">Tell us</a>.</p>
+</div></div>"""
+    return page("", "What's new", "Release notes for every public version of the ServMod Android app: new drives, modules and fixes.", body, "/whats-new.html")
+
 PAGES = {
- "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(), "wiring.html": wiring_page(), **device_pages(),
+ "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(), "wiring.html": wiring_page(), "whats-new.html": whatsnew(), **device_pages(),
  "pricing.html": pricing(), "support.html": support(), "requests.html": requests_page(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
  "waitlist.html": waitlist(), "download.html": download(),

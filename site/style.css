@@ -263,3 +263,5 @@ table.plans{border-collapse:collapse;width:100%;margin-top:34px;font-size:.92rem
 .wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:14px;margin-top:12px}
 a.wd{display:block;border:1px solid var(--line,#2a2a2a);border-radius:10px;overflow:hidden;background:#0b0e13}a.wd img{display:block;width:100%;height:auto}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.chips a{border:1px solid var(--line,#2a2a2a);border-radius:999px;padding:5px 12px;font-size:.88rem;text-decoration:none}.chips a:hover{border-color:#eb8a00}
+
+article.rel{margin:28px 0;padding-bottom:18px;border-bottom:1px solid var(--line,#2a2a2a)}article.rel h2{margin:0 0 8px}article.rel h2 small{font-size:.9rem;font-weight:400;opacity:.65;margin-left:8px}
