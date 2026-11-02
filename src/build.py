@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Builds the ServMod static site: python build.py  ->  ../site (or OUT env)."""
 import glob, json, os, shutil, datetime, html
+from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
 DOMAIN = "https://servmod.com"
@@ -57,7 +58,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 FOOTER = f"""<footer><div class="wrap">
   <div class="block">
     <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
-    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/waitlist.html">Update news</a></li></ul></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/wiring.html">Wiring diagrams</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/waitlist.html">Update news</a></li></ul></div>
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li><li><a href="/requests.html">Requests</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
@@ -134,7 +135,7 @@ DIAGRAM = """<section id="how"><div class="wrap">
   <div class="fnode"><b>Cars and boards</b><small>OBD2 diagnostics, ESP32 flashing</small></div>
  </div>
 </div>
-<p class="hint" style="margin-top:14px">The phone's own sensors and camera also work with no connection at all: level, magnet meter, tachometer, slow motion, loupe, strobe, leak finder and more. See the <a href="/guides.html">connection guides</a> for cables and wiring.</p>
+<p class="hint" style="margin-top:14px">The phone's own sensors and camera also work with no connection at all: level, magnet meter, tachometer, slow motion, loupe, strobe, leak finder and more. See the <a href="/wiring.html">wiring diagrams</a> for every drive and the <a href="/guides.html">connection guides</a> for cables.</p>
 </div></section>
 """
 
@@ -338,7 +339,7 @@ def equipment():
 <li><b>Ethernet:</b> any USB-C Ethernet adapter. Android handles it natively.</li>
 <li><b>One USB-C port:</b> a phone has only one, so for Ethernet and RS-485 together use a powered USB-C hub.</li>
 <li><b>CAN:</b> through the ServMod Box. Lenze 8400 is tested this way.</li></ul></div>
-<p class="intro" style="margin-top:20px">Wiring for each drive is on the <a href="/guides.html">connection guides</a>.</p>
+<p class="intro" style="margin-top:20px">Wiring for each drive is on the <a href="/wiring.html">wiring diagrams</a> and the <a href="/guides.html">connection guides</a>.</p>
 </div>"""
     return page("equipment", "Supported equipment", "Inverters, PLCs and printers ServMod works with, plus the USB-RS485 and Ethernet adapters you need.", body, "/equipment.html")
 
@@ -349,6 +350,7 @@ def guides():
     body = f"""<div class="wrap page"><div class="prose" style="max-width:48em">
 <h1>Connection guides</h1>
 <p class="intro">Wire the drive to the phone with a USB-RS485 adapter. Bench-test before you touch a production machine.</p>
+<p><a class="btn" href="/wiring.html">Wiring diagrams for every drive</a></p>
 <h2>Cables and adapters</h2>
 <p>What the connections in the guides below are made of. Most phones need the OTG adapter first, then the cable or adapter for the drive.</p>
 <div class="photos adapters"><figure class="photo"><img src="/assets/adapters/otg-usbc-usba.jpg" width="900" height="675" loading="lazy" alt="A white USB-C OTG adapter with a USB-C plug and a USB-A socket"><figcaption><b>USB-C OTG adapter</b><br>USB-C plug on the phone, USB-A socket for the cable or adapter. Most connections start here.</figcaption></figure><figure class="photo"><img src="/assets/adapters/cable-usba-mini.jpg" width="900" height="675" loading="lazy" alt="A black USB-A to mini-USB cable"><figcaption><b>USB-A to mini-USB cable</b><br>For drives with a mini-B service port, such as the Hitachi WL200 keypad port.</figcaption></figure><figure class="photo"><img src="/assets/adapters/cable-usba-micro.jpg" width="900" height="675" loading="lazy" alt="A black USB-A to micro-USB cable"><figcaption><b>USB-A to micro-USB cable</b><br>For drives with a micro-USB service port.</figcaption></figure><figure class="photo"><img src="/assets/adapters/cable-usbc-usbb.jpg" width="900" height="675" loading="lazy" alt="A braided USB-C to USB-B cable"><figcaption><b>USB-C to USB-B cable</b><br>Square USB-B port, for example the Danfoss VLT FC 280. Goes straight into a USB-C phone.</figcaption></figure><figure class="photo"><img src="/assets/adapters/usb-rs232.jpg" width="900" height="675" loading="lazy" alt="A USB to RS-232 adapter with a USB-A plug and a 9-pin D-sub plug"><figcaption><b>USB to RS-232 adapter</b><br>USB-A plug, 9-pin D-sub plug. Used with an OTG adapter.</figcaption></figure></div>
@@ -598,8 +600,50 @@ def not_found():
     body = '<div class="wrap page"><div class="prose"><h1>Page not found</h1><p class="intro">That page does not exist. Try the <a href="/">home page</a>, the <a href="/features.html">modules</a> or the <a href="/support.html">support page</a>.</p></div></div>'
     return page("", "Page not found", "This page does not exist.", body, "/404.html", noindex=True)
 
+WIRING = [
+ ("hitachi-wl200", "Hitachi WL200", "T", ["hitachi_wl200_1_usb_direct", "hitachi_wl200_2_box_usb", "hitachi_wl200_3_adapter_rs485", "hitachi_wl200_4_box_rs485"]),
+ ("hitachi-wjc1", "Hitachi WJ C1", "T", ["hitachi_wjc1_1_box_usb", "hitachi_wjc1_2_adapter_rs485", "hitachi_wjc1_3_box_rs485", "hitachi_wjc1_4_usb_direct"]),
+ ("hitachi-wj200", "Hitachi WJ200", "N", ["hitachi_wj200_1_usb_direct", "hitachi_wj200_2_box_usb", "hitachi_wj200_3_adapter_rs485", "hitachi_wj200_4_box_rs485"]),
+ ("pf525", "Allen-Bradley PowerFlex 525", "T", ["pf525_1_adapter_rs485", "pf525_2_box_rs485"]),
+ ("danfoss-fc280", "Danfoss VLT FC 280", "T", ["danfoss_fc280_1_usb_direct", "danfoss_fc280_2_adapter_rs485", "danfoss_fc280_3_box_rs485"]),
+ ("danfoss-2800", "Danfoss VLT 2800", "T", ["danfoss_vlt2800_1_adapter_rs485", "danfoss_vlt2800_2_box_rs485"]),
+ ("lenze8400", "Lenze 8400 (CAN)", "T", ["lenze8400_1_box_can"]),
+ ("omron-mx2", "Omron MX2", "N", ["omron_mx2_1_adapter_rs485", "omron_mx2_2_box_rs485"]),
+ ("mitsubishi", "Mitsubishi FR-D700", "N", ["mitsubishi_frd700_1_adapter_rs485", "mitsubishi_frd700_2_box_rs485"]),
+ ("atv320", "Schneider ATV320", "N", ["atv320_1_adapter_rs485", "atv320_2_box_rs485"]),
+ ("v20", "Siemens SINAMICS V20", "N", ["siemens_v20_1_adapter_rs485", "siemens_v20_2_box_rs485"]),
+ ("delta", "Delta MS300", "N", ["delta_ms300_1_adapter_rs485", "delta_ms300_2_box_rs485"]),
+ ("invt", "INVT GD200A", "N", ["invt_gd200a_1_adapter_rs485", "invt_gd200a_2_box_rs485"]),
+ ("abb", "ABB ACS355", "N", ["abb355_1_adapter_rs485", "abb355_2_box_rs485"]),
+ ("inovance", "Inovance MD500", "N", ["inovance_md500_1_adapter_rs485", "inovance_md500_2_box_rs485"]),
+ ("yaskawa", "Yaskawa GA500", "N", ["yaskawa_ga500_1_adapter_rs485", "yaskawa_ga500_2_box_rs485"]),
+ ("e5cn", "Omron E5CN temperature controller", "N", ["omron_e5cn_1_adapter_rs485", "omron_e5cn_2_box_rs485"]),
+ ("smartstep", "Omron SMARTSTEP A servo", "N", ["smartstep_1_adapter_rs232", "smartstep_2_box_ftdi_rs232"]),
+ ("cj1m", "Omron CJ1M PLC", "N", ["omron_cj1m_1_adapter_rs232", "omron_cj1m_2_box_ftdi_rs232"]),
+ ("op17", "Siemens OP17 operator panel", "D", ["op17_1_adapter_rs232", "op17_2_box_ftdi_rs232"]),
+]
+def wiring_page():
+    badge = {"T": '<span class="st test">Tested on a drive</span>', "N": '<span class="st draft">Not yet tried on a drive</span>', "D": '<span class="st draft">Draft, spare panels only</span>'}
+    chips = "".join(f'<a href="#{k}">{n}</a>' for k, n, _, _ in WIRING)
+    secs = ""
+    for k, n, st, fs in WIRING:
+        figs = ""
+        for f in fs:
+            w, h = Image.open(os.path.join(OUT, "assets", "wiring", f + ".webp")).size
+            figs += f'<a class="wd" href="/assets/wiring/{f}.webp" target="_blank" rel="noopener"><img src="/assets/wiring/{f}.webp" width="{w}" height="{h}" loading="lazy" alt="Wiring diagram: {n}, {f.split("_",2)[-1].replace("_", " ")}"></a>'
+        secs += f'<section id="{k}" class="wsec"><h2>{n} {badge[st]}</h2><div class="wgrid">{figs}</div></section>\n'
+    body = f"""<div class="wrap page"><div class="prose" style="max-width:none">
+<h1>Wiring diagrams</h1>
+<p class="intro">The same diagrams that are inside the app: how to connect each drive, controller or panel to the phone. Tap a diagram to open it full size.</p>
+<p>Every drive has one diagram per way of connecting: a USB-RS485 adapter on the phone, the ServMod Box (wireless to the phone), or a direct USB cable where the drive has a USB port. Terminal names differ between production batches, so check the names printed on your unit before you wire anything. Bench-test first, and do not work on a production machine before you have tried it on a bench. <a href="/guides.html">Cables and adapters</a> shows what each connection is made of.</p>
+<p class="chips">{chips}</p>
+{secs}
+<p>Missing your drive? <a href="/requests.html">Tell us what you need</a>.</p>
+</div></div>"""
+    return page("guides", "Wiring diagrams", "Wiring diagrams for connecting Hitachi, Danfoss, Allen-Bradley, Lenze, Omron, Siemens and other drives, PLCs and panels to the ServMod app with a USB-RS485 adapter or the ServMod Box.", body, "/wiring.html")
+
 PAGES = {
- "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(),
+ "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(), "wiring.html": wiring_page(),
  "pricing.html": pricing(), "support.html": support(), "requests.html": requests_page(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
  "waitlist.html": waitlist(), "download.html": download(),

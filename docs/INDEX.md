@@ -93,3 +93,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## General diagram (2026-11-02)
 - Home page section `#how` "How it connects" (DIAGRAM in build.py): phone with ServMod -> adapter / Box / USB / network -> equipment. Pure HTML/CSS, stacks on phones.
+
+## Wiring diagrams page (2026-11-02)
+- `/wiring.html` (WIRING list + wiring_page() in build.py): all 46 wiring diagrams copied from the app (`wl200_android/app/src/main/assets/wiring/*.webp`) into `site/assets/wiring/`, grouped by device with chips, status badge (Tested on a drive / Not yet tried / Draft) from servmod-hardware-verified. Left out: lenze8400_2_usbcan (COMING SOON). Linked from Guides, Equipment, footer and the home diagram. When the app adds or changes diagrams: copy the webp files again and update WIRING.
