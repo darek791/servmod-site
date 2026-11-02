@@ -113,6 +113,31 @@ def _card(k, alt, cap):
 def _ph(src, alt, cap, w=900, h=1125):
     return f'<figure class="photo"><img src="/assets/photos/{src}" width="{w}" height="{h}" loading="lazy" alt="{alt}"><figcaption>{cap}</figcaption></figure>'
 
+DIAGRAM = """<section id="how"><div class="wrap">
+<h2>How it connects</h2>
+<p class="sub">Your phone is the tool. A small adapter or the ServMod Box links it to the equipment.</p>
+<div class="flow">
+ <div class="fcol"><div class="fnode main"><b>Your Android phone</b><span>ServMod app</span><small>Works offline. Backups, parameters, manual control, fault codes, wiring and field tools.</small></div></div>
+ <div class="farrow" aria-hidden="true"></div>
+ <div class="fcol links">
+  <div class="fnode"><b>USB-RS485 adapter</b><small>OTG cable to the phone, RS-485 to the equipment</small></div>
+  <div class="fnode"><b>ServMod Box</b><small>RS-485, RS-232, CAN, USB host, Ethernet. Reached over Wi-Fi or Bluetooth</small></div>
+  <div class="fnode"><b>USB cable</b><small>Direct to drives with a USB port, ESP32 boards and USB sticks</small></div>
+  <div class="fnode"><b>Wi-Fi, Ethernet, Bluetooth</b><small>Network gear, printers, PLCs and car OBD2 adapters</small></div>
+ </div>
+ <div class="farrow" aria-hidden="true"></div>
+ <div class="fcol targets">
+  <div class="fnode"><b>Drives</b><small>Hitachi, Allen-Bradley, Danfoss, Lenze and more</small></div>
+  <div class="fnode"><b>Temperature controllers</b><small>Omron E5CN</small></div>
+  <div class="fnode"><b>PLCs and panels</b><small>Omron, Allen-Bradley, Siemens OP17</small></div>
+  <div class="fnode"><b>Printers and networks</b><small>Honeywell PM45, Zodiac, any Wi-Fi or Ethernet link</small></div>
+  <div class="fnode"><b>Cars and boards</b><small>OBD2 diagnostics, ESP32 flashing</small></div>
+ </div>
+</div>
+<p class="hint" style="margin-top:14px">The phone's own sensors and camera also work with no connection at all: level, magnet meter, tachometer, slow motion, loupe, strobe, leak finder and more. See the <a href="/guides.html">connection guides</a> for cables and wiring.</p>
+</div></section>
+"""
+
 GALLERY = f"""<section id="app"><div class="wrap">
   <h2>In the app</h2>
   <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus a pocket cheat sheet for the cable work around it.</p>
@@ -203,7 +228,7 @@ def waitlist():
     return page("", "Update news", "Get an email when a new version of ServMod is released. Rare, no marketing.", body, "/waitlist.html")
 
 def home():
-    body = hero() + strip() + GALLERY + JOB + f"""
+    body = hero() + strip() + DIAGRAM + GALLERY + JOB + f"""
 <section><div class="wrap">
   <h2>One app, {len(MODULES)} tools</h2>
   <p class="intro">Inverters and printers come first. The rest are tools that live in the same app, so one phone covers the service bag.</p>

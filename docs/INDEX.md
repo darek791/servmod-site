@@ -90,3 +90,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## Visit counter (2026-10-26)
 - Own cookie-free counter: `site.js` posts `/api/hit` (page, referrer host, view or download click); table `hits` (day, path, event, daily salted hash of IP+browser, no IP stored). Bots and the admin's own browser (localStorage `sm_me`) are skipped. Admin panel has a "Visits" section: today/7/30 days, 14-day bar chart, top pages, referrers. Privacy text updated. Real visitor IP from `CF-Connecting-IP`.
+
+## General diagram (2026-11-02)
+- Home page section `#how` "How it connects" (DIAGRAM in build.py): phone with ServMod -> adapter / Box / USB / network -> equipment. Pure HTML/CSS, stacks on phones.
