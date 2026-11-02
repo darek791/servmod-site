@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds the ServMod static site: python build.py  ->  ../site (or OUT env)."""
-import glob, json, os, shutil, datetime, html
+import sys, glob, json, os, shutil, datetime, html
 from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
@@ -318,6 +318,8 @@ def equipment():
               ("Siemens SINAMICS V20", "RS-485 adapter on terminals P+ and N- (6 and 7)", N),
               ("Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500, Yaskawa GA500", "RS-485 adapter, Modbus RTU", N)]
     rows = "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in drives)
+    from devices import DEVICES as _D
+    dev_list = "".join(f'<li><a href="/equipment/{x["slug"]}.html">{x["name"]}</a></li>' for x in _D)
     body = f"""<div class="wrap page">
 <h1>Supported equipment</h1>
 <p class="intro">Every drive uses the same screens: Backup, Parameters, Control, Settings and Faults. Reading, backup and compare are free. Writing, restore and manual control are part of the Pro plan.</p>
@@ -339,6 +341,8 @@ def equipment():
 <li><b>Ethernet:</b> any USB-C Ethernet adapter. Android handles it natively.</li>
 <li><b>One USB-C port:</b> a phone has only one, so for Ethernet and RS-485 together use a powered USB-C hub.</li>
 <li><b>CAN:</b> through the ServMod Box. Lenze 8400 is tested this way.</li></ul></div>
+<h2 style="margin-top:56px;font-size:1.6rem">Device pages</h2>
+<div class="prose"><ul>{dev_list}</ul></div>
 <p class="intro" style="margin-top:20px">Wiring for each drive is on the <a href="/wiring.html">wiring diagrams</a> and the <a href="/guides.html">connection guides</a>.</p>
 </div>"""
     return page("equipment", "Supported equipment", "Inverters, PLCs and printers ServMod works with, plus the USB-RS485 and Ethernet adapters you need.", body, "/equipment.html")
@@ -631,7 +635,9 @@ def wiring_page():
         for f in fs:
             w, h = Image.open(os.path.join(OUT, "assets", "wiring", f + ".webp")).size
             figs += f'<a class="wd" href="/assets/wiring/{f}.webp" target="_blank" rel="noopener"><img src="/assets/wiring/{f}.webp" width="{w}" height="{h}" loading="lazy" alt="Wiring diagram: {n}, {f.split("_",2)[-1].replace("_", " ")}"></a>'
-        secs += f'<section id="{k}" class="wsec"><h2>{n} {badge[st]}</h2><div class="wgrid">{figs}</div></section>\n'
+        dev = next((x["slug"] for x in DEVICES if x["wiring"] == k), None)
+        more = f' <a class="btn ghost" style="font-size:.85rem;padding:6px 12px" href="/equipment/{dev}.html">Device page</a>' if dev else ""
+        secs += f'<section id="{k}" class="wsec"><h2>{n} {badge[st]}{more}</h2><div class="wgrid">{figs}</div></section>\n'
     body = f"""<div class="wrap page"><div class="prose" style="max-width:none">
 <h1>Wiring diagrams</h1>
 <p class="intro">The same diagrams that are inside the app: how to connect each drive, controller or panel to the phone. Tap a diagram to open it full size.</p>
@@ -642,8 +648,61 @@ def wiring_page():
 </div></div>"""
     return page("guides", "Wiring diagrams", "Wiring diagrams for connecting Hitachi, Danfoss, Allen-Bradley, Lenze, Omron, Siemens and other drives, PLCs and panels to the ServMod app with a USB-RS485 adapter or the ServMod Box.", body, "/wiring.html")
 
+from devices import DEVICES
+def device_pages():
+    out = {}
+    badge = {"T": '<span class="st test">Tested on a drive</span>', "N": '<span class="st draft">Not yet tried on a drive</span>', "D": '<span class="st draft">Draft</span>'}
+    kindword = {"drive": "drive", "thermo": "controller", "panel": "panel"}
+    for d in DEVICES:
+        n, kw = d["name"], kindword[d["kind"]]
+        path = f"/equipment/{d['slug']}.html"
+        figs = ""
+        for f in d["files"]:
+            w, h = Image.open(os.path.join(OUT, "assets", "wiring", f + ".webp")).size
+            figs += f'<a class="wd" href="/assets/wiring/{f}.webp" target="_blank" rel="noopener"><img src="/assets/wiring/{f}.webp" width="{w}" height="{h}" loading="lazy" alt="Wiring diagram: {n}, {f.split("_",2)[-1].replace("_", " ")}"></a>'
+        ways = "".join(f"<li>{x}</li>" for x in d["ways"])
+        facts = "".join(f"<li>{x}</li>" for x in d["facts"])
+        if d["kind"] == "drive":
+            title = f"{n} parameter backup and restore from an Android phone"
+            do = "<li>Read all parameters and save them as a backup file on the phone. Free.</li><li>Compare a backup with a drive and see every difference. Free.</li><li>Watch live values and fault history, and look up fault causes. Free.</li><li>Edit parameters, restore a backup to a new drive, run the motor manually and reset faults. Part of the Pro plan.</li>"
+            intro = f"Back up the settings of a {n} on your phone, then restore them to a replacement drive in minutes. No laptop, no mobile signal and no software to install on a PC."
+        elif d["kind"] == "thermo":
+            title = f"{n}: read and set parameters from an Android phone"
+            do = "<li>Read the present value, setpoint, alarms and parameters. Free.</li><li>Save the parameters as a backup file.</li><li>Change the setpoint and parameters. Part of the Pro plan.</li>"
+            intro = f"Read and set an {n} over RS-485 with your phone, without the Omron PC software."
+        else:
+            title = f"{n}: backup and write from an Android phone"
+            do = "<li>Record a ProTool or ProSave transfer into a backup file on the phone.</li><li>Write the file to a spare panel. Part of the Pro plan.</li>"
+            intro = f"Copy the project and system of a {n} to a backup file and write it to a spare panel, with a phone and a USB-RS232 adapter."
+        same = [x for x in DEVICES if x["brand"] == d["brand"] and x is not d]
+        rel = ("<p>Same brand: " + ", ".join(f'<a href="/equipment/{x["slug"]}.html">{x["name"]}</a>' for x in same) + ".</p>") if same else ""
+        body = f"""<div class="wrap page"><div class="prose" style="max-width:none">
+<p class="hint"><a href="/equipment.html">Supported equipment</a> / {n}</p>
+<h1>{title}</h1>
+<p class="intro">{intro}</p>
+<p>{badge[d["st"]]} {d["note"]}</p>
+<p class="actions"><a class="btn" data-dl href="/download.html">{ICON_SVG} Download free for Android</a><a class="btn ghost" href="/wiring.html#{d["wiring"]}">All wiring diagrams</a></p>
+<h2>How to connect it</h2>
+<ul>{ways}</ul>
+<p class="hint">Terminal names differ between production batches. Check the names printed on your unit before you wire anything, and bench-test before you touch a production machine.</p>
+<div class="wgrid">{figs}</div>
+<h2>What you can do with it in ServMod</h2>
+<ul>{do}</ul>
+<h2>Good to know</h2>
+<ul>{facts}<li>ServMod is an independent tool. It is not made, approved or supported by {d["brand"]}.</li></ul>
+{rel}
+<p>Using a different {kw}? <a href="/requests.html">Tell us which one you need</a>. See also the <a href="/guides.html">cables and adapters</a> you need.</p>
+</div></div>"""
+        ld = '<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "ServMod", "item": DOMAIN + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Supported equipment", "item": DOMAIN + "/equipment.html"},
+            {"@type": "ListItem", "position": 3, "name": n, "item": DOMAIN + path}]}) + "</script>"
+        desc = f"{n}: how to connect it to an Android phone (wiring, adapter, terminals) and back up, compare and restore its parameters with the ServMod app. {d['note']}"[:300]
+        out[f"equipment/{d['slug']}.html"] = page("equipment", title, desc, body, path, extra_head=ld)
+    return out
+
 PAGES = {
- "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(), "wiring.html": wiring_page(),
+ "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(), "wiring.html": wiring_page(), **device_pages(),
  "pricing.html": pricing(), "support.html": support(), "requests.html": requests_page(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
  "waitlist.html": waitlist(), "download.html": download(),

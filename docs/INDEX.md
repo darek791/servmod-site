@@ -96,3 +96,7 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## Wiring diagrams page (2026-11-02)
 - `/wiring.html` (WIRING list + wiring_page() in build.py): all 46 wiring diagrams copied from the app (`wl200_android/app/src/main/assets/wiring/*.webp`) into `site/assets/wiring/`, grouped by device with chips, status badge (Tested on a drive / Not yet tried / Draft) from servmod-hardware-verified. Left out: lenze8400_2_usbcan (COMING SOON). Linked from Guides, Equipment, footer and the home diagram. When the app adds or changes diagrams: copy the webp files again and update WIRING.
+
+## Device pages for search (2026-11-02)
+- 18 landing pages `/equipment/<slug>.html` generated from `src/devices.py` (DEVICES list: name, status T/N/D, ways to connect, facts, wiring files). Each has its own title/description, H1 "<device> parameter backup and restore from an Android phone", BreadcrumbList JSON-LD, wiring diagrams, what is free vs Pro, canonical URL; all in sitemap.xml. Linked from Equipment (Device pages list) and from the Wiring page (Device page button). Facts only from app docs, diagrams and servmod-hardware-verified; when a drive gets tested change `st` in devices.py.
+- Google Search Console: add property servmod.com (DNS TXT verification, done by the owner), then submit https://servmod.com/sitemap.xml.
