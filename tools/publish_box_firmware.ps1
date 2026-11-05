@@ -3,8 +3,10 @@
 # Files go to /var/lib/servmod/box, NOT to the public web root: the API serves them only to Pro accounts / Pro licence codes.
 $ErrorActionPreference = "Stop"
 $srv = "root@167.233.108.235"; $key = "$env:USERPROFILE\.ssh\id_ed25519"
-$web = Split-Path -Parent $PSScriptRoot
-$src = Join-Path (Split-Path -Parent $web) "handoff\www_assets\box_firmware"
+# Works from ServMod\tools or ServMod\web\tools
+$root = Split-Path -Parent $PSScriptRoot
+$src = Join-Path $root "handoff\www_assets\box_firmware"
+if (-not (Test-Path $src)) { $src = Join-Path (Split-Path -Parent $root) "handoff\www_assets\box_firmware" }
 if (-not (Test-Path "$src\firmware.json")) { throw "firmware.json not found in $src" }
 $m = Get-Content -Raw "$src\firmware.json" | ConvertFrom-Json
 Write-Host "Firmware version $($m.version) ($($m.build_date))" -ForegroundColor Yellow
