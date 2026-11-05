@@ -264,3 +264,57 @@ def test_hit_counter_and_admin_stats(c):
     s = A.visit_stats()
     assert s["today"]["views"] == 1 and s["today"]["visitors"] == 1 and s["today"]["downloads"] == 1
     assert s["pages"][0]["path"] == "/pricing.html" and s["refs"][0]["ref"] == "google.com"
+
+def _box_files(tmp_path, monkeypatch):
+    d = tmp_path / "box"; (d / "firmware").mkdir(parents=True); (d / "schematics").mkdir()
+    (d / "firmware" / "servmod_box_9.bin").write_bytes(b"\x01\x02\x03")
+    (d / "firmware" / "secret.bin").write_bytes(b"x")  # not in manifest
+    (d / "schematics" / "wiring.png").write_bytes(b"png")
+    (d / "firmware.json").write_text('{"version":"9.9.9","boxes":{"b":{"title":"B","files":[{"file":"servmod_box_9.bin","sha256":"aa","bytes":3,"offset":"0x0"}]}}}')
+    monkeypatch.setenv("BOX_DIR", str(d))
+
+def test_box_firmware_pro_only(c, tmp_path, monkeypatch):
+    _box_files(tmp_path, monkeypatch)
+    assert c.get("/api/box/firmware").status_code == 401
+    assert c.get("/api/box/firmware/servmod_box_9.bin").status_code == 401
+    tok, _ = login(c, "free@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    assert c.get("/api/box/firmware").status_code == 403  # signed in but no Pro
+    c.post("/api/auth/logout", headers=H)
+    tok, _ = login(c, "boss@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    c.post("/api/admin/grant", json={"email": "free@x.com", "features": "SUB:20300101"}, headers=H)
+    c.post("/api/admin/grant", json={"email": "pro@x.com", "features": "PRO"}, headers=H)
+    c.post("/api/auth/logout", headers=H)
+    tok, _ = login(c, "free@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    assert c.get("/api/box/firmware").status_code == 403  # Subscription alone is not Pro
+    c.post("/api/auth/logout", headers=H)
+    tok, _ = login(c, "pro@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    m = c.get("/api/box/firmware").json()
+    assert m["version"] == "9.9.9" and m["boxes"]["b"]["files"][0]["url"] == "/api/box/firmware/servmod_box_9.bin"
+    assert m["schematics"][0]["url"] == "/api/box/doc/wiring.png"
+    r = c.get("/api/box/firmware/servmod_box_9.bin")
+    assert r.status_code == 200 and r.content == b"\x01\x02\x03" and "attachment" in r.headers["content-disposition"]
+    assert c.get("/api/box/firmware/secret.bin").status_code == 404   # only manifest files
+    assert c.get("/api/box/firmware/..%2Fx.bin").status_code == 404
+    assert c.get("/api/box/doc/wiring.png").content == b"png"
+
+def test_box_firmware_with_licence_code_from_app(c, tmp_path, monkeypatch):
+    _box_files(tmp_path, monkeypatch)
+    tok, _ = login(c, "boss@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    c.post("/api/admin/grant", json={"email": "boss@x.com", "features": "PRO"}, headers=H)
+    code = c.post("/api/devices", json={"device_id": "ABCDEF123"}, headers=H).json()["code"]
+    c.post("/api/auth/logout", headers=H); c.cookies.clear()
+    assert c.get("/api/box/firmware", headers={"X-Licence": code}).json()["version"] == "9.9.9"
+    assert c.get("/api/box/firmware/servmod_box_9.bin", headers={"X-Licence": code}).status_code == 200
+    assert c.get("/api/box/firmware", headers={"X-Licence": code[:-3] + "AAA"}).status_code == 401
+    # releasing the device or revoking the entitlement ends access
+    tok, _ = login(c, "boss@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    lid = c.get("/api/me").json()["licences"][0]["id"]
+    c.post("/api/devices/release", json={"id": lid}, headers=H)
+    c.post("/api/auth/logout", headers=H); c.cookies.clear()
+    assert c.get("/api/box/firmware", headers={"X-Licence": code}).status_code == 401
+
+def test_box_firmware_not_published(c, tmp_path, monkeypatch):
+    monkeypatch.setenv("BOX_DIR", str(tmp_path / "none"))
+    tok, _ = login(c, "boss@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    c.post("/api/admin/grant", json={"email": "boss@x.com", "features": "PRO"}, headers=H)
+    assert c.get("/api/box/firmware").status_code == 404

@@ -385,7 +385,7 @@ def pricing():
 <h1>Pricing</h1>
 <p class="intro" id="shop-closed">Ordering is not open yet. Join the waiting list and we will write to you when it is.</p>
 <div class="actions" style="margin-top:28px"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
-<table class="plans"><thead><tr><th></th><th>Free</th><th>Pro<br><small>&pound;40 once</small></th><th>Subscription<br><small>&pound;20 / year</small></th></tr></thead><tbody><tr><th scope="row">Connect, read and monitor drives</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Fault history</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Backup to a file and compare</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Cable, wiring and fault-code cheat sheets, field tools</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Write parameters to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Restore a backup to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Manual control (run the motor)</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Fault reset and factory reset</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Unlock writes on the ServMod Box</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Modules and drive brands released after you buy</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Updates of parameter lists and profiles</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr></tbody></table>
+<table class="plans"><thead><tr><th></th><th>Free</th><th>Pro<br><small>&pound;40 once</small></th><th>Subscription<br><small>&pound;20 / year</small></th></tr></thead><tbody><tr><th scope="row">Connect, read and monitor drives</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Fault history</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Backup to a file and compare</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Cable, wiring and fault-code cheat sheets, field tools</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Write parameters to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Restore a backup to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Manual control (run the motor)</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Fault reset and factory reset</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Unlock writes on the ServMod Box</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Wiring drawings and firmware to <a href="/modbox.html">build your own Box</a></th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Modules and drive brands released after you buy</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Updates of parameter lists and profiles</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr></tbody></table>
 <p class="hint">Pro stays with the version you own. Pro and Subscription are bought separately, and Free needs no code.</p>
 </div><div class="prose">
 <h2 style="margin-top:0">How a licence works</h2>
@@ -397,7 +397,7 @@ def pricing():
 <p>The code is checked inside the app, so ServMod keeps working with no internet connection.</p>
 <h2>The plans</h2>
 <ul><li><b>Free:</b> connect, read, monitor, fault history, backup to a file, compare, and all the field tools. No code needed.</li>
-<li><b>Pro:</b> a one-time purchase that adds writing parameters, restore, manual control, fault and factory reset, and unlocking writes on the ServMod Box. It stays with the version you own.</li>
+<li><b>Pro:</b> a one-time purchase that adds writing parameters, restore, manual control, fault and factory reset, unlocking writes on the ServMod Box, and the <a href="/modbox.html">wiring drawings and firmware to build your own Box</a>. It stays with the version you own.</li>
 <li><b>Subscription:</b> yearly, for modules and drive brands released after you buy, and for updates of parameter lists and profiles.</li></ul>
 <p><span id="shop-closed2">Prices will be published before ordering opens. </span>Stop always works, in every plan. Prices include all taxes; we are not VAT registered.</p>
 <div id="shop" hidden></div>
@@ -716,11 +716,44 @@ def whatsnew():
 </div></div>"""
     return page("", "What's new", "Release notes for every public version of the ServMod Android app: new drives, modules and fixes.", body, "/whats-new.html")
 
+def modbox():
+    body = """<div class="wrap page" id="mb"><h1>Build your own ServMod Box</h1>
+<p class="intro">The ServMod Box is a small ESP32-S3 unit that links your phone to a drive, PLC or CAN bus wirelessly. For ServMod Pro owners we publish the wiring drawings and the ready-to-flash firmware, so you can build one yourself.</p>
+<p class="hint">Source code is not published, only the compiled firmware. You build the hardware, flash it from your phone with the ESP32 Loader inside the ServMod app, and the Box then talks to the app over Wi-Fi or Bluetooth LE. Firmware is not updated over the air: you flash a new file with a cable.</p>
+<div id="mb-msg" class="msg" role="status"></div>
+<section id="mb-lock" hidden>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Pro only</h2>
+  <p id="mb-lock-txt"></p>
+  <p><a class="btn" id="mb-lock-btn" href="/account/">Sign in</a></p>
+</section>
+<section id="mb-open" hidden>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">1. Wiring drawings</h2>
+  <p class="hint">All signals are 3.3 V logic. Check the notes at the bottom of each drawing. Tap a drawing to open it full size.</p>
+  <div id="mb-doc"></div>
+  <h2 style="font-size:1.5rem;margin:34px 0 10px">2. Firmware <small id="mb-ver" style="font-weight:400;opacity:.75"></small></h2>
+  <p class="hint">For a first install or any update, take the <b>full image</b> for your board. The <b>application only</b> file is for updating a board that already runs a 0.9.x Box. Flashing replaces the settings stored in the Box.</p>
+  <div id="mb-fw"></div>
+  <h2 style="font-size:1.5rem;margin:34px 0 10px">3. Flash it from your phone</h2>
+  <ol class="steps">
+    <li>Download the <code>.bin</code> file to the phone (it lands in Downloads).</li>
+    <li>Connect the board to the phone with a USB cable and an OTG adapter. DevKit: use the board's COM port. Mini: the USB-C port.</li>
+    <li>Open <b>ServMod &gt; ESP32 Loader</b> and choose chip <b>ESP32-S3</b>. Flash size: 16 MB for the DevKit, 4 MB for the mini.</li>
+    <li>Tap <b>+ ADD</b>, pick the file, and set the offset: <code>0x0</code> for the full image, <code>0x10000</code> for application only.</li>
+    <li>Tap <b>FLASH</b>. The board restarts by itself when it is done.</li>
+  </ol>
+  <p class="hint">If the board does not enter download mode by itself, hold BOOT, tap RESET, release BOOT, and then connect. After flashing, open ServMod and connect to the Box: the app shows its firmware version.</p>
+  <h2 style="font-size:1.5rem;margin:34px 0 10px">Updating later</h2>
+  <p>When a new firmware is published, this page shows the new version. Repeat the flashing steps above with the new file. Compare the SHA-256 shown next to each file if you want to check the download.</p>
+</section>
+<p class="hint" style="margin-top:34px">Honest status: the DevKit Box firmware 0.9.1 was flashed from a phone and started. The mini build is experimental and has not been flashed on a board yet. Building and using hardware is at your own risk, see the <a href="/terms.html">terms</a>.</p>
+</div>"""
+    return page("", "Build your own ServMod Box", "Pro users: wiring drawings and ready-to-flash firmware for the ServMod Box (ESP32-S3), with step-by-step flashing from your phone.", body, "/modbox.html", extra_head='<script src="/modbox.js" defer></script>')
+
 PAGES = {
  "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(), "wiring.html": wiring_page(), "whats-new.html": whatsnew(), **device_pages(),
  "pricing.html": pricing(), "support.html": support(), "requests.html": requests_page(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
- "waitlist.html": waitlist(), "download.html": download(),
+ "modbox.html": modbox(), "waitlist.html": waitlist(), "download.html": download(),
  "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY, draft=False),
  "refunds.html": doc("", "Refunds", "How refunds for ServMod licences work.", "/refunds.html", REFUNDS, draft=False),
  "licence.html": doc("", "Licence", "How the ServMod licence and activation work.", "/licence.html", LICENCE, draft=False),
@@ -739,7 +772,7 @@ def main():
         if os.path.isfile(p): os.remove(p)
     import hashlib, re
     def _ver(f): return hashlib.sha1(open(os.path.join(HERE, f), "rb").read()).hexdigest()[:8]
-    VERS = {f: _ver(f) for f in ("style.css", "site.js", "account.js", "manuals.js")}
+    VERS = {f: _ver(f) for f in ("style.css", "site.js", "account.js", "manuals.js", "modbox.js")}
     def _bust(html):
         return re.sub(r'(["\'])/(style\.css|site\.js|account\.js|manuals\.js)\1', lambda m: f'{m.group(1)}/{m.group(2)}?v={VERS[m.group(2)]}{m.group(1)}', html)
     for name, content in PAGES.items():
@@ -753,6 +786,7 @@ def main():
     os.makedirs(os.path.join(OUT, "manuals"), exist_ok=True)
     json.dump({"manuals": ms}, open(os.path.join(OUT, "manuals", "data.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     shutil.copy(os.path.join(HERE, "account.js"), os.path.join(OUT, "account.js"))
+    shutil.copy(os.path.join(HERE, "modbox.js"), os.path.join(OUT, "modbox.js"))
     shutil.copy(os.path.join(HERE, "manuals.js"), os.path.join(OUT, "manuals.js"))
     shutil.copy(os.path.join(HERE, "site.js"), os.path.join(OUT, "site.js"))
     urls = [("/", "1.0")] + [(f"/{n}".replace("index.html", ""), "0.7") for n in PAGES if n not in ("index.html", "404.html", "account/index.html")]

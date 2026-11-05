@@ -2,7 +2,7 @@ import os, json, logging, secrets, threading, time, re
 from urllib.parse import urlparse
 from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
-from . import core, mail, licence, issuing, shop
+from . import core, mail, licence, issuing, shop, box
 
 log = logging.getLogger("servmod")
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
@@ -360,3 +360,4 @@ async def request_status(req: Request):
     return {"ok": True}
 
 app.include_router(shop.router)
+app.include_router(box.router)

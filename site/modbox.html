@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Build your own ServMod Box - ServMod</title>
+<meta name="description" content="Pro users: wiring drawings and ready-to-flash firmware for the ServMod Box (ESP32-S3), with step-by-step flashing from your phone.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://servmod.com/modbox.html">
+<link rel="icon" href="/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="ServMod">
+<meta property="og:title" content="Build your own ServMod Box - ServMod"><meta property="og:description" content="Pro users: wiring drawings and ready-to-flash firmware for the ServMod Box (ESP32-S3), with step-by-step flashing from your phone.">
+<meta property="og:url" content="https://servmod.com/modbox.html"><meta property="og:image" content="https://servmod.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/style.css?v=b5108299"><script src="/modbox.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="ServMod home"><img src="/assets/logo-wide.png" srcset="/assets/logo-wide.png 1x,/assets/logo-wide@2x.png 2x" width="172" height="30" alt="ServMod"></a>
+  <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav" aria-label="Main"><a href="/features.html">Modules</a><a href="/equipment.html">Equipment</a><a href="/guides.html">Connection guides</a><a href="/manuals/">Fault codes</a><a href="/pricing.html">Pricing</a><a href="/about.html">About</a><a href="/support.html">Support</a><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download</a></nav>
+  <a class="acct" id="acct-link" href="/account/">Sign in</a>
+</div></header>
+<main id="main">
+<div class="wrap page" id="mb"><h1>Build your own ServMod Box</h1>
+<p class="intro">The ServMod Box is a small ESP32-S3 unit that links your phone to a drive, PLC or CAN bus wirelessly. For ServMod Pro owners we publish the wiring drawings and the ready-to-flash firmware, so you can build one yourself.</p>
+<p class="hint">Source code is not published, only the compiled firmware. You build the hardware, flash it from your phone with the ESP32 Loader inside the ServMod app, and the Box then talks to the app over Wi-Fi or Bluetooth LE. Firmware is not updated over the air: you flash a new file with a cable.</p>
+<div id="mb-msg" class="msg" role="status"></div>
+<section id="mb-lock" hidden>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">Pro only</h2>
+  <p id="mb-lock-txt"></p>
+  <p><a class="btn" id="mb-lock-btn" href="/account/">Sign in</a></p>
+</section>
+<section id="mb-open" hidden>
+  <h2 style="font-size:1.5rem;margin:30px 0 10px">1. Wiring drawings</h2>
+  <p class="hint">All signals are 3.3 V logic. Check the notes at the bottom of each drawing. Tap a drawing to open it full size.</p>
+  <div id="mb-doc"></div>
+  <h2 style="font-size:1.5rem;margin:34px 0 10px">2. Firmware <small id="mb-ver" style="font-weight:400;opacity:.75"></small></h2>
+  <p class="hint">For a first install or any update, take the <b>full image</b> for your board. The <b>application only</b> file is for updating a board that already runs a 0.9.x Box. Flashing replaces the settings stored in the Box.</p>
+  <div id="mb-fw"></div>
+  <h2 style="font-size:1.5rem;margin:34px 0 10px">3. Flash it from your phone</h2>
+  <ol class="steps">
+    <li>Download the <code>.bin</code> file to the phone (it lands in Downloads).</li>
+    <li>Connect the board to the phone with a USB cable and an OTG adapter. DevKit: use the board's COM port. Mini: the USB-C port.</li>
+    <li>Open <b>ServMod &gt; ESP32 Loader</b> and choose chip <b>ESP32-S3</b>. Flash size: 16 MB for the DevKit, 4 MB for the mini.</li>
+    <li>Tap <b>+ ADD</b>, pick the file, and set the offset: <code>0x0</code> for the full image, <code>0x10000</code> for application only.</li>
+    <li>Tap <b>FLASH</b>. The board restarts by itself when it is done.</li>
+  </ol>
+  <p class="hint">If the board does not enter download mode by itself, hold BOOT, tap RESET, release BOOT, and then connect. After flashing, open ServMod and connect to the Box: the app shows its firmware version.</p>
+  <h2 style="font-size:1.5rem;margin:34px 0 10px">Updating later</h2>
+  <p>When a new firmware is published, this page shows the new version. Repeat the flashing steps above with the new file. Compare the SHA-256 shown next to each file if you want to check the download.</p>
+</section>
+<p class="hint" style="margin-top:34px">Honest status: the DevKit Box firmware 0.9.1 was flashed from a phone and started. The mini build is experimental and has not been flashed on a board yet. Building and using hardware is at your own risk, see the <a href="/terms.html">terms</a>.</p>
+</div>
+</main>
+<footer><div class="wrap">
+  <div class="block">
+    <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/wiring.html">Wiring diagrams</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/whats-new.html">What's new</a></li><li><a href="/waitlist.html">Update news</a></li></ul></div>
+    <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li><li><a href="/requests.html">Requests</a></li></ul></div>
+    <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
+  </div>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Lenze, Siemens, Schneider Electric, Mitsubishi Electric, Delta, ABB, Inovance, Yaskawa, INVT, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release 0.75, in testing. Created by DG, United Kingdom.</p>
+</div></footer>
+<script src="/site.js?v=e73e995c" defer></script>
+</body>
+</html>

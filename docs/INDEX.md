@@ -104,3 +104,13 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 ## What's new page and site check (2026-11-02)
 - `/whats-new.html`: release notes. A static copy of 0.76.3 is built in; `site.js` replaces it with the stable entries of `/servmod/history.json` (written by tools/release.py). Linked from the footer and the Download page. History entries need clear English `notes`.
 - Local check of all 37 pages: no broken internal links, no missing alt text, unique titles and descriptions, LCP under 0.5 s on a mobile viewport. Not measured on the live site (not reachable from the container).
+
+## Build your own ServMod Box (Pro only), added 2026-11-05
+- Page `/modbox.html` (src/build.py `modbox()`, src/modbox.js). Public text; wiring drawings and firmware are loaded by JS from the API only when the caller is Pro. States: not signed in -> sign-in prompt, signed in without Pro -> pricing prompt, no files on server yet -> "being prepared".
+- Backend `backend/servmod_api/box.py` (tests: `test_box_*`). Files in `BOX_DIR` (default `/var/lib/servmod/box`, NOT the public web root): `firmware.json`, `firmware/*.bin`, `schematics/*`.
+  - `GET /api/box/firmware` -> manifest from BOX (version, per-file sha256/bytes/offset/flash size, `url`) plus `schematics` list.
+  - `GET /api/box/firmware/<file>` -> .bin download (only files named in the manifest), `GET /api/box/doc/<file>` -> drawing.
+  - Pro check on the server: session cookie with a non-revoked entitlement containing `PRO` or `ALL` (Subscription alone is not Pro), or header `X-Licence: <activation code>` (signature valid, device not released, entitlement not revoked and Pro). Downloads are written to the audit log (`box-fw`, `box-doc`).
+- Upload to the server: `tools\publish_box_firmware.cmd` on the PC (checks sha256 and sizes against firmware.json, asks for PUBLISH). New firmware from BOX: same folder `ServMod\handoff\www_assets\box_firmware`, run the tool again.
+- Linked from Pricing (plans table row) and from the account page for Pro accounts. Mini build is labelled experimental, "not flashed yet".
+- Not verified live (server not reachable from the container); local test with real files and a Pro session passed.
