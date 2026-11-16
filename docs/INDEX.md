@@ -114,3 +114,11 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Upload to the server: `tools\publish_box_firmware.cmd` on the PC (checks sha256 and sizes against firmware.json, asks for PUBLISH). New firmware from BOX: same folder `ServMod\handoff\www_assets\box_firmware`, run the tool again.
 - Linked from Pricing (plans table row) and from the account page for Pro accounts. Mini build is labelled experimental, "not flashed yet".
 - Not verified live (server not reachable from the container); local test with real files and a Pro session passed.
+
+## Content refresh to app 0.99.42, 2026-11-16
+- Published app is 0.97.9 (stable). `APP_VERSION` = 0.97.9. Features from the development builds (0.98.x-0.99.x, not yet published) are on the site marked "next release" with honest status, so the download and the text stay consistent.
+- MODULES: added Setup (Draft), EzSQ programs (In field testing), Bilwinco boards (In field testing); Siemens OP17 now In field testing (spare panels); Tools mentions Nameplate; ESP32 Loader mentions Box firmware download (Pro).
+- Features cards: Setup and drive converter, EzSQ programs, Bilwinco boards and OP17. Equipment: Hitachi SJ200, Danfoss FC 302 (partly tested), Mitsubishi FR-E800 (tested by owner), WJ-C1 direct USB works, PF525 also through the Box, Lenze USB-CAN planned; new table "Control boards and panels".
+- Privacy: Nameplate "Read with AI" sends the photo to Google Gemini with the user's own key (stated explicitly; app otherwise offline).
+- Box firmware on /modbox.html stays 0.9.1: BOX firmware 0.9.2 (Danfoss HID on USB host, contract 1.7) is not compiled or tested, so not published. Source of truth: `_komunikacja/STATUS.md`.
+- When the owner publishes a new APK: bump `APP_VERSION`, drop the "next release" marks for what shipped.

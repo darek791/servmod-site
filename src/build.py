@@ -5,7 +5,7 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
 DOMAIN = "https://servmod.com"
-APP_VERSION = "0.75"
+APP_VERSION = "0.97.9"
 TODAY = datetime.date.today().isoformat()
 ICON_SVG = '<svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
@@ -62,7 +62,7 @@ FOOTER = f"""<footer><div class="wrap">
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li><li><a href="/requests.html">Requests</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
-  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Rockwell Automation, Allen-Bradley, Danfoss, Lenze, Siemens, Schneider Electric, Mitsubishi Electric, Delta, ABB, Inovance, Yaskawa, INVT, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release {APP_VERSION}, in testing. Created by DG, United Kingdom.</p>
+  <p class="fine">ServMod is an independent tool. It is not made, approved or supported by Hitachi, Omron, Bilwinco, Rockwell Automation, Allen-Bradley, Danfoss, Lenze, Siemens, Schneider Electric, Mitsubishi Electric, Delta, ABB, Inovance, Yaskawa, INVT, Zodiac, Honeywell or any other manufacturer. Product and company names belong to their owners. Use it at your own risk and bench-test before working on production equipment; it is not a safety function and not an emergency stop. App release {APP_VERSION}, in testing. Created by DG, United Kingdom.</p>
 </div></footer>"""
 
 HERO_SVG = """<svg viewBox="0 40 600 390" role="img" aria-label="Diagram: an Android phone connects through a USB to RS-485 adapter to the RS+ and RS- terminals of an inverter">
@@ -175,11 +175,14 @@ JOB = """<section id="job"><div class="wrap split">
 </div></section>"""
 
 MODULES = [
- ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525, Danfoss FC 280 and VLT 2800, Lenze 8400 over CAN, and more: Omron MX2, Mitsubishi FR-D700, Schneider ATV320, Siemens V20, Delta, INVT, ABB, Inovance and Yaskawa. Read, back up, compare, edit, restore, run the motor manually, and look up fault causes. The first six are tested on real drives; the others are new and not yet tried on a drive.", "test", "In field testing"),
+ ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525, Danfoss FC 280 and VLT 2800, Lenze 8400 over CAN, and more: Omron MX2, Mitsubishi FR-D700 and FR-E800, Schneider ATV320, Siemens V20, Delta, INVT, ABB, Inovance and Yaskawa. In the next release also Danfoss FC 302, Mitsubishi FR-E800 and Hitachi SJ200. Read, back up, compare, edit, restore, run the motor manually, and look up fault causes. The first six are tested on real drives; the others are new and not yet tried on a drive.", "test", "In field testing"),
  ("Thermocontrollers", "Read and set Omron E5CN temperature controllers over RS-485: present value, setpoint, alarms and parameters.", "draft", "Draft, bench only"),
  ("OBD2 Scanner", "Car diagnostics with an ELM327 adapter (Wi-Fi or Bluetooth): trouble codes with descriptions, freeze frame, live data with CSV recording, VIN and readiness monitors, raw terminal.", "draft", "Draft, bench only"),
  ("Printers", "Check the Ethernet port and test printing on Honeywell PM45 label printers. Cable check finds a corroded plug or damaged cable by counting link drops, lost replies and slow links. Fault guide for the PM45 included.", "test", "In field testing"),
- ("Tools", "Spirit level, magnet meter, tachometer, slow-motion study of fast machines, loupe, strobe, leak finder, ruler, picture measure, colour matcher, solar panel aiming and a sensor explorer, all from the phone's own sensors and camera.", "test", "In field testing"),
+ ("Setup", "Build a drive setup from the motor nameplate: choose motor, brand and drive, pick a layout (start/stop, 4-20 mA, 3 or 7 preset speeds, PID, Modbus and more) and get a backup file with the right parameters and warnings from the manual, ready to write through Restore. Includes a drive converter that turns a backup of an old drive into a setup for another brand.", "draft", "Draft, next release"),
+ ("EzSQ programs", "Write, check, emulate and load the small programs inside Hitachi WL200 and WJ-C1 drives: step editor, ready-made programs, an on-phone emulator with inputs and outputs, read and clone from a drive.", "test", "In field testing, next release"),
+ ("Bilwinco boards", "Backup and restore of Bilwinco Q20 control boards (main program, PLC and product data) over a USB-RS232 adapter or the ServMod Box, with one folder per machine.", "test", "In field testing, next release"),
+ ("Tools", "Spirit level, magnet meter, tachometer, slow-motion study of fast machines, loupe, strobe, leak finder, ruler, picture measure, colour matcher, solar panel aiming and a sensor explorer, all from the phone's own sensors and camera. In the next release also Nameplate: photograph a motor plate and an AI reads it (needs your own Google Gemini key).", "test", "In field testing"),
  ("USB Tools", "USB stick analyser: partitions, raw sectors, speed and surface scan, a check for sticks that claim more space than they have, format, repair and a file browser. Works even when Android does not mount the stick.", "test", "In field testing"),
  ("NFC & Barcode", "Scan and program NFC tags and barcodes. A tag opens a backup, a manual or any tool in ServMod. Make QR and barcode stickers and print them.", "draft", "Draft, bench only"),
  ("Zodiac Printers", "Library of Zodiac printer clone files sorted by machine and date, with label preview, compare and copy to a pendrive for the printer.", "draft", "Draft, bench only"),
@@ -187,7 +190,7 @@ MODULES = [
  ("Backup", "Encrypted copy of the app's own data (settings, drive backups, notes, photos, tags) to a folder you choose, such as Google Drive, with restore on a new phone and an optional daily copy.", "test", "In field testing"),
  ("Steppers", "Stepper motor test bench through the ServMod Box: run, jog, moves, speed and acceleration ladders, resonance sweep and endurance tests. A simulator is included.", "draft", "Draft, bench only"),
  ("HMI", "Remote operator panel for PLCs: live inputs, outputs, analog values, timers, counters, setpoints, trends and alarms. It runs on a built-in simulator for now; real protocols are added step by step.", "draft", "Draft, simulator only"),
- ("Siemens OP17", "Loader for Siemens OP17 operator panels: record a ProTool / ProSave transfer into a backup file and write it to a spare panel. Experimental, for spare panels only.", "draft", "Draft, bench only"),
+ ("Siemens OP17", "Loader for Siemens OP17 operator panels: read the panel memory directly or record a ProTool / ProSave transfer, import ProSave .psr files, and write to a spare panel. Writing has worked on spare panels; experimental, for spare panels only.", "test", "In field testing, spare panels only"),
  ("PLC", "Read Omron (FINS over UDP) and Allen-Bradley (EtherNet/IP) controllers with live values and a change list. It never writes to the PLC.", "draft", "Draft, bench only"),
  ("Condition", "Vibration and sound checks with history, to compare before and after service.", "test", "In field testing"),
  ("Network", "Wi-Fi, Ethernet and Bluetooth analyser, ping, port scan and Modbus TCP read.", "test", "In field testing"),
@@ -196,7 +199,7 @@ MODULES = [
  ("Notes", "Service notes with photos and drawing on top of the photo.", "ready", "Ready"),
  ("Parts", "Search the warehouse list on the phone. Import CSV or XLSX files with automatic column matching.", "ready", "Ready"),
  ("My Stuff", "Your manuals: PDFs you download and keep offline, opened from the phone or by an NFC tag or barcode.", "draft", "Draft, bench only"),
- ("ESP32 Loader", "Flash ESP32, ESP32-S3 and CYD boards over USB from .bin files, with checksum verification.", "ready", "Ready"),
+ ("ESP32 Loader", "Flash ESP32, ESP32-S3 and CYD boards over USB from .bin files, with checksum verification. Pro users can download the ServMod Box firmware straight into the loader.", "ready", "Ready"),
 ]
 def status_legend():
     return '<div class="legend"><span class="st">Ready</span><span class="st test">In field testing</span><span class="st draft">Draft</span><span class="st plan">Planned</span></div>'
@@ -271,9 +274,15 @@ def home():
 
 def features():
     cards = [
-     ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525, Danfoss FC 280 and VLT 2800 and Lenze 8400 are tested on real drives. Omron MX2, Mitsubishi FR-D700, Schneider ATV320, Siemens V20, Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500 and Yaskawa GA500 are new and not yet tried on a drive. Hitachi WL200 and Danfoss FC 280 also work over their USB cable.", [
+     ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525 (also through the ServMod Box), Danfoss FC 280 and VLT 2800 and Lenze 8400 are tested on real drives. Omron MX2, Mitsubishi FR-D700, Schneider ATV320, Siemens V20, Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500 and Yaskawa GA500 are new and not yet tried on a drive. Hitachi WL200, WJ-C1 and Danfoss FC 280 also work over their USB cable. Next release: Danfoss FC 302 (USB and RS-485), Mitsubishi FR-E800 and Hitachi SJ200 (RS-485).", [
         "Read all parameters and keep the backup on the phone", "Restore a backup to the drive", "Compare a backup with the drive, or the drive with factory settings",
         "Edit a single parameter", "Run the motor manually from the Control screen", "Faults screen with causes and reset notes from the manual (Hitachi WJ200)"]),
+     ("Setup and drive converter (next release)", "A guided way to set up a drive from the motor nameplate. Draft: not yet used on a production drive.", [
+        "Motor, brand, drive and layout in four steps; sizes and currents are checked against the nameplate", "Layouts for start/stop, preset speeds, 4-20 mA, second ramp, PID, Modbus and more, with notes from the manual highlighted", "Result is a backup file you write with Restore, or keep as your own saved setup", "Drive converter: replace a drive with another brand from the old drive's backup and see which parameters have no equivalent", "Nameplate (in Tools): photo of the motor plate read by AI with your own Gemini key"]),
+     ("EzSQ programs on Hitachi drives (next release)", "The small built-in programs of Hitachi WL200 and WJ-C1.", [
+        "Edit a program as a list of steps, with a check while you edit", "Ready-made programs: mixers, counters, sequences, sensors and more", "Emulator on the phone with input switches, output lights and timers before you load anything", "Read a program from a drive, clone it to another, write it back and set the drive up to run it", "Checked on WL200 and WJ-C1; some ready-made programs are not yet tried on a machine"]),
+     ("Bilwinco boards and Siemens OP17 (next release)", "Backup and restore of machine controllers and operator panels.", [
+        "Bilwinco Q20: main program, PLC and product data to a folder per machine, restore, import of zip files", "Works through a USB-RS232 adapter or the ServMod Box over Wi-Fi or Bluetooth", "Siemens OP17: read the panel memory directly, import ProSave files, restore to a spare panel", "Written to spare panels and boards; use on production machines at your own risk"]),
      ("Printers", "Honeywell PM45 thermal label printers over a USB-Ethernet adapter.", [
         "Test the Ethernet port and test-print", "Cable check: counts link drops, lost replies, delay and speed to show a corroded plug or a damaged cable", "Keep your own printer list and test one or all", "PM45 fault guide: error alerts, front panel LEDs, print, network and RFID problems"]),
      ("Tools", "The phone's sensors and camera as service instruments.", [
@@ -301,19 +310,22 @@ def features():
      ("Condition, Network and My Stuff", "Vibration and sound checks with history, Wi-Fi, Ethernet and Bluetooth analysis with ping, port scan and Modbus TCP read, and your own manuals kept offline.", ["In field testing"]),
     ]
     sec = "".join(f'<section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">{t}</h2><p class="intro">{d}</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none">' + "".join(f'<li style="padding:12px 0;border-bottom:1px solid var(--line)">{x}</li>' for x in items) + "</ul></div></section>" for t, d, items in cards)
-    body = f'<div class="wrap page" style="padding-bottom:0"><h1>Modules</h1><p class="intro">What each part of ServMod does today. Status labels are honest: release {APP_VERSION} is in testing, and modules marked draft have not been tried on live equipment yet.</p><div style="margin-top:26px">{status_legend()}</div></div>' + sec
+    body = f'<div class="wrap page" style="padding-bottom:0"><h1>Modules</h1><p class="intro">What each part of ServMod does today. Status labels are honest: release {APP_VERSION} is in testing, and modules marked draft have not been tried on live equipment yet. Items marked "next release" are in the development build and not yet in the public download.</p><div style="margin-top:26px">{status_legend()}</div></div>' + sec
     return page("features", "Modules", "Everything ServMod does: inverters, printers, phone-sensor tools, USB stick tools, NFC and barcode labels, read-only PLC, calculators, encrypted passwords, notes, parts search and an ESP32 loader.", body, "/features.html")
 
 def equipment():
     T, N = "Tested on a drive", "Not yet tried on a drive"
     drives = [("Hitachi WL200", "USB cable (mini-USB) or USB-RS485 adapter", T),
-              ("Hitachi WJ200 / WJ-C1", "USB-RS485 adapter on the RS-485 terminals, or USB through the ServMod Box. The phone's own USB port does not power it yet.", T),
-              ("Allen-Bradley PowerFlex 520 / 525", "USB-RS485 adapter on the DSI port", T + " (525)"),
+              ("Hitachi WJ200 / WJ-C1", "USB-RS485 adapter on the RS-485 terminals, USB through the ServMod Box, or the phone's own USB port (WJ-C1)", T),
+              ("Hitachi SJ200 (next release)", "RS-485: USB-RS485 adapter or the ServMod Box. Register map from the manual.", N),
+              ("Allen-Bradley PowerFlex 520 / 525", "USB-RS485 adapter on the DSI port, or the ServMod Box", T + " (525)"),
               ("Danfoss VLT FC 280", "USB cable, or USB-RS485 adapter on terminals 68 and 69", T),
+              ("Danfoss VLT FC 302 (next release)", "USB cable or USB-RS485 adapter; USB through the Box is being tested. Read and backup checked on a drive; restore and factory reset not yet.", "Partly tested"),
               ("Danfoss VLT 2800", "USB-RS485 adapter on terminals 68 and 69", T),
-              ("Lenze 8400 StateLine C", "CAN through the ServMod Box", T),
+              ("Lenze 8400 StateLine C", "CAN through the ServMod Box. A USB-CAN adapter (slcan) is coming and is not yet tried.", T),
               ("Omron 3G3MX2 (MX2-V2)", "USB-RS485 adapter", N),
               ("Mitsubishi FR-D700", "RS-485 adapter", N),
+              ("Mitsubishi FR-E800 (next release)", "PU port RJ45 through an RS-485 adapter or the ServMod Box", T),
               ("Schneider ATV320", "RS-485 adapter, Modbus RTU", N),
               ("Siemens SINAMICS V20", "RS-485 adapter on terminals P+ and N- (6 and 7)", N),
               ("Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500, Yaskawa GA500", "RS-485 adapter, Modbus RTU", N)]
@@ -333,6 +345,11 @@ def equipment():
 <tr><td>Mitsubishi</td><td>MC protocol</td><td>Planned. Usually needs a port opened in GX Works.</td></tr>
 </tbody></table></div>
 <p class="intro" style="margin-top:16px">Siemens is not supported: it needs the PUT/GET function unlocked in the controller. The PLC module is a draft and has been tested on a simulator only.</p>
+<h2 style="margin-top:56px;font-size:1.6rem">Control boards and panels</h2>
+<div class="scroll" style="margin-top:16px"><table class="tbl"><thead><tr><th>Device</th><th>Connection</th><th>Status</th></tr></thead><tbody>
+<tr><td>Bilwinco Q20 control board (next release)</td><td>USB-RS232 adapter or the ServMod Box (Wi-Fi or Bluetooth)</td><td>Backup and restore checked on a board</td></tr>
+<tr><td>Siemens OP17 operator panel</td><td>USB-RS232 adapter on the phone or in the ServMod Box</td><td>Write checked on spare panels</td></tr>
+</tbody></table></div>
 <h2 style="margin-top:56px;font-size:1.6rem">Printers</h2>
 <p class="intro" style="margin-top:12px">Honeywell PM45 industrial thermal label printers, over Ethernet through a USB-C Ethernet adapter. The Cable check can also test the cable between the phone and any other network device.</p>
 <h2 style="margin-top:56px;font-size:1.6rem">Adapters</h2>
@@ -581,7 +598,7 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 </ol>
 <p>ServMod is not a safety function and must never be used as an emergency stop.</p>
 <h2>Buying a licence</h2><p>Pro and Subscription are digital licences sold by the author (DG, United Kingdom) through servmod.com and the app, paid by card or PayPal. Prices are shown before you pay and include all taxes. The licence terms are on the <a href="/licence.html">licence page</a> and refunds are covered on the <a href="/refunds.html">refunds page</a>. The Free plan never expires. These terms are governed by the laws of the United Kingdom, and nothing in them takes away your statutory consumer rights.</p>"""
-PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
+PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. One other exception: the optional Nameplate tool can send a photo of a motor plate to the Google Gemini API when you tap "Read with AI". It uses your own API key, stored only on your phone, and the photo goes straight from the phone to Google, not through us. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
 <p>The Device ID shown in the app is a code derived from your phone. It is used only to create your activation code. The update check downloads one small file and sends no identifier.</p>
 <h2>This website</h2><p>The site uses no advertising cookies and no third-party analytics. To see whether anyone visits, our own server counts page views and download clicks: it stores the page, the date and a one-way hash of your IP address and browser that changes every day, so a visitor cannot be followed from one day to the next, and it never stores the IP address itself. Fonts are served from this site, not from a third party. Cloudflare delivers the site and may process technical request data such as IP address to protect and speed it up.</p>
 <h2>Requests</h2><p>If you send a request for a drive, protocol or feature we store what you wrote, the time, and your email address only if you gave one. We use it to decide what to build and to reply if you asked for a reply. We do not add you to any list and we do not share requests.</p><h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to tell you when a new version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
