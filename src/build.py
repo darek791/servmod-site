@@ -31,7 +31,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
 <meta property="og:type" content="website"><meta property="og:site_name" content="ServMod">
 <meta property="og:title" content="{html.escape(full_title)}"><meta property="og:description" content="{html.escape(desc)}">
-<meta property="og:url" content="{DOMAIN}{path}"><meta property="og:image" content="{DOMAIN}/assets/og.png">
+<meta property="og:url" content="{DOMAIN}{path}"><meta name="p:domain_verify" content="d3d0d5627071baaf4ef495d2c081324a"><meta property="og:image" content="{DOMAIN}/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 {robots}
 <link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
