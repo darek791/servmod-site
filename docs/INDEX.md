@@ -122,3 +122,9 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Privacy: Nameplate "Read with AI" sends the photo to Google Gemini with the user's own key (stated explicitly; app otherwise offline).
 - Box firmware on /modbox.html stays 0.9.1: BOX firmware 0.9.2 (Danfoss HID on USB host, contract 1.7) is not compiled or tested, so not published. Source of truth: `_komunikacja/STATUS.md`.
 - When the owner publishes a new APK: bump `APP_VERSION`, drop the "next release" marks for what shipped.
+
+## Pinterest, started 2026-11-17
+- New business profile "Servmod.com" (@servmodpins), created by DG on a separate login. Domain servmod.com claimed and verified (meta `p:domain_verify` in the head of every page, set in `src/build.py`, commit 7eeae61).
+- Pin texts for 7 app and site screenshots: `pinterest_pins.csv` (title, description, alt, board, destination URL with UTM `utm_source=pinterest`). Screens of next-release features (Nameplate, Setup, EzSQ, new brands) are deliberately left out until the next release is published.
+- Traffic from Pinterest shows in the admin "Visits" panel as a referrer.
+- Open: per-page `og:image`, Rich Pins, boards and first pins (DG).
