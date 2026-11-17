@@ -128,3 +128,10 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Pin texts for 7 app and site screenshots: `pinterest_pins.csv` (title, description, alt, board, destination URL with UTM `utm_source=pinterest`). Screens of next-release features (Nameplate, Setup, EzSQ, new brands) are deliberately left out until the next release is published.
 - Traffic from Pinterest shows in the admin "Visits" panel as a referrer.
 - Open: per-page `og:image`, Rich Pins, boards and first pins (DG).
+
+## SEO: fault-code and parameter pages, 2026-11-17
+- New `src/faults.py` builds static, indexable pages from `manuals_src/data/*.json` (our own summaries with manual page numbers): `/fault-codes/` hub, `/fault-codes/<drive>/` (WJ200, FC 280, MX2, PowerFlex 520) and one page per code (175), plus `/parameters/<drive>/` lists. Site is now 222 pages, sitemap 220 URLs (checked live, HTTP 200).
+- Internal links: nav "Fault codes" now points to `/fault-codes/`; device pages link to their fault hub; `/manuals/` (search tool) lists static links; every fault page links to the device page, wiring and download.
+- Each page has its own title and description, BreadcrumbList JSON-LD, and the standard disclaimer. No duplicate titles or descriptions across the site.
+- Pinterest: tool `pinterest_servmod.js` (menu option PS in AI Business System) pins from `C:\ComfyUI\servmod_pins\pinterest_pins.csv` (52 pins: app screenshots and 42 wiring diagrams). Domain claimed and verified.
+- Next ideas: fault pages for Lenze 8400, Mitsubishi and Hitachi WL200 once we have data; Google Ads on narrow model queries; submit the new sitemap in Search Console (already known to Google).
