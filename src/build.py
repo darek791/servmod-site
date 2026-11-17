@@ -765,7 +765,7 @@ def modbox():
   <h2 style="font-size:1.5rem;margin:34px 0 10px">Updating later</h2>
   <p>When a new firmware is published, this page shows the new version. Repeat the flashing steps above with the new file. Compare the SHA-256 shown next to each file if you want to check the download.</p>
 </section>
-<p class="hint" style="margin-top:34px">Honest status: the DevKit Box firmware 0.9.1 was flashed from a phone and started. The mini build is experimental and has not been flashed on a board yet. Building and using hardware is at your own risk, see the <a href="/terms.html">terms</a>.</p>
+<p class="hint" style="margin-top:34px">Honest status: both the DevKit Box and the mini run the newer firmware 0.9.2 on the author's own boards. The files offered above are still the older 0.9.1; the 0.9.2 files will replace them here once they are published, and this page then shows the new version. Building and using hardware is at your own risk, see the <a href="/terms.html">terms</a>.</p>
 </div>"""
     return page("", "Build your own ServMod Box", "Pro users: wiring drawings and ready-to-flash firmware for the ServMod Box (ESP32-S3), with step-by-step flashing from your phone.", body, "/modbox.html", extra_head='<script src="/modbox.js" defer></script>')
 
