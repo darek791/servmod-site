@@ -296,8 +296,8 @@ def home():
     <div class="actions"><a class="btn" href="/pricing.html">See plans and prices</a><a class="btn ghost" href="/support.html">Ask a question</a></div>
   </div>
 </div></section>"""
-    return page("home", "ServMod - service toolbox for maintenance engineers on Android",
-        "ServMod reads, backs up and compares inverter parameters from an Android phone over USB-RS485, USB and CAN. Hitachi, Allen-Bradley, Danfoss, Lenze and more drives, label printers, phone-sensor tools and more, offline.", body, "/")
+    return page("home", "ServMod - VFD and frequency inverter backup, parameters and fault codes on Android",
+        "Back up, compare and write the parameters of VFDs, frequency inverters and AC drives from an Android phone (USB-RS485, USB, CAN). Hitachi, Allen-Bradley, Danfoss, Lenze, Omron, plus fault codes, wiring diagrams and 25+ service tools. Works offline.", body, "/")
 
 def features():
     cards = [
