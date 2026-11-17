@@ -168,6 +168,21 @@ def paypal_return(token: str = ""):
 # ---------- Stripe
 STRIPE = "https://api.stripe.com/v1"
 
+def _owns_pro(req, dev):
+    """True when the caller is signed in with Pro/ALL, or the Device ID holds an active Pro licence."""
+    def pro(f):
+        parts = {x.strip() for x in (f or "").split(",")}
+        return "PRO" in parts or "ALL" in parts
+    u = core.session_user(req.cookies.get("sm_session"))
+    if u:
+        for e in core.q("SELECT features FROM entitlements WHERE user_id=? AND revoked=0", (u["id"],)).fetchall():
+            if pro(e["features"]): return True
+    if dev:
+        for r in core.q("""SELECT e.features FROM licences l JOIN entitlements e ON e.id=l.entitlement_id
+                           WHERE l.device_id=? AND l.released IS NULL AND e.revoked=0""", (dev,)).fetchall():
+            if pro(r["features"]): return True
+    return False
+
 @router.post("/api/shop/checkout")
 async def checkout(req: Request):
     if not is_open(): raise HTTPException(503, "ordering is not open yet")
@@ -186,6 +201,8 @@ async def checkout(req: Request):
     if dev and not core.DEVICE_RE.match(dev): raise HTTPException(400, "invalid Device ID")
     claim = _claim_hash(str(d.get("claim") or "")) if dev else ""
     if dev and not claim: raise HTTPException(400, "claim token required (16-128 characters)")
+    if product == "sub" and not _owns_pro(req, dev):
+        raise HTTPException(403, "The Subscription is for Pro owners. Buy Pro first (sign in, or send the Device ID of a Pro device), then add the Subscription.")
     if provider == "paypal": return {"url": _paypal_create(product, P[product], dev, claim)}
     form = {
         "mode": "payment", "success_url": f"{core.SITE_URL}/pricing.html#paid={'app' if dev else '1'}", "cancel_url": f"{core.SITE_URL}/pricing.html",

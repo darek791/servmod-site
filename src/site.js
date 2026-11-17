@@ -69,8 +69,8 @@
           var b = e.target.closest('button[data-product]'); if (!b) return;
           var m = document.getElementById('shop-msg'); b.disabled = true; m.textContent = 'Opening the payment page...';
           fetch('/api/shop/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'servmod' }, body: JSON.stringify({ product: b.dataset.product, provider: b.dataset.provider }) })
-            .then(function (r) { return r.json(); }).then(function (d) { if (d.url) location.href = d.url; else throw 0; })
-            .catch(function () { m.textContent = 'Could not open the payment page. Please try again later.'; b.disabled = false; });
+            .then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (d) { if (d.url) location.href = d.url; else { var e = new Error(typeof d.detail === 'string' ? d.detail : ''); throw e; } })
+            .catch(function (e) { m.textContent = (e && e.message) ? e.message : 'Could not open the payment page. Please try again later.'; b.disabled = false; });
         });
       }).catch(function () {});
     }

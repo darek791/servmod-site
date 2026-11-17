@@ -254,7 +254,7 @@ def home():
 <section><div class="wrap split">
   <div>
     <h2>Start with the free version</h2>
-    <p class="intro">The Free plan needs no account and no code. Pro and Subscription are one tap away in the app when you need to write to a drive.</p>
+    <p class="intro">The Free plan needs no account and no code. Pro, bought once, unlocks writing to a drive. It is one tap away in the app.</p>
   </div>
   <div><p><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a></p><p class="hint" style="margin-top:10px">Android 7.0 or newer. Prefer an e-mail when a new version ships? <a href="/waitlist.html">Update news</a></p></div>
 </div></section>
@@ -262,10 +262,10 @@ def home():
 <section><div class="wrap split">
   <div>
     <h2>Ordering</h2>
-    <p class="intro">Free to use. Pro and Subscription are one tap away in the app.</p>
+    <p class="intro">Free to use. Pro (one-time) unlocks writing, and it is one tap away in the app.</p>
   </div>
   <div class="stack">
-    <p style="margin:0;color:#d4d4d4">Buy Pro once, or take the yearly Subscription, from the app or from the pricing page. Pay by card or PayPal and the app activates by itself. Each licence is tied to your email, so a lost or replaced phone does not cost you the licence.</p>
+    <p style="margin:0;color:#d4d4d4">Buy Pro once, from the app or from the pricing page. Pro owners can add the yearly Subscription for later updates. Pay by card or PayPal and the app activates by itself. Each licence is tied to your email, so a lost or replaced phone does not cost you the licence.</p>
     <div class="actions"><a class="btn" href="/pricing.html">See plans and prices</a><a class="btn ghost" href="/support.html">Ask a question</a></div>
   </div>
 </div></section>"""
@@ -402,12 +402,12 @@ def pricing():
 <h1>Pricing</h1>
 <p class="intro" id="shop-closed">Ordering is not open yet. Join the waiting list and we will write to you when it is.</p>
 <div class="actions" style="margin-top:28px"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free</a><a class="btn ghost" href="/support.html">Ask before you buy</a></div>
-<table class="plans"><thead><tr><th></th><th>Free</th><th>Pro<br><small>&pound;40 once</small></th><th>Subscription<br><small>&pound;20 / year</small></th></tr></thead><tbody><tr><th scope="row">Connect, read and monitor drives</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Fault history</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Backup to a file and compare</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Cable, wiring and fault-code cheat sheets, field tools</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Write parameters to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Restore a backup to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Manual control (run the motor)</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Fault reset and factory reset</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Unlock writes on the ServMod Box</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Wiring drawings and firmware to <a href="/modbox.html">build your own Box</a></th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Modules and drive brands released after you buy</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Updates of parameter lists and profiles</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr></tbody></table>
-<p class="hint">Pro stays with the version you own. Pro and Subscription are bought separately, and Free needs no code.</p>
+<table class="plans"><thead><tr><th></th><th>Free</th><th>Pro<br><small>&pound;40 once</small></th><th>Subscription<br><small>&pound;20 / year<br>add-on for Pro owners</small></th></tr></thead><tbody><tr><th scope="row">Connect, read and monitor drives</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Fault history</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Backup to a file and compare</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Cable, wiring and fault-code cheat sheets, field tools</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Write parameters to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Restore a backup to a drive</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Manual control (run the motor)</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Fault reset and factory reset</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Unlock writes on the ServMod Box</th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Wiring drawings and firmware to <a href="/modbox.html">build your own Box</a></th><td class="n">&ndash;</td><td class="y">&#10003;</td><td class="n">&ndash;</td></tr><tr><th scope="row">Modules and drive brands released after you buy</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr><tr><th scope="row">Updates of parameter lists and profiles</th><td class="n">&ndash;</td><td class="n">&ndash;</td><td class="y">&#10003;</td></tr></tbody></table>
+<p class="hint">Pro stays with the version you own. The Subscription is an optional add-on for Pro owners: it cannot be bought without Pro. Free needs no code.</p>
 </div><div class="prose">
 <h2 style="margin-top:0">How a licence works</h2>
 <ol>
-<li>In the app open Settings, Subscription, and tap Buy (or buy here on this page).</li>
+<li>In the app open Settings, Subscription, and tap Buy (or buy here on this page). The Subscription is offered once you own Pro.</li>
 <li>Pay by card or PayPal on the payment provider's secure page.</li>
 <li>Go back to the app. It activates by itself in a few seconds.</li>
 <li>A receipt arrives by email. If you lose or replace your phone, sign in with that email and move the licence to the new Device ID.</li></ol>
@@ -415,7 +415,7 @@ def pricing():
 <h2>The plans</h2>
 <ul><li><b>Free:</b> connect, read, monitor, fault history, backup to a file, compare, and all the field tools. No code needed.</li>
 <li><b>Pro:</b> a one-time purchase that adds writing parameters, restore, manual control, fault and factory reset, unlocking writes on the ServMod Box, and the <a href="/modbox.html">wiring drawings and firmware to build your own Box</a>. It stays with the version you own.</li>
-<li><b>Subscription:</b> yearly, for modules and drive brands released after you buy, and for updates of parameter lists and profiles.</li></ul>
+<li><b>Subscription:</b> an optional yearly add-on for Pro owners (it cannot be bought without Pro), for modules and drive brands released after you buy, and for updates of parameter lists and profiles.</li></ul>
 <p><span id="shop-closed2">Prices will be published before ordering opens. </span>Stop always works, in every plan. Prices include all taxes; we are not VAT registered.</p>
 <div id="shop" hidden></div>
 <h2>What stays the same</h2>
@@ -501,7 +501,7 @@ def download():
   <div id="dl-none" hidden><p>The first public version is being published. Leave your e-mail and we will tell you the day it is ready.</p><p><a class="btn ghost" href="/waitlist.html">Update news</a></p></div>
 </div>
 <h2 style="font-size:1.4rem;margin-top:34px">What the free version does</h2>
-<p>Reads and saves drive parameters, compares a backup with a drive, shows faults, and has the cable and wiring cheat sheets. Writing parameters back, restore and manual control are in Pro or Subscription, which you buy inside the app. <a href="/pricing.html">Plans and prices</a>.</p>
+<p>Reads and saves drive parameters, compares a backup with a drive, shows faults, and has the cable and wiring cheat sheets. Writing parameters back, restore and manual control are in Pro, which you buy inside the app. <a href="/pricing.html">Plans and prices</a>.</p>
 </div><div class="prose">
 <h2 id="install" style="margin-top:0">How to install</h2>
 <p class="hint">Android shows a few warnings, because ServMod is not on Google Play yet. They appear for every app installed from outside the store. In every screenshot below, the orange frame marks what to tap.</p>
@@ -613,10 +613,10 @@ REFUNDS = """<p>Last updated 26 October 2026. These terms do not affect your sta
 <h2>Digital delivery and the 14-day right to cancel</h2><p>ServMod licences are digital content. The activation code is issued straight after payment. UK consumers can normally cancel a digital purchase within 14 days, but when you buy you ask us to start delivery at once and you accept that you lose the right to cancel once the code has been issued. We show this wording at checkout.</p>
 <h2>If it does not work for you</h2><p>If the app does not work with your equipment, write to <a href="mailto:support@servmod.com">support@servmod.com</a> within 30 days of purchase and describe the problem. We will try to fix it. If we cannot, we will refund the licence in full.</p>
 <h2>How refunds are paid</h2><p>Refunds go back to the card or PayPal account you paid with, normally within 5 working days of us agreeing the refund. When a refund is paid, the licence for that purchase is withdrawn.</p>
-<h2>Subscription</h2><p>Subscription is a one-year pass. It does not renew by itself and we never charge you again without you buying again.</p>
+<h2>Subscription</h2><p>Subscription is a one-year add-on for Pro owners and is sold only to them. It is a one-year pass. It does not renew by itself and we never charge you again without you buying again.</p>
 <h2>Lost or replaced phone</h2><p>This is not a refund case. Move your licence to the new Device ID from your account page.</p>"""
 LICENCE = """<p>Last updated 26 October 2026.</p>
-<h2>Plans</h2><p><b>Free</b> needs no code. <b>Pro</b> is a one-time purchase that unlocks writing parameters, restore, manual control, fault and factory reset, and keeps working for the version you own. <b>Subscription</b> is yearly and covers modules and drive brands released after you buy, and updates of the parameter lists and profiles. Prices are shown on the <a href="/pricing.html">pricing page</a>.</p>
+<h2>Plans</h2><p><b>Free</b> needs no code. <b>Pro</b> is a one-time purchase that unlocks writing parameters, restore, manual control, fault and factory reset, and keeps working for the version you own. <b>Subscription</b> is an optional yearly add-on for Pro owners and covers modules and drive brands released after you buy, and updates of the parameter lists and profiles. Prices are shown on the <a href="/pricing.html">pricing page</a>.</p>
 <h2>What you get</h2><p>A personal, non-transferable licence to use ServMod on one Android device at a time. The licence belongs to your account email, not to one phone.</p>
 <h2>Activation</h2><p>An activation code is created from your Device ID and signed. The app checks the signature offline. You can move the licence to a new Device ID from your account page if the old phone is lost, broken or replaced; a few moves per year are included.</p>
 <h2>Not allowed</h2><p>Copying, redistributing, sharing activation codes or reverse engineering the app. See also the <a href="/terms.html">terms of use</a>.</p>"""
@@ -730,7 +730,7 @@ def whatsnew():
 <div id="rel"><article class="rel"><h2>0.76.3 <small>26 October 2026</small></h2><ul>
 <li>First public release</li>
 <li>Free plan: read, save and compare drive parameters, faults, cable and wiring cheat sheets</li>
-<li>Pro and Subscription add writing, restore and manual control (bought in the app)</li>
+<li>Pro adds writing, restore and manual control (bought in the app); the yearly Subscription is an add-on for Pro owners</li>
 <li>Some drives and modules are not yet verified on hardware</li></ul></article></div>
 <p class="hint">Want an email when a new version comes out? <a href="/waitlist.html">Update news</a>. Something missing? <a href="/requests.html">Tell us</a>.</p>
 </div></div>"""

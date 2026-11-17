@@ -318,3 +318,24 @@ def test_box_firmware_not_published(c, tmp_path, monkeypatch):
     tok, _ = login(c, "boss@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
     c.post("/api/admin/grant", json={"email": "boss@x.com", "features": "PRO"}, headers=H)
     assert c.get("/api/box/firmware").status_code == 404
+
+
+def test_subscription_only_for_pro_owners(c, monkeypatch):
+    from servmod_api import shop
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x"); monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", "whsec_x")
+    class R:
+        def raise_for_status(self): pass
+        def json(self): return {"url": "https://checkout.stripe.test/x"}
+    monkeypatch.setattr(shop.httpx, "post", lambda url, data=None, **kw: R())
+    tok = "u" * 24
+    # nobody owns Pro: refused, with a readable message
+    r = c.post("/api/shop/checkout", json={"product": "sub", "device_id": "NOPRO-0001", "claim": tok}, headers=H)
+    assert r.status_code == 403 and "Pro" in r.json()["detail"]
+    assert c.post("/api/shop/checkout", json={"product": "sub"}, headers=H).status_code == 403
+    # Pro is bought for this device: now the Subscription may be added
+    obj = {"id": "cs_pro9", "payment_status": "paid", "amount_total": 4000, "currency": "gbp", "customer_details": {"email": "own@x.com"},
+           "metadata": {"product": "pro", "device_id": "OWNPRO-0001", "claim": shop._claim_hash(tok)}}
+    raw, h = _stripe_event("whsec_x", obj)
+    assert c.post("/api/pay/stripe", content=raw, headers=h).status_code == 200
+    r = c.post("/api/shop/checkout", json={"product": "sub", "device_id": "OWNPRO-0001", "claim": tok}, headers=H)
+    assert r.status_code == 200 and r.json()["url"]
