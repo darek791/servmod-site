@@ -1,6 +1,6 @@
 # ServMod website – project index (read this first)
 
-Last updated: 2026-10-15. Keep this file current: when something is added/changed/learned, update it in the same commit.
+Last updated: 2026-11-17. Keep this file current: when something is added/changed/learned, update it in the same commit.
 Mirror on the PC: `C:\Users\grabo\Desktop\Arduino\ServMod\handoff\website\` (copy of `docs/`). Master copy = this repo.
 
 ## What it is
@@ -38,7 +38,7 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - 2026-10-15 content refresh to app 0.55: `APP_VERSION` 0.55, `MODULES` list now 17 tools (added Tools, USB Tools, NFC & Barcode, Zodiac Printers, ServMod Box, Steppers, My Stuff; Danfoss FC 280 in Inverters; Printers cable check), features/equipment/guides updated (Hitachi: WL200 USB ok, WJ200 via RS-485 only). When the app gets new modules, edit `MODULES`, the `features()` cards and `equipment()`/`guides()` in src/build.py.
 - Done: full static site, manuals search, account login, support form (works), licence activation codes, visible Sign-in button.
 - Waiting list built 2026-10-12: send the release e-mail from the account page (admin) when the first public version is published.
-- Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for the owner to show those files), automatic licence e-mail after purchase, publishing the APK (only on "unlock").
+- Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for the owner to show those files), automatic licence e-mail after purchase. (APK is published and downloadable.)
 - Known gotcha: do not reuse DOM id `acct` (account page uses it) – header link is `acct-link`.
 
 
@@ -116,7 +116,7 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Not verified live (server not reachable from the container); local test with real files and a Pro session passed.
 
 ## Content refresh to app 0.99.42, 2026-11-16
-- Published app is 0.97.9 (stable). `APP_VERSION` = 0.97.9. Features from the development builds (0.98.x-0.99.x, not yet published) are on the site marked "next release" with honest status, so the download and the text stay consistent.
+- (Superseded 2026-11-17: published app is now 0.99.52 and the "next release" marks are gone.)
 - MODULES: added Setup (Draft), EzSQ programs (In field testing), Bilwinco boards (In field testing); Siemens OP17 now In field testing (spare panels); Tools mentions Nameplate; ESP32 Loader mentions Box firmware download (Pro).
 - Features cards: Setup and drive converter, EzSQ programs, Bilwinco boards and OP17. Equipment: Hitachi SJ200, Danfoss FC 302 (partly tested), Mitsubishi FR-E800 (tested by owner), WJ-C1 direct USB works, PF525 also through the Box, Lenze USB-CAN planned; new table "Control boards and panels".
 - Privacy: Nameplate "Read with AI" sends the photo to Google Gemini with the user's own key (stated explicitly; app otherwise offline).
@@ -125,7 +125,7 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## Pinterest, started 2026-11-17
 - New business profile "Servmod.com" (@servmodpins), created by DG on a separate login. Domain servmod.com claimed and verified (meta `p:domain_verify` in the head of every page, set in `src/build.py`, commit 7eeae61).
-- Pin texts for 7 app and site screenshots: `pinterest_pins.csv` (title, description, alt, board, destination URL with UTM `utm_source=pinterest`). Screens of next-release features (Nameplate, Setup, EzSQ, new brands) are deliberately left out until the next release is published.
+- Pin texts for 7 app and site screenshots: `pinterest_pins.csv` (title, description, alt, board, destination URL with UTM `utm_source=pinterest`). Nameplate, Setup and EzSQ screens can now be added, with Draft / untested wording.
 - Traffic from Pinterest shows in the admin "Visits" panel as a referrer.
 - Open: per-page `og:image`, Rich Pins, boards and first pins (DG).
 
