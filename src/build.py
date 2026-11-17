@@ -100,7 +100,7 @@ def hero():
     <div class="actions"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works offline, no account needed</li><li><a href="/download.html#install">How to install</a></li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
-  <figure class="heroimg"><p class="herobadge"><b>Read. Back up. Compare.</b> Write.</p><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
+  <figure class="heroimg"><p class="herobadge"><b>One app.</b> {len(MODULES)} tools.</p><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
 </div></section>"""
 
 def strip():
@@ -141,12 +141,14 @@ DIAGRAM = """<section id="how"><div class="wrap">
 
 GALLERY = f"""<section id="app"><div class="wrap">
   <h2>In the app</h2>
-  <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus a wiring cheat sheet for the cable work around it.</p>
+  <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus the toolbox around it: wiring cheat sheets, calculators and more.</p>
   <div class="shots appshots">
     {_card("inv", "ServMod list of supported inverters: Hitachi, Allen-Bradley, Omron, Danfoss, Lenze, Mitsubishi, Delta, INVT, ABB, Inovance", "Choose the drive")}
     {_card("backup", "ServMod backup screen with Create backup, Import CSV and a list of saved backups", "Save the settings, swap the drive")}
     {_card("lenze", "ServMod Compare and write dialog listing three differences between a backup and the inverter, each with a tick box", "Compare, then write only what you tick")}
+    {_card("home", "ServMod home screen with a grid of tools: Inverters, Thermocontrollers, Printers, Condition, Network, Calc, Access, Notes, Parts, PLC, HMI, Manuals and more", "One app for the whole toolbox")}
     {_card("wiring", "ServMod cheat sheet showing the T568B Ethernet wiring colours and pin functions", "Wiring cheat sheet")}
+    {_card("resistor", "ServMod resistor colour band calculator showing 4.7 kilohm with 5 percent tolerance", "Resistor colour codes")}
   </div>
 </div></section>"""
 
@@ -238,7 +240,21 @@ def home():
   <h2>Tested on real drives</h2>
   <p class="intro">These drives have been read, backed up and written on live equipment. Every other drive is listed on the Equipment page with an honest status.</p>
   <ul class="facts" style="margin-top:22px">{tested_links()}</ul>
-  <p class="intro" style="margin-top:22px"><a href="/equipment.html">All supported drives</a> &middot; <a href="/features.html">All {len(MODULES)} tools in the app</a></p>
+  <p class="intro" style="margin-top:22px"><a href="/equipment.html">All supported drives</a></p>
+</div></section>
+
+<section><div class="wrap">
+  <h2>And a whole toolbox beside the drives</h2>
+  <p class="intro">{len(MODULES)} tools in one app, so one phone covers the service bag. Each tool carries an honest status; the full list with statuses is on the <a href="/features.html">Modules page</a>.</p>
+  <div class="rules" style="margin-top:28px">
+    <div><h3>More drive work</h3><p>Setup and drive converter, EzSQ programs, Bilwinco boards, Siemens OP17 panels, the ServMod Box for RS-485, RS-232, CAN and Ethernet. <span class="st test">In field testing</span> and <span class="st draft">Draft</span></p></div>
+    <div><h3>Printers and labels</h3><p>Honeywell PM45 and Zodiac printers: lists, settings, cable check. <span class="st test">In field testing</span></p></div>
+    <div><h3>Machine health and network</h3><p>Vibration and sound checks with history, Wi-Fi and Ethernet analysis with ping, port scan and Modbus TCP read, read-only PLC. <span class="st test">In field testing</span></p></div>
+    <div><h3>Phone sensor tools</h3><p>Spirit level, magnet meter, tachometer, slow motion for fast machines, loupe, strobe, leak finder, ruler, Nameplate reader. <span class="st test">In field testing</span></p></div>
+    <div><h3>Daily office</h3><p>Calc for power, cable size, resistor colours and Ethernet pinouts; Access for encrypted passwords; Notes with annotated photos; Parts search. <span class="st ready">Ready</span></p></div>
+    <div><h3>Boards, sticks and cars</h3><p>ESP32 Loader (<span class="st ready">Ready</span>), USB stick tools, NFC and barcode labels, OBD2 scanner, stepper test panel. <span class="st draft">Draft</span> where not yet tried on live equipment.</p></div>
+  </div>
+  <p class="intro" style="margin-top:22px"><a href="/features.html">All {len(MODULES)} tools with statuses</a></p>
 </div></section>
 
 <section><div class="wrap">

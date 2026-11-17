@@ -148,3 +148,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## 2026-11-17 – Offline wording made accurate
 - Owner decision: Nameplate (photo to Google Gemini, own key) stays. Home hero "Works offline, no account needed"; "Careful by design" card is now "Offline by default" and names the two optional online features (cloud Backup folder, Nameplate); FAQ and meta description adjusted. Privacy page already stated the Gemini exception. Task WWW-008 to APP: first-use warning in Nameplate; offline on-device reading is a later idea.
+
+## 2026-11-17 – Breadth restored on Home
+- Owner: after the Grok-driven cleanup the home looked like a drives-only app, while the price rests on the breadth of the toolbox. Home now: hero badge "One app. {N} tools." (N = len(MODULES)), "Tested on real drives", then a new section "And a whole toolbox beside the drives" with 6 grouped cards, each with an honest status chip (Ready / In field testing / Draft); gallery has the tools home screen and resistor calculator again. The full module table with statuses stays on Modules.
