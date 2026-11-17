@@ -158,3 +158,6 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - `hero-app.jpg` rebuilt: Inverters list, Tools grid, Setup (no FULL badge, no mismatched clocks), over a blurred factory-hall background (ComfyUI servmod_bg3).
 - Screenshots with third-party names/MACs (Condition, Network, Devices) deliberately not used.
 - Modbox page carries the "both Boxes run 0.9.2, files offered still 0.9.1" notice until BOX delivers the bins (WWW-009).
+
+## /servmod/latest.apk fix (2026-11-17)
+- Cause (likely): the API fallback fetched https://servmod.com/servmod/version.json with the default Python user agent, which Cloudflare blocks; the file read itself failed for the service user. Fixes: (1) `servmod-sync.sh` now makes symlink `/var/www/servmod/servmod/latest.apk` -> newest APK on every run (`mklatest`), (2) nginx serves that symlink directly (attachment `ServMod.apk`) and only falls back to the API, (3) API fallback sends a User-Agent and logs why it failed.

@@ -79,6 +79,8 @@ def test_hex_key_format_matches_vendor_script(tmp_path, monkeypatch):
 
 def test_latest_apk_redirect(c, tmp_path, monkeypatch):
     monkeypatch.setenv("FEED_DIR", str(tmp_path))
+    import urllib.request
+    monkeypatch.setattr(urllib.request, "urlopen", lambda *a, **k: (_ for _ in ()).throw(OSError("offline")))
     assert c.get("/api/latest.apk", follow_redirects=False).status_code == 404
     (tmp_path / "version.json").write_text('{"apkUrl":"https://servmod.com/servmod/releases/ServMod-0.27.0.apk"}')
     r = c.get("/api/latest.apk", follow_redirects=False)

@@ -7,6 +7,8 @@ REPO=/var/lib/servmod-repo
 LOCK=/run/servmod-sync.lock
 exec 9>"$LOCK"; flock -n 9 || exit 0
 log(){ echo "$(date -u +%FT%TZ) $*" >> /var/log/servmod-sync.log; }
+mklatest(){ F=/var/www/servmod/servmod; f=$(sed -n 's/.*"apkUrl"[^"]*"[^"]*\/releases\/\([^"\/]*\.apk\)".*/\1/p' $F/version.json 2>/dev/null | head -1); [ -n "$f" ] && [ -f "$F/releases/$f" ] && ln -sfn "releases/$f" $F/latest.apk; }
+mklatest
 if [ ! -d "$REPO/.git" ]; then git clone -q --depth 1 "$REPO_URL" "$REPO" || { log "clone failed"; exit 1; }; fi
 cd "$REPO" || exit 1
 git fetch -q origin main || { log "fetch failed"; exit 1; }
@@ -15,6 +17,7 @@ NEW=$(git rev-parse origin/main); OLD=$(cat /var/lib/servmod-sync.head 2>/dev/nu
 git reset -q --hard origin/main
 [ -f site/index.html ] || { log "abort: site/index.html missing at $NEW"; exit 1; }
 rsync -a --delete --exclude 'servmod/' site/ /var/www/servmod/ && chown -R www-data:www-data /var/www/servmod
+mklatest
 # nginx
 if [ -f nginx/servmod.conf ] && ! cmp -s nginx/servmod.conf /etc/nginx/sites-available/servmod; then
   cp /etc/nginx/sites-available/servmod /etc/nginx/sites-available/servmod.prev 2>/dev/null

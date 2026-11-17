@@ -57,9 +57,11 @@ def latest_apk():
         # feed file not readable by this service (permissions): ask the public feed instead
         try:
             import urllib.request
-            with urllib.request.urlopen(core.SITE_URL + "/servmod/version.json", timeout=5) as r:
+            rq = urllib.request.Request(core.SITE_URL + "/servmod/version.json", headers={"User-Agent": "ServMod-API/1.0"})
+            with urllib.request.urlopen(rq, timeout=5) as r:
                 url = json.load(r)["apkUrl"]
-        except Exception:
+        except Exception as e:
+            logging.getLogger("servmod").warning("latest.apk: feed unreadable: %r", e)
             raise HTTPException(404, "no release published")
     if not url.startswith(core.SITE_URL + "/servmod/releases/"): raise HTTPException(404, "no release published")
     return RedirectResponse(url, 302)
