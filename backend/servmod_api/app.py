@@ -54,7 +54,13 @@ def latest_apk():
         with open(os.environ.get("FEED_DIR", "/var/www/servmod/servmod") + "/version.json", encoding="utf-8") as f:
             url = json.load(f)["apkUrl"]
     except Exception:
-        raise HTTPException(404, "no release published")
+        # feed file not readable by this service (permissions): ask the public feed instead
+        try:
+            import urllib.request
+            with urllib.request.urlopen(core.SITE_URL + "/servmod/version.json", timeout=5) as r:
+                url = json.load(r)["apkUrl"]
+        except Exception:
+            raise HTTPException(404, "no release published")
     if not url.startswith(core.SITE_URL + "/servmod/releases/"): raise HTTPException(404, "no release published")
     return RedirectResponse(url, 302)
 
