@@ -100,7 +100,7 @@ def hero():
     <div class="actions"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a><a class="btn ghost" href="#job">See how a job goes</a></div>
     <ul class="facts"><li>Works fully offline</li><li><a href="/download.html#install">How to install</a></li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
-  <figure class="heroimg"><p class="herobadge"><b>One app.</b> 30+ tools.</p><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
+  <figure class="heroimg"><p class="herobadge"><b>Read. Back up. Compare.</b> Write.</p><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
 </div></section>"""
 
 def strip():
@@ -141,14 +141,12 @@ DIAGRAM = """<section id="how"><div class="wrap">
 
 GALLERY = f"""<section id="app"><div class="wrap">
   <h2>In the app</h2>
-  <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus a pocket cheat sheet for the cable work around it.</p>
+  <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus a wiring cheat sheet for the cable work around it.</p>
   <div class="shots appshots">
     {_card("inv", "ServMod list of supported inverters: Hitachi, Allen-Bradley, Omron, Danfoss, Lenze, Mitsubishi, Delta, INVT, ABB, Inovance", "Choose the drive")}
     {_card("backup", "ServMod backup screen with Create backup, Import CSV and a list of saved backups", "Save the settings, swap the drive")}
     {_card("lenze", "ServMod Compare and write dialog listing three differences between a backup and the inverter, each with a tick box", "Compare, then write only what you tick")}
-    {_card("home", "ServMod home screen with a grid of tools: Inverters, Thermocontrollers, Printers, Condition, Network, Calc, Access, Notes, Parts, PLC, HMI, Manuals and more", "One app for the toolbox")}
     {_card("wiring", "ServMod cheat sheet showing the T568B Ethernet wiring colours and pin functions", "Wiring cheat sheet")}
-    {_card("resistor", "ServMod resistor colour band calculator showing 4.7 kilohm with 5 percent tolerance", "Resistor colour codes")}
   </div>
 </div></section>"""
 
@@ -231,14 +229,16 @@ def waitlist():
 </div></div></div>"""
     return page("", "Update news", "Get an email when a new version of ServMod is released. Rare, no marketing.", body, "/waitlist.html")
 
+def tested_links():
+    return "".join(f'<li><a href="/equipment/{d["slug"]}.html">{d["name"]}</a></li>' for d in DEVICES if d.get("st") == "T")
+
 def home():
     body = hero() + strip() + DIAGRAM + GALLERY + JOB + f"""
 <section><div class="wrap">
-  <h2>One app, {len(MODULES)} tools</h2>
-  <p class="intro">Inverters and printers come first. The rest are tools that live in the same app, so one phone covers the service bag.</p>
-  <div style="margin-top:32px" class="scroll">{status_legend()}
-  <table class="tbl mods"><thead><tr><th>Module</th><th>What it does</th><th>Status</th></tr></thead><tbody>{module_rows()}</tbody></table></div>
-  <p class="intro" style="margin-top:22px"><a href="/features.html">Module details</a></p>
+  <h2>Tested on real drives</h2>
+  <p class="intro">These drives have been read, backed up and written on live equipment. Every other drive is listed on the Equipment page with an honest status.</p>
+  <ul class="facts" style="margin-top:22px">{tested_links()}</ul>
+  <p class="intro" style="margin-top:22px"><a href="/equipment.html">All supported drives</a> &middot; <a href="/features.html">All {len(MODULES)} tools in the app</a></p>
 </div></section>
 
 <section><div class="wrap">
@@ -310,7 +310,7 @@ def features():
      ("Condition, Network and My Stuff", "Vibration and sound checks with history, Wi-Fi, Ethernet and Bluetooth analysis with ping, port scan and Modbus TCP read, and your own manuals kept offline.", ["In field testing"]),
     ]
     sec = "".join(f'<section class="tight"><div class="wrap split"><div><h2 style="font-size:1.8rem">{t}</h2><p class="intro">{d}</p></div><ul class="rules" style="display:block;border:0;margin:0;padding:0;list-style:none">' + "".join(f'<li style="padding:12px 0;border-bottom:1px solid var(--line)">{x}</li>' for x in items) + "</ul></div></section>" for t, d, items in cards)
-    body = f'<div class="wrap page" style="padding-bottom:0"><h1>Modules</h1><p class="intro">What each part of ServMod does today. Status labels are honest: release {APP_VERSION} is in testing, and modules marked draft have not been tried on live equipment yet.</p><div style="margin-top:26px">{status_legend()}</div></div>' + sec
+    body = f'<div class="wrap page" style="padding-bottom:0"><h1>Modules</h1><p class="intro">What each part of ServMod does today ({len(MODULES)} tools). Status labels are honest: release {APP_VERSION} is in testing, and modules marked draft have not been tried on live equipment yet.</p><div style="margin-top:26px">{status_legend()}</div><div class="scroll" style="margin-top:22px"><table class="tbl mods"><thead><tr><th>Module</th><th>What it does</th><th>Status</th></tr></thead><tbody>{module_rows()}</tbody></table></div></div>' + sec
     return page("features", "Modules", "Everything ServMod does: inverters, printers, phone-sensor tools, USB stick tools, NFC and barcode labels, read-only PLC, calculators, encrypted passwords, notes, parts search and an ESP32 loader.", body, "/features.html")
 
 def equipment():
