@@ -10,7 +10,7 @@ TODAY = datetime.date.today().isoformat()
 ICON_SVG = '<svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 NAV = [("features", "/features.html", "Modules"), ("equipment", "/equipment.html", "Equipment"),
-       ("guides", "/guides.html", "Connection guides"), ("manuals", "/manuals/", "Fault codes"), ("pricing", "/pricing.html", "Pricing"),
+       ("guides", "/guides.html", "Connection guides"), ("manuals", "/fault-codes/", "Fault codes"), ("pricing", "/pricing.html", "Pricing"),
        ("about", "/about.html", "About"), ("support", "/support.html", "Support")]
 
 def page(key, title, desc, body, path, extra_head="", noindex=False):
@@ -527,6 +527,7 @@ def manuals():
 <div class="f" style="margin-top:26px"><div class="row"><div><label for="mq">Search</label><input id="mq" type="search" placeholder="E04, F013, P-12, acceleration time" autocomplete="off"></div>
 <div><label for="mm">Drive</label><select id="mm"><option value="">All drives</option></select></div></div></div>
 <div id="mres" style="margin-top:24px"></div>
+<p class="chips"><a href="/fault-codes/wj200/">Hitachi WJ200 fault codes</a><a href="/fault-codes/pf520/">PowerFlex 520 fault codes</a><a href="/fault-codes/mx2/">Omron MX2 fault codes</a><a href="/fault-codes/fc280/">Danfoss FC 280 fault codes</a></p>
 <p class="hint" style="margin-top:30px">These summaries are a quick aid and can contain mistakes or be out of date. Always check the manufacturer's current manual before changing settings on a machine. ServMod is not affiliated with Hitachi, Rockwell Automation, Allen-Bradley, Omron or Danfoss; product names belong to their owners.</p></div>"""
     return page("manuals", "Fault codes and parameters", "Quick look-up of drive fault codes and parameters for Hitachi WJ200, PowerFlex 520, Omron MX2 and Danfoss FC 280, with links to the manufacturer manuals.", body, "/manuals/", extra_head='<script src="/manuals.js" defer></script>')
 
@@ -668,6 +669,7 @@ def wiring_page():
     return page("guides", "Wiring diagrams", "Wiring diagrams for connecting Hitachi, Danfoss, Allen-Bradley, Lenze, Omron, Siemens and other drives, PLCs and panels to the ServMod app with a USB-RS485 adapter or the ServMod Box.", body, "/wiring.html")
 
 from devices import DEVICES
+import faults as FAULTS
 def device_pages():
     out = {}
     badge = {"T": '<span class="st test">Tested on a drive</span>', "N": '<span class="st draft">Not yet tried on a drive</span>', "D": '<span class="st draft">Draft</span>'}
@@ -693,6 +695,7 @@ def device_pages():
             title = f"{n}: backup and write from an Android phone"
             do = "<li>Record a ProTool or ProSave transfer into a backup file on the phone.</li><li>Write the file to a spare panel. Part of the Pro plan.</li>"
             intro = f"Copy the project and system of a {n} to a backup file and write it to a spare panel, with a phone and a USB-RS232 adapter."
+        flink = (f'<p>Fault codes: <a href="{FAULTS.FAULT_LINK[d["slug"]]}">all {n} fault codes with meaning and checks</a>.</p>' if d["slug"] in FAULTS.FAULT_LINK else "")
         same = [x for x in DEVICES if x["brand"] == d["brand"] and x is not d]
         rel = ("<p>Same brand: " + ", ".join(f'<a href="/equipment/{x["slug"]}.html">{x["name"]}</a>' for x in same) + ".</p>") if same else ""
         body = f"""<div class="wrap page"><div class="prose" style="max-width:none">
@@ -709,7 +712,7 @@ def device_pages():
 <ul>{do}</ul>
 <h2>Good to know</h2>
 <ul>{facts}<li>ServMod is an independent tool. It is not made, approved or supported by {d["brand"]}.</li></ul>
-{rel}
+{rel}{flink}
 <p>Using a different {kw}? <a href="/requests.html">Tell us which one you need</a>. See also the <a href="/guides.html">cables and adapters</a> you need.</p>
 </div></div>"""
         ld = '<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -775,6 +778,7 @@ PAGES = {
  "refunds.html": doc("", "Refunds", "How refunds for ServMod licences work.", "/refunds.html", REFUNDS, draft=False),
  "licence.html": doc("", "Licence", "How the ServMod licence and activation work.", "/licence.html", LICENCE, draft=False),
  "manuals/index.html": manuals(),
+ **FAULTS.make(page, DOMAIN, ICON_SVG, HERE),
  "account/index.html": account(),
  "404.html": not_found(),
 }
