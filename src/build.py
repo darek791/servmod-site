@@ -141,12 +141,23 @@ DIAGRAM = """<section id="how"><div class="wrap">
 
 GALLERY = f"""<section id="app"><div class="wrap">
   <h2>In the app</h2>
-  <p class="intro">Screens from ServMod on a phone: choose the drive, back it up, compare and write, plus the toolbox around it: wiring cheat sheets, calculators and more.</p>
+  <p class="intro">Real screens from ServMod on a phone: the drive work first, then the toolbox around it.</p>
+  <h3 class="gal">Drive work</h3>
   <div class="shots appshots">
     {_card("inv", "ServMod list of supported inverters: Hitachi, Allen-Bradley, Omron, Danfoss, Lenze, Mitsubishi, Delta, INVT, ABB, Inovance", "Choose the drive")}
     {_card("backup", "ServMod backup screen with Create backup, Import CSV and a list of saved backups", "Save the settings, swap the drive")}
     {_card("lenze", "ServMod Compare and write dialog listing three differences between a backup and the inverter, each with a tick box", "Compare, then write only what you tick")}
+    {_card("converter", "ServMod Drive converter: pick the old drive's backup, then the new drive brand, with a list of drives marked everything found", "Drive converter: old backup to a new drive (Draft)")}
+    {_card("setup", "ServMod Setup screen with motor, drive and layout chosen, a Start/Stop plus Up/Down wiring diagram and Save file and Write to drive buttons", "Setup: pick the layout, get the wiring (Draft)")}
+    {_card("nameplate", "ServMod Nameplate screen with motor values such as power, frequency, voltage, current, speed and poles filled in from a photo", "Nameplate: optional AI photo reading, always check the values")}
+  </div>
+  <h3 class="gal">The toolbox</h3>
+  <div class="shots appshots">
     {_card("home", "ServMod home screen with a grid of tools: Inverters, Thermocontrollers, Printers, Condition, Network, Calc, Access, Notes, Parts, PLC, HMI, Manuals and more", "One app for the whole toolbox")}
+    {_card("tools", "ServMod Tools grid: Level, Magnet, Tacho, Slow-mo, Loupe, Strobe, Leak, Ruler, Picture, Height, Colour, Solar, Vibration, Pipe/Cable and IR", "Phone-sensor tools, no connection needed")}
+    {_card("solar", "ServMod Solar tool showing a sun path chart and the tilt and direction for aiming a solar panel", "Solar panel aiming")}
+    {_card("plc", "ServMod demo packaging line emulator with simulated inputs and outputs and a note that no PLC is connected", "PLC emulator: simulated data, not tested on hardware (Draft)")}
+    {_card("nfc", "ServMod NFC and Barcode screen with a QR code sticker preview and a button to print twelve stickers", "Labels: QR stickers for backups and tools (Draft)")}
     {_card("wiring", "ServMod cheat sheet showing the T568B Ethernet wiring colours and pin functions", "Wiring cheat sheet")}
     {_card("resistor", "ServMod resistor colour band calculator showing 4.7 kilohm with 5 percent tolerance", "Resistor colour codes")}
   </div>
