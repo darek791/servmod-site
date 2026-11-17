@@ -98,7 +98,7 @@ def hero():
     <h1>Fix it faster. The app remembers for you.</h1>
     <p class="lead">Save the settings of every drive on your phone, then swap a faulty one in minutes: read, store, write to the new drive. Wiring and fault codes are in the app too, so there is less to look up. No laptop, no mobile signal, no software to install on a PC.</p>
     <div class="actions"><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a><a class="btn ghost" href="#job">See how a job goes</a></div>
-    <ul class="facts"><li>Works fully offline</li><li><a href="/download.html#install">How to install</a></li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
+    <ul class="facts"><li>Works offline, no account needed</li><li><a href="/download.html#install">How to install</a></li><li>Android 7.0 or newer</li><li>Hitachi, Allen-Bradley, Danfoss, Lenze and more</li></ul>
   </div>
   <figure class="heroimg"><p class="herobadge"><b>Read. Back up. Compare.</b> Write.</p><img src="/assets/app/hero-app.jpg" width="1600" height="1000" fetchpriority="high" alt="Three Android phones showing ServMod: the list of supported inverters, the tools home screen and the parameter backup screen, in front of an electrical control cabinet"></figure>
 </div></section>"""
@@ -244,7 +244,7 @@ def home():
 <section><div class="wrap">
   <h2>Careful by design</h2>
   <div class="rules">
-    <div><h3>Nothing leaves the phone</h3><p>Backups, printer lists, notes and passwords stay on the device unless you choose a cloud folder for the encrypted Backup copy. The only network request the app makes by itself is the check for a new version.</p></div>
+    <div><h3>Offline by default</h3><p>Backups, printer lists, notes and passwords stay on the phone. Two optional features go online, and only when you choose them: the encrypted Backup copy to your own cloud folder, and Nameplate, which sends a photo of a motor plate to Google Gemini with your own key. The app otherwise only checks for a new version.</p></div>
     <div><h3>The PLC module only reads</h3><p>It has no write function at all, so you can look at a running controller without risking a change.</p></div>
     <div><h3>Passwords stay encrypted</h3><p>The Access vault uses AES-GCM through the Android keystore, hides itself from screenshots, and clears the clipboard after 30 seconds.</p></div>
     <div><h3>Manual names, not nicknames</h3><p>Parameters keep the codes and names from the manufacturer's manual, so what you read on screen matches the paper.</p></div>
@@ -270,7 +270,7 @@ def home():
   </div>
 </div></section>"""
     return page("home", "ServMod - service toolbox for maintenance engineers on Android",
-        "ServMod reads, backs up and compares inverter parameters from an Android phone over USB-RS485, USB and CAN. Hitachi, Allen-Bradley, Danfoss, Lenze and more drives, label printers, phone-sensor tools and more, fully offline.", body, "/")
+        "ServMod reads, backs up and compares inverter parameters from an Android phone over USB-RS485, USB and CAN. Hitachi, Allen-Bradley, Danfoss, Lenze and more drives, label printers, phone-sensor tools and more, offline.", body, "/")
 
 def features():
     cards = [
@@ -424,7 +424,7 @@ def pricing():
     return page("pricing", "Pricing", "ServMod plans and prices: Free, Pro (one-time) and yearly Subscription. How licences, activation codes and accounts work.", body, "/pricing.html")
 
 FAQ = [
- ("Do I need internet to use ServMod?", "No. Everything works offline. The app only goes online if you choose About, Check for updates."),
+ ("Do I need internet to use ServMod?", "No. Drive work, backups, wiring and fault codes all work offline. The app goes online only when you choose it: Check for updates, the optional cloud Backup folder, or Nameplate (Read with AI)."),
  ("Which phone do I need?", "An Android 7.0 or newer phone or tablet with USB host (OTG). Most phones from the last several years have it."),
  ("Which cable or adapter do I need?", "For drives, a USB-RS485 adapter with an FTDI, CP210x, CH34x or CH343 chip. For printers, a USB-C Ethernet adapter. See the connection guides."),
  ("Can it damage my equipment?", "Writing parameters or running a motor can make machinery move or stop unexpectedly. Back up first, check every written value and test on the bench before a production machine. Read the terms of use."),
