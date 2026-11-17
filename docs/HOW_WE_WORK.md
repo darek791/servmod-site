@@ -11,7 +11,7 @@ The owner writes Polish, usually from a phone. Claude answers in Polish; **websi
 ## Rules
 1. Work autonomously; ask only when a decision is irreversible or truly ambiguous.
 2. Secrets (API keys, passwords, Resend key) only typed by the owner in PC prompts, never in chat or repo. Never commit keys, .env, APKs, `license_private.key`, `servmod-release.jks`. These two key files never leave the PC.
-3. Downloads stay locked until he writes "unlock". Publishing a release only on his command (`tools/release.py` from the PC).
+3. APK download is open (since 2026-10-26). Publishing a release only on his command (`tools/release.py` from the PC).
 4. Scripts for him = double-click `.cmd` files, not pasted commands.
 5. Don't delete the old trading-bot files on the server without asking.
 6. Prefer the repo as source of truth: every change committed with a clear message, ending with the attribution lines required by the session.

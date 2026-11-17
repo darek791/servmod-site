@@ -32,12 +32,12 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Domain servmod.com on Cloudflare DNS -> Hetzner server (167.233.108.235; the box formerly ran the trading bots – bot files still there, do not delete without asking). nginx + certbot TLS.
 - Server paths: site `/var/www/servmod/`, **update feed** `/var/www/servmod/servmod/` (never touched by sync), backend `/opt/servmod-app`, data `/var/lib/servmod` (SQLite), licence signing key `/etc/servmod/license_private.key`, repo checkout `/var/lib/servmod-repo`, sync log `/var/log/servmod-sync.log`.
 - Mail: Resend (MAIL_MODE=resend, key in server env, never in repo); inbound support@servmod.com via Cloudflare Email Routing (delivery confirmed 2026-10-11).
-- Update feed: `/servmod/version.json`, `/servmod/beta/version.json`, `/servmod/history.json`, `/servmod/releases/*.apk`. **APK downloads are locked in nginx until the owner says "unlock".**
+- Update feed: `/servmod/version.json`, `/servmod/beta/version.json`, `/servmod/history.json`, `/servmod/releases/*.apk`. **APK download is open (unlocked 2026-10-26); published stable is 0.99.52 (versionCode 427).**
 
 ## Current status / open items
 - 2026-10-15 content refresh to app 0.55: `APP_VERSION` 0.55, `MODULES` list now 17 tools (added Tools, USB Tools, NFC & Barcode, Zodiac Printers, ServMod Box, Steppers, My Stuff; Danfoss FC 280 in Inverters; Printers cable check), features/equipment/guides updated (Hitachi: WL200 USB ok, WJ200 via RS-485 only). When the app gets new modules, edit `MODULES`, the `features()` cards and `equipment()`/`guides()` in src/build.py.
 - Done: full static site, manuals search, account login, support form (works), licence activation codes, visible Sign-in button.
-- Waiting list built 2026-10-12: send the release e-mail from the account page (admin) when the first public version is published, together with the "unlock".
+- Waiting list built 2026-10-12: send the release e-mail from the account page (admin) when the first public version is published.
 - Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for the owner to show those files), automatic licence e-mail after purchase, publishing the APK (only on "unlock").
 - Known gotcha: do not reuse DOM id `acct` (account page uses it) – header link is `acct-link`.
 
@@ -74,7 +74,7 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## 2026-10-26 – Launch wording
 - Refunds, Licence, Privacy and Terms rewritten as final (Draft banner removed on the owner's instruction; not legal advice): 14-day cancellation waiver for digital content, 30-day "does not work" refund, one-year Subscription without auto-renew, "Buying a licence" section in Terms. Checkout consent text (Stripe and under the site buy buttons).
-- Home "Ordering" block and Pricing "How a licence works" describe buying from the app; hero button still "Get notified at release" until APK download is unlocked.
+- Home "Ordering" block and Pricing "How a licence works" describe buying from the app; download is live since 2026-10-26.
 - Stripe LIVE (restricted key, Checkout Sessions Write) and PayPal LIVE keys on the server; tools/set_prices.cmd changes prices only.
 
 ## 2026-10-26 – Images and Requests page
@@ -135,3 +135,8 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Each page has its own title and description, BreadcrumbList JSON-LD, and the standard disclaimer. No duplicate titles or descriptions across the site.
 - Pinterest: tool `pinterest_servmod.js` (menu option PS in AI Business System) pins from `C:\ComfyUI\servmod_pins\pinterest_pins.csv` (52 pins: app screenshots and 42 wiring diagrams). Domain claimed and verified.
 - Next ideas: fault pages for Lenze 8400, Mitsubishi and Hitachi WL200 once we have data; Google Ads on narrow model queries; submit the new sitemap in Search Console (already known to Google).
+
+## 2026-11-17 – Corrections: download live, app 0.99.52
+- Download has worked since 2026-10-26 (earlier notes saying "locked" were stale). Published stable app = 0.99.52 (versionCode 427, feed /servmod/version.json).
+- Site content now matches app 0.99.52 (APP_VERSION in src/build.py); all "next release" wording removed. Honest labels kept: Setup = Draft; Nameplate, Bilwinco and EzSQ untested on hardware unless APP confirms otherwise (task WWW-006).
+- /servmod/latest.apk: backend falls back to the public /servmod/version.json when it cannot read the feed directory (it returned 404 before). Live check pending after deploy.
