@@ -821,6 +821,7 @@ def main():
     import hashlib, re
     def _ver(f): return hashlib.sha1(open(os.path.join(HERE, f), "rb").read()).hexdigest()[:8]
     VERS = {f: _ver(f) for f in ("style.css", "site.js", "account.js", "manuals.js", "modbox.js", "chat.js")}
+    VERS["site.js"] = hashlib.sha1((_ver("site.js") + _ver("chat.js")).encode()).hexdigest()[:8]
     def _bust(html):
         return re.sub(r'(["\'])/(style\.css|site\.js|account\.js|manuals\.js)\1', lambda m: f'{m.group(1)}/{m.group(2)}?v={VERS[m.group(2)]}{m.group(1)}', html)
     for name, content in PAGES.items():
@@ -856,7 +857,7 @@ def main():
     shutil.copy(os.path.join(HERE, "chat.js"), os.path.join(OUT, "chat.js"))
     shutil.copy(os.path.join(HERE, "modbox.js"), os.path.join(OUT, "modbox.js"))
     shutil.copy(os.path.join(HERE, "manuals.js"), os.path.join(OUT, "manuals.js"))
-    shutil.copy(os.path.join(HERE, "site.js"), os.path.join(OUT, "site.js"))
+    open(os.path.join(OUT, "site.js"), "w", encoding="utf-8").write(open(os.path.join(HERE, "site.js"), encoding="utf-8").read().replace("__CHATV__", VERS["chat.js"]))
     urls = [("/", "1.0")] + [(f"/{n}".replace("index.html", ""), "0.7") for n in PAGES if n not in ("index.html", "404.html", "account/index.html")]
     open(os.path.join(OUT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{DOMAIN}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n" for u, p in urls) + "</urlset>\n")
     open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nDisallow: /servmod/\nDisallow: /account/\nDisallow: /api/\nSitemap: {DOMAIN}/sitemap.xml\n")

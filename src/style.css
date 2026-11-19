@@ -291,7 +291,7 @@ li.istep figure.instshot figcaption{text-align:center}
 .chatrow input{flex:1;min-width:0;background:#141a22;color:#fff;border:1px solid #2a323c;border-radius:8px;padding:9px;font-size:16px}
 .chatgo{background:#f28c00;color:#000;border:0;border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer}
 @media(max-width:600px){
- .chatbox{left:8px;right:8px;bottom:auto;top:8px;width:auto;height:calc(100vh - 16px);height:calc(100dvh - 16px);max-height:none;border-radius:12px}
+ .chatbox{left:8px;right:8px;top:auto;bottom:8px;width:auto;height:calc(100vh - 16px);height:calc(100dvh - 16px);max-height:none;border-radius:12px}
  .chatbtn{right:12px;bottom:12px}
  .chathead{position:sticky;top:0;flex:none}
  .chatx{padding:4px 10px;font-size:30px}
