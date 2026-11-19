@@ -170,5 +170,5 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 
 ## Box firmware 0.9.2 prepared (2026-11-19)
 - Owner supplied the two merged images (DevKit 16 MB, mini 4 MB; both contain "0.9.2"). WWW trimmed the empty flash end (full = bootloader+partitions+app up to the end of the app, rounded to 4 KB, 1773568 B each), cut the app-only files at 0x10000 from the same images and checked the embedded application SHA-256. Files + `firmware.json` (version 0.9.2, build_date 2026-11-19, new `changes` text shown on /modbox.html) are in `ServMod\handoff\www_assets\box_firmware`; old manifest kept as `firmware.json.bak_0.9.1`.
-- NOT yet on the server: the owner must run `tools\publish_box_firmware.cmd` (PUBLISH). Danfoss FC 302 over the Box is stated as not confirmed on a drive; mini stays "experimental".
+- NOT yet on the server: the owner must run `tools\publish_box_firmware.cmd` (PUBLISH). Danfoss FC 302 over the Box is stated as not confirmed on a drive; the "experimental" label of the mini was removed on the owner's word (2026-11-19: the mini works).
 - Modbox page notice now says the offered version is shown at the top of the download block.

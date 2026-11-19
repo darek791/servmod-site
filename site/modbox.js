@@ -12,7 +12,7 @@ fetch('/api/box/firmware',{credentials:'same-origin'}).then(function(r){
     $('mb-open').hidden=false;
     $('mb-ver').textContent='version '+m.version+(m.build_date?' ('+m.build_date+')':'')+(m.changes?'. '+m.changes:'');
     $('mb-doc').innerHTML=(m.schematics||[]).filter(function(s){return /\.png$/i.test(s.file)}).map(function(s){
-      var title=/mini/i.test(s.file)?'ServMod Box mini (experimental)':'ServMod Box (ESP32-S3 DevKit)';
+      var title=/mini/i.test(s.file)?'ServMod Box mini (ESP32-S3 Super Mini)':'ServMod Box (ESP32-S3 DevKit)';
       var svg=(m.schematics||[]).filter(function(x){return x.file===s.file.replace(/\.png$/i,'.svg')})[0];
       return '<figure class="instshot"><figcaption><b>'+title+'</b>'+(svg?' · <a href="'+esc(svg.url)+'" target="_blank" rel="noopener">SVG</a>':'')+'</figcaption><a href="'+esc(s.url)+'" target="_blank" rel="noopener"><img src="'+esc(s.url)+'" alt="Wiring diagram: '+title+'" loading="lazy" style="width:100%;height:auto"></a></figure>'}).join('');
     var h='';
