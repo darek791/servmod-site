@@ -30,7 +30,9 @@
       if (window.innerWidth > 600 || box.hidden) { box.style.bottom = box.style.height = box.style.top = ""; return; }
       var vh = v ? v.height : window.innerHeight, below = v ? Math.max(0, window.innerHeight - (v.offsetTop + v.height)) : 0;
       var h = Math.max(220, Math.min(window.innerHeight, vh) - 16);   // whichever viewport the browser shrinks for the keyboard
-      box.style.top = "auto"; box.style.bottom = (below + 8) + "px"; box.style.height = h + "px"; }
+      box.style.top = "auto"; box.style.bottom = (below + 8) + "px"; box.style.height = h + "px";
+      var r = box.getBoundingClientRect();   // some browsers report a taller viewport than they show: measure and trim
+      if (r.top < 8) box.style.height = Math.max(200, h + r.top - 8) + "px"; }
     if (window.visualViewport) { visualViewport.addEventListener("resize", fit); visualViewport.addEventListener("scroll", fit); }
     window.addEventListener("resize", fit); window.addEventListener("orientationchange", fit);
     input.addEventListener("focus", function () { fit(); setTimeout(fit, 150); setTimeout(fit, 500); }); input.addEventListener("blur", function () { setTimeout(fit, 150); });
