@@ -167,3 +167,8 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - LLM = owner's Ollama (qwen2.5:14b on the RTX 3060, GPU1) behind `tools/chat_gateway.py` (key check, fixed model, output limits) on 127.0.0.1:11500 and a Cloudflare Tunnel `llm.servmod.com`. Config `CHAT_URL`, `CHAT_KEY`, `CHAT_MODEL` in `/etc/servmod/pay.env`; without `CHAT_URL` no widget is loaded (`site.js` asks `/api/chat/status`, then loads `chat.js`).
 - Owner steps on the PC: `tools\chat_pc_setup.cmd` (key, cloudflared, tunnel, autostart tasks), then `tools\install_chat_keys.cmd` (server config; `install_chat_keys.cmd OFF` switches it off). Key file `tools/chat_key.txt` is git-ignored.
 - Privacy page has a "Website assistant" section. 23 backend tests pass.
+
+## Box firmware 0.9.2 prepared (2026-11-19)
+- Owner supplied the two merged images (DevKit 16 MB, mini 4 MB; both contain "0.9.2"). WWW trimmed the empty flash end (full = bootloader+partitions+app up to the end of the app, rounded to 4 KB, 1773568 B each), cut the app-only files at 0x10000 from the same images and checked the embedded application SHA-256. Files + `firmware.json` (version 0.9.2, build_date 2026-11-19, new `changes` text shown on /modbox.html) are in `ServMod\handoff\www_assets\box_firmware`; old manifest kept as `firmware.json.bak_0.9.1`.
+- NOT yet on the server: the owner must run `tools\publish_box_firmware.cmd` (PUBLISH). Danfoss FC 302 over the Box is stated as not confirmed on a drive; mini stays "experimental".
+- Modbox page notice now says the offered version is shown at the top of the download block.

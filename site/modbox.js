@@ -10,7 +10,7 @@ fetch('/api/box/firmware',{credentials:'same-origin'}).then(function(r){
   if(!r.ok)return lock('Something went wrong. Please try again in a moment.','Account','/account/');
   return r.json().then(function(m){
     $('mb-open').hidden=false;
-    $('mb-ver').textContent='version '+m.version+(m.build_date?' ('+m.build_date+')':'');
+    $('mb-ver').textContent='version '+m.version+(m.build_date?' ('+m.build_date+')':'')+(m.changes?'. '+m.changes:'');
     $('mb-doc').innerHTML=(m.schematics||[]).filter(function(s){return /\.png$/i.test(s.file)}).map(function(s){
       var title=/mini/i.test(s.file)?'ServMod Box mini (experimental)':'ServMod Box (ESP32-S3 DevKit)';
       var svg=(m.schematics||[]).filter(function(x){return x.file===s.file.replace(/\.png$/i,'.svg')})[0];
