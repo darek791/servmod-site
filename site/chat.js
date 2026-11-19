@@ -25,6 +25,10 @@
     document.body.appendChild(btn); document.body.appendChild(box);
     add("bot", "Hi! Ask me about supported drives, wiring, fault codes, the free version or Pro.");
     function toggle(o) { box.hidden = !o; btn.setAttribute("aria-expanded", o); btn.style.display = o ? "none" : ""; if (o) input.focus(); }
+    function fit() { var v = window.visualViewport; if (!v || window.innerWidth > 600 || box.hidden) { box.style.top = box.style.height = ""; return; }
+      box.style.top = (v.offsetTop + 8) + "px"; box.style.height = (v.height - 16) + "px"; }
+    if (window.visualViewport) { visualViewport.addEventListener("resize", fit); visualViewport.addEventListener("scroll", fit); }
+    var t0 = toggle; toggle = function (o) { t0(o); fit(); if (o) setTimeout(fit, 300); };
     btn.onclick = function () { toggle(true); }; x.onclick = function () { toggle(false); };
     go.onclick = send; input.onkeydown = function (e) { if (e.key === "Enter") send(); };
   }
