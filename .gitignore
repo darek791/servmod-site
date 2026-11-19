@@ -9,3 +9,4 @@ manuals_src/*.pdf
 __pycache__/
 *.pyc
 .pytest_cache/
+tools/chat_key.txt

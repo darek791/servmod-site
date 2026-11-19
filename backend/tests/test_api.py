@@ -341,3 +341,33 @@ def test_subscription_only_for_pro_owners(c, monkeypatch):
     assert c.post("/api/pay/stripe", content=raw, headers=h).status_code == 200
     r = c.post("/api/shop/checkout", json={"product": "sub", "device_id": "OWNPRO-0001", "claim": tok}, headers=H)
     assert r.status_code == 200 and r.json()["url"]
+
+def test_chat_off_by_default_and_on_with_fake_llm(c, monkeypatch):
+    from servmod_api import chat
+    monkeypatch.delenv("CHAT_URL", raising=False)
+    assert c.get("/api/chat/status").json() == {"enabled": False}
+    assert c.post("/api/chat", json={"messages": [{"role": "user", "content": "hi"}]}, headers=H).status_code == 404
+    monkeypatch.setenv("CHAT_URL", "https://llm.example")
+    assert c.get("/api/chat/status").json() == {"enabled": True}
+    seen = {}
+    class R:
+        def raise_for_status(self): pass
+        def json(self): return {"message": {"content": "Use the Hitachi module."}}
+    class AC:
+        def __init__(self, *a, **k): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *a): pass
+        async def post(self, url, json=None, headers=None):
+            seen["body"] = json; seen["h"] = headers; return R()
+    monkeypatch.setattr(chat.httpx, "AsyncClient", AC)
+    r = c.post("/api/chat", json={"messages": [{"role": "user", "content": "What does E01 mean on a Hitachi WJ200?"}]}, headers=H)
+    assert r.status_code == 200 and r.json()["reply"] == "Use the Hitachi module."
+    sysmsg = seen["body"]["messages"][0]["content"]
+    assert "FACTS:" in sysmsg and "Over-current" in sysmsg           # fault data of the named code is added
+    assert c.post("/api/chat", json={"messages": [{"role": "user", "content": "x"}]}).status_code == 403   # needs header
+    assert c.post("/api/chat", json={"messages": [{"role": "assistant", "content": "x"}]}, headers=H).status_code == 400
+    class Bad(AC):
+        async def post(self, *a, **k): raise OSError("down")
+    monkeypatch.setattr(chat.httpx, "AsyncClient", Bad)
+    r = c.post("/api/chat", json={"messages": [{"role": "user", "content": "hello"}]}, headers=H)
+    assert r.json().get("offline") is True and "Support" in r.json()["reply"]

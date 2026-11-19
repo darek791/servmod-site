@@ -626,7 +626,7 @@ TERMS = """<p>ServMod is professional diagnostic and programming software for us
 </ol>
 <p>ServMod is not a safety function and must never be used as an emergency stop.</p>
 <h2>Buying a licence</h2><p>Pro and Subscription are digital licences sold by the author (DG, United Kingdom) through servmod.com and the app, paid by card or PayPal. Prices are shown before you pay and include all taxes. The licence terms are on the <a href="/licence.html">licence page</a> and refunds are covered on the <a href="/refunds.html">refunds page</a>. The Free plan never expires. These terms are governed by the laws of the United Kingdom, and nothing in them takes away your statutory consumer rights.</p>"""
-PRIVACY = """<h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. One other exception: the optional Nameplate tool can send a photo of a motor plate to the Google Gemini API when you tap "Read with AI". It uses your own API key, stored only on your phone, and the photo goes straight from the phone to Google, not through us. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
+PRIVACY = """<h2>Website assistant</h2><p>When the "Ask ServMod" assistant is shown on the site, the text you type is sent to our own server and answered by an AI model that runs on our own computer. It is not sent to any other AI company. We do not store the conversation; we only keep a short-lived counter of requests per visitor to stop abuse. Please do not type personal or confidential data into it. Its answers can be wrong, so always check the manufacturer manual.</p><h2>The app</h2><p>ServMod works offline. It does not send your parameter backups, printer lists, notes, passwords or any other data anywhere. Everything stays on your phone unless you choose to share a file yourself. One other exception: the optional Nameplate tool can send a photo of a motor plate to the Google Gemini API when you tap "Read with AI". It uses your own API key, stored only on your phone, and the photo goes straight from the phone to Google, not through us. The Backup module is the one exception you control: it writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
 <p>The Device ID shown in the app is a code derived from your phone. It is used only to create your activation code. The update check downloads one small file and sends no identifier.</p>
 <h2>This website</h2><p>The site uses no advertising cookies and no third-party analytics. To see whether anyone visits, our own server counts page views and download clicks: it stores the page, the date and a one-way hash of your IP address and browser that changes every day, so a visitor cannot be followed from one day to the next, and it never stores the IP address itself. Fonts are served from this site, not from a third party. Cloudflare delivers the site and may process technical request data such as IP address to protect and speed it up.</p>
 <h2>Requests</h2><p>If you send a request for a drive, protocol or feature we store what you wrote, the time, and your email address only if you gave one. We use it to decide what to build and to reply if you asked for a reply. We do not add you to any list and we do not share requests.</p><h2>Waiting list</h2><p>If you join the waiting list we store your email address, the time you joined and whether you confirmed it, only to tell you when a new version of ServMod is released. We ask you to confirm the address first, every message from us has an unsubscribe link, and unsubscribing deletes the entry. We do not share the list with anyone except the email service that delivers our messages.</p>
@@ -820,7 +820,7 @@ def main():
         if os.path.isfile(p): os.remove(p)
     import hashlib, re
     def _ver(f): return hashlib.sha1(open(os.path.join(HERE, f), "rb").read()).hexdigest()[:8]
-    VERS = {f: _ver(f) for f in ("style.css", "site.js", "account.js", "manuals.js", "modbox.js")}
+    VERS = {f: _ver(f) for f in ("style.css", "site.js", "account.js", "manuals.js", "modbox.js", "chat.js")}
     def _bust(html):
         return re.sub(r'(["\'])/(style\.css|site\.js|account\.js|manuals\.js)\1', lambda m: f'{m.group(1)}/{m.group(2)}?v={VERS[m.group(2)]}{m.group(1)}', html)
     for name, content in PAGES.items():
@@ -833,7 +833,27 @@ def main():
         ms.append(json.load(open(f, encoding="utf-8")))
     os.makedirs(os.path.join(OUT, "manuals"), exist_ok=True)
     json.dump({"manuals": ms}, open(os.path.join(OUT, "manuals", "data.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    # knowledge for the chat assistant (backend/servmod_api/knowledge.json)
+    def _txt(h, n):
+        h = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", h, flags=re.S); h = re.sub(r"<[^>]+>", " ", h)
+        return " ".join(html.unescape(h).split())[:n]
+    import devices as _dv
+    _st = {"T": "tested on a real drive", "N": "not yet tried on a real drive", "D": "draft"}
+    parts = ["TOOLS IN THE APP (status in brackets):"]
+    for m in MODULES: parts.append(f"- {m[0]} [{m[3]}]: {m[1][:230]}")
+    parts.append("DEVICES AND HOW THEY CONNECT:")
+    for d in _dv.DEVICES: parts.append(f"- {d['name']} ({_st.get(d['st'], d['st'])}): " + " | ".join(w[:150] for w in d["ways"][:3]))
+    parts.append("FAQ:")
+    for q, a in FAQ: parts.append(f"Q: {q} A: {a}")
+    for nm, lim in (("pricing.html", 2800), ("refunds.html", 1800), ("licence.html", 1800), ("download.html", 900)):
+        if nm in PAGES: parts.append(f"PAGE /{nm}: " + _txt(PAGES[nm].split("<main", 1)[-1], lim))
+    parts.append(f"Current app version: {APP_VERSION}. Site pages: /features.html (modules), /equipment.html, /wiring.html, /guides.html, /fault-codes/, /support.html, /download.html, /pricing.html.")
+    flt = {}
+    for md in ms:
+        flt[md["id"]] = [dict(drive=md["title"], code=str(f["code"]), name=f["name"], meaning=f["meaning"], checks=f.get("checks", []), page=f.get("page")) for f in md["faults"]]
+    json.dump({"facts": "\n".join(parts), "faults": flt}, open(os.path.join(HERE, "..", "backend", "servmod_api", "knowledge.json"), "w", encoding="utf-8"), ensure_ascii=False)
     shutil.copy(os.path.join(HERE, "account.js"), os.path.join(OUT, "account.js"))
+    shutil.copy(os.path.join(HERE, "chat.js"), os.path.join(OUT, "chat.js"))
     shutil.copy(os.path.join(HERE, "modbox.js"), os.path.join(OUT, "modbox.js"))
     shutil.copy(os.path.join(HERE, "manuals.js"), os.path.join(OUT, "manuals.js"))
     shutil.copy(os.path.join(HERE, "site.js"), os.path.join(OUT, "site.js"))
