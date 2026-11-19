@@ -25,11 +25,16 @@
     document.body.appendChild(btn); document.body.appendChild(box);
     add("bot", "Hi! Ask me about supported drives, wiring, fault codes, the free version or Pro.");
     function toggle(o) { box.hidden = !o; btn.setAttribute("aria-expanded", o); btn.style.display = o ? "none" : ""; if (o) input.focus(); }
-    function fit() { var v = window.visualViewport; if (!v || window.innerWidth > 600 || box.hidden) { box.style.bottom = box.style.height = box.style.top = ""; return; }
-      var below = Math.max(0, window.innerHeight - (v.offsetTop + v.height));
-      box.style.top = "auto"; box.style.bottom = (below + 8) + "px"; box.style.height = Math.max(240, v.height - 16) + "px"; }
+    var timer = 0;
+    function fit() { var v = window.visualViewport;
+      if (window.innerWidth > 600 || box.hidden) { box.style.bottom = box.style.height = box.style.top = ""; return; }
+      var vh = v ? v.height : window.innerHeight, below = v ? Math.max(0, window.innerHeight - (v.offsetTop + v.height)) : 0;
+      var h = Math.max(220, Math.min(window.innerHeight, vh) - 16);   // whichever viewport the browser shrinks for the keyboard
+      box.style.top = "auto"; box.style.bottom = (below + 8) + "px"; box.style.height = h + "px"; }
     if (window.visualViewport) { visualViewport.addEventListener("resize", fit); visualViewport.addEventListener("scroll", fit); }
-    var t0 = toggle; toggle = function (o) { t0(o); fit(); if (o) setTimeout(fit, 300); };
+    window.addEventListener("resize", fit); window.addEventListener("orientationchange", fit);
+    input.addEventListener("focus", function () { fit(); setTimeout(fit, 150); setTimeout(fit, 500); }); input.addEventListener("blur", function () { setTimeout(fit, 150); });
+    var t0 = toggle; toggle = function (o) { t0(o); fit(); clearInterval(timer); if (o) { setTimeout(fit, 300); timer = setInterval(fit, 500); } };
     btn.onclick = function () { toggle(true); }; x.onclick = function () { toggle(false); };
     go.onclick = send; input.onkeydown = function (e) { if (e.key === "Enter") send(); };
   }
