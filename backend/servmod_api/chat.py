@@ -71,7 +71,7 @@ async def chat(req: Request):
             "messages": [{"role": "system", "content": system_prompt(msgs[-1]["content"])}] + msgs,
             "options": {"temperature": 0.2, "num_ctx": 10240, "num_predict": 300}}
     try:
-        async with httpx.AsyncClient(timeout=httpx.Timeout(45, connect=6)) as c:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(85, connect=6)) as c:
             r = await c.post(os.environ["CHAT_URL"].rstrip("/") + "/api/chat", json=body,
                              headers={"X-Chat-Key": os.environ.get("CHAT_KEY", ""), "User-Agent": "ServMod-API/1.0"})
         r.raise_for_status()
