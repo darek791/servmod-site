@@ -24,7 +24,8 @@
     box.appendChild(head); box.appendChild(log); box.appendChild(note); box.appendChild(row);
     document.body.appendChild(btn); document.body.appendChild(box);
     add("bot", "Hi! Ask me about supported drives, wiring, fault codes, the free version or Pro.");
-    function toggle(o) { box.hidden = !o; btn.setAttribute("aria-expanded", o); btn.style.display = o ? "none" : ""; if (o) input.focus(); }
+    var warmed = false;
+    function toggle(o) { if (o && !warmed) { warmed = true; try { fetch("/api/chat/warm", { method: "POST", headers: { "X-Requested-With": "servmod" } }); } catch (e) {} } box.hidden = !o; btn.setAttribute("aria-expanded", o); btn.style.display = o ? "none" : ""; if (o) input.focus(); }
     var timer = 0;
     function fit() { var v = window.visualViewport;
       if (window.innerWidth > 600 || box.hidden) { box.style.bottom = box.style.height = box.style.top = ""; return; }

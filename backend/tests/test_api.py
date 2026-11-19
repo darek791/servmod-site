@@ -365,6 +365,11 @@ def test_chat_off_by_default_and_on_with_fake_llm(c, monkeypatch):
     sysmsg = seen["body"]["messages"][0]["content"]
     assert "FACTS:" in sysmsg and "Over-current" in sysmsg           # fault data of the named code is added
     assert c.post("/api/chat", json={"messages": [{"role": "user", "content": "x"}]}).status_code == 403   # needs header
+    seen.clear()
+    w = c.post("/api/chat/warm", headers=H)
+    assert w.status_code == 200 and w.json()["warm"] == "done" and seen["body"]["options"]["num_predict"] == 1
+    assert c.post("/api/chat/warm", headers=H).json()["warm"] == "skipped"   # global cooldown
+    assert c.post("/api/chat/warm").status_code == 403
     assert c.post("/api/chat", json={"messages": [{"role": "assistant", "content": "x"}]}, headers=H).status_code == 400
     class Bad(AC):
         async def post(self, *a, **k): raise OSError("down")

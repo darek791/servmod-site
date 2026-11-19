@@ -155,4 +155,4 @@
 })();
 
 /* optional customer chat: shown only when the server has it switched on */
-(function(){try{fetch("/api/chat/status").then(function(r){return r.json()}).then(function(d){if(d&&d.enabled){var s=document.createElement("script");s.src="/chat.js?v=69742bd0";s.defer=true;document.body.appendChild(s)}}).catch(function(){})}catch(e){}})();
+(function(){try{fetch("/api/chat/status").then(function(r){return r.json()}).then(function(d){if(d&&d.enabled){var s=document.createElement("script");s.src="/chat.js?v=ea9ab202";s.defer=true;document.body.appendChild(s)}}).catch(function(){})}catch(e){}})();
