@@ -1,6 +1,6 @@
 # ServMod website – project index (read this first)
 
-Last updated: 2026-11-17. Keep this file current: when something is added/changed/learned, update it in the same commit.
+Last updated: 2026-11-20. Keep this file current: when something is added/changed/learned, update it in the same commit.
 Mirror on the PC: `C:\Users\grabo\Desktop\Arduino\ServMod\handoff\website\` (copy of `docs/`). Master copy = this repo.
 
 ## What it is
