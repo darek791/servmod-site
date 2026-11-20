@@ -218,23 +218,6 @@ def module_rows(n=None):
     rows = MODULES if n is None else MODULES[:n]
     return "".join(f'<tr><td><b>{a}</b></td><td>{b}</td><td><span class="st {c}">{d}</span></td></tr>' for a, b, c, d in rows)
 
-def wl_form(uid):
-    return f"""<form class="f wl-form" novalidate style="margin-top:22px;max-width:460px">
-  <div><label for="wl-{uid}">Email</label><input id="wl-{uid}" name="email" type="email" autocomplete="email" required></div>
-  <div class="hp" aria-hidden="true"><label>Leave empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
-  <div><button class="btn" type="submit">Notify me</button></div>
-  <div class="msg" role="status"></div>
-</form>"""
-
-def waitlist():
-    body = """<div class="wrap page"><div class="prose">
-<h1>Update news</h1>
-<div id="wl-status" class="msg" role="status"></div>
-<p class="intro">The update-news list is closed. ServMod is out: get the free version on the <a href="/download.html">download page</a>, and see <a href="/whats-new.html">what's new</a> for each release.</p>
-<p>If you were on the list and have an e-mail from us with an unsubscribe link, open it and your address is removed. You can also write to <a href="mailto:support@servmod.com">support@servmod.com</a>.</p>
-</div></div>"""
-    return page("", "Update news", "The ServMod update-news list is closed.", body, "/waitlist.html")
-
 def tested_links():
     return "".join(f'<li><a href="/equipment/{d["slug"]}.html">{d["name"]}</a></li>' for d in DEVICES if d.get("st") == "T")
 
@@ -654,7 +637,6 @@ DELETE_DATA = """<p>Last updated 20 November 2026. This page explains how to del
 <p>If you downloaded ServMod Box firmware, we kept a short record of the download (time and licence). Write to us to have it deleted.</p>
 <h2>The website and your orders</h2><ul>
 <li><strong>Account</strong>: sign in at <a href="/account/">your account page</a> and delete the account. This removes your login, licences and activation codes.</li>
-<li><strong>Old update-news list</strong> (closed): use the unsubscribe link in any message from us, or write to us, and the entry is deleted.</li>
 <li><strong>Support messages, requests and anything else</strong>: write to <a href="mailto:support@servmod.com">support@servmod.com</a> from the address you used and say what to delete. We reply within one month.</li>
 <li><strong>Website assistant</strong>: we do not store the conversations.</li>
 </ul>
@@ -824,7 +806,7 @@ PAGES = {
  "index.html": home(), "features.html": features(), "equipment.html": equipment(), "guides.html": guides(), "wiring.html": wiring_page(), "whats-new.html": whatsnew(), **device_pages(),
  "pricing.html": pricing(), "support.html": support(), "requests.html": requests_page(), "about.html": about(),
  "terms.html": doc("", "Terms of use", "Terms of use and safety disclaimer for ServMod.", "/terms.html", TERMS, draft=False),
- "modbox.html": modbox(), "waitlist.html": waitlist(), "download.html": download(),
+ "modbox.html": modbox(), "download.html": download(),
  "privacy.html": doc("", "Privacy", "What ServMod and servmod.com do and do not collect.", "/privacy.html", PRIVACY, draft=False),
  "app-privacy.html": doc("", "App privacy (Google Play version)", "What the ServMod app installed from Google Play collects and sends.", "/app-privacy.html", APP_PRIVACY, draft=False),
  "delete-data.html": doc("", "Delete data", "How to delete data connected with ServMod: the app, your account and orders.", "/delete-data.html", DELETE_DATA, draft=False),

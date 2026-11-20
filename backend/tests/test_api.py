@@ -88,44 +88,13 @@ def test_latest_apk_redirect(c, tmp_path, monkeypatch):
     (tmp_path / "version.json").write_text('{"apkUrl":"https://evil.example/x.apk"}')
     assert c.get("/api/latest.apk", follow_redirects=False).status_code == 404
 
-def test_waitlist_closed_but_unsub_works(c):
-    from servmod_api import core
-    assert c.post("/api/waitlist", json={"email": "w@x.com"}, headers=H).status_code == 410
-    core.q("INSERT INTO waitlist(email,created,tok,source) VALUES(?,?,?,?)", ("w@x.com", core.now(), "tok123", "web"))
-    assert c.post("/api/waitlist/unsubscribe", json={"token": "tok123"}, headers=H).status_code == 200
-    assert core.q("SELECT COUNT(*) FROM waitlist").fetchone()[0] == 0
-
-def test_waitlist_account_toggle_and_admin_notify(c, monkeypatch):
-    from servmod_api import mail, core, app as appmod
-    monkeypatch.setattr(appmod.time, "sleep", lambda s: None)
-    tok, _ = login(c, "u@x.com")
-    c.post("/api/auth/verify", json={"token": tok}, headers=H)
-    assert c.get("/api/me").json()["waitlist"] is False
-    assert c.post("/api/waitlist/me", json={"on": True}, headers=H).json()["on"] is True
-    assert c.get("/api/me").json()["waitlist"] is True
-    assert c.post("/api/admin/waitlist/notify", json={"subject": "s", "text": "long enough text", "confirm": True}, headers=H).status_code == 403
-    c.post("/api/auth/logout", headers=H)
-    tok, _ = login(c, "boss@x.com")
-    c.post("/api/auth/verify", json={"token": tok}, headers=H)
-    assert c.get("/api/admin/overview").json()["waitlist"]["confirmed"] == 1
-    assert c.post("/api/admin/waitlist/notify", json={"subject": "Released", "text": "ServMod is out now"}, headers=H).status_code == 400  # needs confirm
-    n = len(mail.OUTBOX)
-    assert c.post("/api/admin/waitlist/notify", json={"subject": "Released", "text": "ServMod is out now", "test": True}, headers=H).json()["test"]
-    assert mail.OUTBOX[-1][0] == "boss@x.com" and len(mail.OUTBOX) == n + 1
-    r = c.post("/api/admin/waitlist/notify", json={"subject": "Released", "text": "ServMod is out now", "confirm": True}, headers=H).json()
-    assert r["queued"] == 1
-    import time; time.sleep(0.3)
-    assert mail.OUTBOX[-1][0] == "u@x.com" and "Unsubscribe" in mail.OUTBOX[-1][2]
-    assert core.q("SELECT notified FROM waitlist").fetchone()[0] is not None
-    assert c.post("/api/admin/waitlist/notify", json={"subject": "Released", "text": "ServMod is out now", "confirm": True}, headers=H).json()["queued"] == 0
-
-
 def _stripe_event(secret, obj, typ="checkout.session.completed", t=None):
     import hmac, hashlib, json, time
     raw = json.dumps({"type": typ, "data": {"object": obj}}).encode()
     t = int(t or time.time())
     sig = hmac.new(secret.encode(), f"{t}.".encode() + raw, hashlib.sha256).hexdigest()
     return raw, {"Stripe-Signature": f"t={t},v1={sig}", "Content-Type": "application/json"}
+
 
 def test_shop_closed_by_default(c):
     assert c.get("/api/shop/config").json()["open"] is False

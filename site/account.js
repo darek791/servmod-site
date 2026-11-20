@@ -13,8 +13,6 @@ function dashboard(){ api('GET','/api/me').then(function(me){ show('a-main'); $(
   $('a-devs').innerHTML=ls.length?ls.map(function(l){return '<div class="mhit"><b>'+esc(l.label||'Phone')+'</b> <span class="hint">'+esc(l.device_id)+' · added '+date(l.created)+'</span><p style="word-break:break-all;font-size:.85rem"><code>'+esc(l.code)+'</code></p><button class="btn ghost" data-rel="'+l.id+'" type="button">Release this phone</button></div>'}).join(''):'<p class="hint">No phone activated yet.</p>';
   if(me.admin) admin(); else $('a-admin').hidden=true;
  }).catch(function(e){ show('a-login'); if(e.status!==401) say('Could not load your account. Try again later.','err') }) }
-var wlN=0;
-function renderWl(w){ if(!$('ad-w')) return; wlN=w.not_yet_notified; $('ad-w').innerHTML='<p>Confirmed: <b>'+w.confirmed+'</b> · waiting for confirmation: '+w.pending+' · not yet notified: '+w.not_yet_notified+'</p>'+w.latest.map(function(r){return '<p class="hint">'+esc(r.email)+' · '+date(r.created)+(r.confirmed?'':' · unconfirmed')+(r.notified?' · notified':'')+' · '+esc(r.source||'')+'</p>'}).join('') }
 function admin(){ $('a-admin').hidden=false; api('GET','/api/admin/overview').then(function(o){
   (function(){var v=o.visits||{daily:[]};var max=Math.max.apply(null,[1].concat(v.daily.map(function(d){return d.views})));
     function row(n,t){return '<b>'+n+'</b>: '+(t?t.views:0)+' views · '+(t?t.visitors:0)+' visitors · '+(t?t.downloads:0)+' download clicks'}
@@ -45,10 +43,6 @@ document.addEventListener('click',function(e){var t=e.target, id;
   else if((id=t.getAttribute&&t.getAttribute('data-close'))) api('POST','/api/admin/ticket',{id:+id,status:'closed'}).then(admin);
   else if((id=t.getAttribute&&t.getAttribute('data-rq'))){e.preventDefault(); var pr=id.split(':'); api('POST','/api/admin/request',{id:+pr[0],status:pr[1]}).then(admin)}
   else if((id=t.getAttribute&&t.getAttribute('data-rev'))){e.preventDefault(); if(confirm('Revoke licence #'+id+'?')) api('POST','/api/admin/revoke',{id:+id}).then(dashboard)}
-  else if(t.id==='ad-wt'||t.id==='ad-ws'){ var test=t.id==='ad-wt', sub=$('ad-ws-sub').value.trim(), txt=$('ad-ws-txt').value.trim();
-    if(!sub||txt.length<10){say('Write a subject and a message first.','err');return}
-    if(!test&&!confirm('Send this to '+wlN+' people on the waiting list? This cannot be undone.'))return;
-    api('POST','/api/admin/waitlist/notify',test?{subject:sub,text:txt,test:true}:{subject:sub,text:txt,confirm:true}).then(function(r){say(test?'Test sent to you.':'Sending to '+r.queued+' people (takes about '+Math.ceil(r.queued*0.6)+' s).');admin()}).catch(function(x){say(x.message,'err')}) }
   else if(t.id==='a-del'){ if(confirm('Delete your account and licences permanently? This cannot be undone.')) api('DELETE','/api/me').then(function(){show('a-login');say('Your account was deleted.')}) } });
 $('a-grant').addEventListener('submit',function(e){e.preventDefault();api('POST','/api/admin/grant',{email:$('g-email').value.trim(),seats:+$('g-seats').value||1}).then(function(){say('Licence granted.');$('g-email').value='';admin()}).catch(function(x){say(x.message,'err')})});
 // magic link: #t=TOKEN (fragment never reaches servers or logs)
