@@ -9,13 +9,12 @@ function show(which){['a-login','a-main'].forEach(function(i){$(i).hidden=(i!==w
 var email='';
 function dashboard(){ api('GET','/api/me').then(function(me){ show('a-main'); $('a-who').textContent=me.email; say('');
   $('a-ents').innerHTML=me.entitlements.length?me.entitlements.map(function(e){return '<p>'+(e.revoked?'<b>Revoked</b> — ':'')+'Licence #'+e.id+' · '+e.seats+' phone'+(e.seats>1?'s':'')+' ('+e.seats_used+' in use) · device moves left this year: '+e.moves_left+'</p>'}).join('')+(me.entitlements.some(function(e){return !e.revoked&&/(^|,)(PRO|ALL)(,|$)/.test(e.features)})?'<p><a href="/modbox.html">Build your own ServMod Box: wiring drawings and firmware</a></p>':''):'<p>There is no licence on this account yet. <a href="/pricing.html">See pricing</a>. If you bought ServMod, make sure you signed in with the e-mail used for the purchase.</p>';
-  $('a-wl').checked=!!me.waitlist;
   var ls=me.licences.filter(function(l){return !l.released});
   $('a-devs').innerHTML=ls.length?ls.map(function(l){return '<div class="mhit"><b>'+esc(l.label||'Phone')+'</b> <span class="hint">'+esc(l.device_id)+' · added '+date(l.created)+'</span><p style="word-break:break-all;font-size:.85rem"><code>'+esc(l.code)+'</code></p><button class="btn ghost" data-rel="'+l.id+'" type="button">Release this phone</button></div>'}).join(''):'<p class="hint">No phone activated yet.</p>';
   if(me.admin) admin(); else $('a-admin').hidden=true;
  }).catch(function(e){ show('a-login'); if(e.status!==401) say('Could not load your account. Try again later.','err') }) }
 var wlN=0;
-function renderWl(w){ wlN=w.not_yet_notified; $('ad-w').innerHTML='<p>Confirmed: <b>'+w.confirmed+'</b> · waiting for confirmation: '+w.pending+' · not yet notified: '+w.not_yet_notified+'</p>'+w.latest.map(function(r){return '<p class="hint">'+esc(r.email)+' · '+date(r.created)+(r.confirmed?'':' · unconfirmed')+(r.notified?' · notified':'')+' · '+esc(r.source||'')+'</p>'}).join('') }
+function renderWl(w){ if(!$('ad-w')) return; wlN=w.not_yet_notified; $('ad-w').innerHTML='<p>Confirmed: <b>'+w.confirmed+'</b> · waiting for confirmation: '+w.pending+' · not yet notified: '+w.not_yet_notified+'</p>'+w.latest.map(function(r){return '<p class="hint">'+esc(r.email)+' · '+date(r.created)+(r.confirmed?'':' · unconfirmed')+(r.notified?' · notified':'')+' · '+esc(r.source||'')+'</p>'}).join('') }
 function admin(){ $('a-admin').hidden=false; api('GET','/api/admin/overview').then(function(o){
   (function(){var v=o.visits||{daily:[]};var max=Math.max.apply(null,[1].concat(v.daily.map(function(d){return d.views})));
     function row(n,t){return '<b>'+n+'</b>: '+(t?t.views:0)+' views · '+(t?t.visitors:0)+' visitors · '+(t?t.downloads:0)+' download clicks'}
@@ -41,7 +40,6 @@ $('a-dev').addEventListener('submit',function(e){e.preventDefault();
     $('a-code-out').innerHTML='<p>Activation code for <b>'+esc(r.device_id)+'</b>. Paste it into ServMod on that phone:</p><p style="word-break:break-all"><code id="a-c">'+esc(r.code)+'</code></p><button class="btn ghost" id="a-copy" type="button">Copy</button>';
     $('a-copy').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(r.code).then(function(){$('a-copy').textContent='Copied'})};
     $('a-did').value='';dashboard()}).catch(function(x){say(x.message,'err')})});
-$('a-wl').addEventListener('change',function(){var on=this.checked; api('POST','/api/waitlist/me',{on:on}).then(function(){say(on?'You will get one email when ServMod is released.':'Removed from the waiting list.')}).catch(function(x){say(x.message,'err')})});
 document.addEventListener('click',function(e){var t=e.target, id;
   if((id=t.getAttribute&&t.getAttribute('data-rel'))){ if(confirm('Release this phone? Its code will stop being yours to reuse; you have a limited number of moves per year.')) api('POST','/api/devices/release',{id:+id}).then(dashboard).catch(function(x){say(x.message,'err')}) }
   else if((id=t.getAttribute&&t.getAttribute('data-close'))) api('POST','/api/admin/ticket',{id:+id,status:'closed'}).then(admin);

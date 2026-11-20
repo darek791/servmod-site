@@ -88,21 +88,11 @@ def test_latest_apk_redirect(c, tmp_path, monkeypatch):
     (tmp_path / "version.json").write_text('{"apkUrl":"https://evil.example/x.apk"}')
     assert c.get("/api/latest.apk", follow_redirects=False).status_code == 404
 
-def test_waitlist_double_optin_and_unsub(c):
-    from servmod_api import mail, core
-    assert c.post("/api/waitlist", json={"email": "bad"}, headers=H).status_code == 400
-    assert c.post("/api/waitlist", json={"email": "w@x.com"}, headers=H).status_code == 200
-    assert len(mail.OUTBOX) == 1
-    tok = re.search(r"#confirm=(\S+)", mail.OUTBOX[-1][2]).group(1)
-    assert core.q("SELECT confirmed FROM waitlist").fetchone()[0] == 0
-    assert c.post("/api/waitlist/confirm", json={"token": "nope"}, headers=H).status_code == 400
-    assert c.post("/api/waitlist/confirm", json={"token": tok}, headers=H).status_code == 200
-    assert core.q("SELECT confirmed FROM waitlist").fetchone()[0] == 1
-    assert c.post("/api/waitlist", json={"email": "w@x.com"}, headers=H).status_code == 200  # generic, nothing more sent
-    assert len(mail.OUTBOX) == 1
-    assert c.post("/api/waitlist", json={"email": "h@x.com", "website": "spam"}, headers=H).status_code == 200
-    assert core.q("SELECT COUNT(*) FROM waitlist").fetchone()[0] == 1  # honeypot
-    assert c.post("/api/waitlist/unsubscribe", json={"token": tok}, headers=H).status_code == 200
+def test_waitlist_closed_but_unsub_works(c):
+    from servmod_api import core
+    assert c.post("/api/waitlist", json={"email": "w@x.com"}, headers=H).status_code == 410
+    core.q("INSERT INTO waitlist(email,created,tok,source) VALUES(?,?,?,?)", ("w@x.com", core.now(), "tok123", "web"))
+    assert c.post("/api/waitlist/unsubscribe", json={"token": "tok123"}, headers=H).status_code == 200
     assert core.q("SELECT COUNT(*) FROM waitlist").fetchone()[0] == 0
 
 def test_waitlist_account_toggle_and_admin_notify(c, monkeypatch):

@@ -192,6 +192,7 @@ def _wl_url(kind, tok): return f"{core.SITE_URL}/waitlist.html#{kind}={tok}"
 
 @app.post("/api/waitlist")
 async def waitlist_join(req: Request):
+    raise HTTPException(410, "the update-news list is closed")
     d = await body(req)
     if d.get("website"): return {"ok": True}  # honeypot
     email = core.norm_email(d.get("email"))

@@ -58,7 +58,7 @@ def page(key, title, desc, body, path, extra_head="", noindex=False):
 FOOTER = f"""<footer><div class="wrap">
   <div class="block">
     <div><img src="/assets/logo-wide.png" width="196" height="34" alt="ServMod"><p>Service toolbox for Android, made for maintenance engineers.</p></div>
-    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/wiring.html">Wiring diagrams</a></li><li><a href="/modbox.html">Build your own Box (Pro)</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/whats-new.html">What's new</a></li><li><a href="/waitlist.html">Update news</a></li></ul></div>
+    <div><h4>Product</h4><ul><li><a href="/features.html">Modules</a></li><li><a href="/equipment.html">Supported equipment</a></li><li><a href="/guides.html">Connection guides</a></li><li><a href="/wiring.html">Wiring diagrams</a></li><li><a href="/modbox.html">Build your own Box (Pro)</a></li><li><a href="/pricing.html">Pricing</a></li><li><a href="/download.html">Download</a></li><li><a href="/whats-new.html">What's new</a></li></ul></div>
     <div><h4>Help</h4><ul><li><a href="/support.html">Support</a></li><li><a href="/support.html#faq">FAQ</a></li><li><a href="/requests.html">Requests</a></li></ul></div>
     <div><h4>Legal</h4><ul><li><a href="/terms.html">Terms of use</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="/app-privacy.html">App privacy</a></li><li><a href="/delete-data.html">Delete data</a></li><li><a href="/refunds.html">Refunds</a></li><li><a href="/licence.html">Licence</a></li></ul></div>
   </div>
@@ -227,20 +227,13 @@ def wl_form(uid):
 </form>"""
 
 def waitlist():
-    body = f"""<div class="wrap page"><div class="split"><div>
-<h1>Be first to know</h1>
+    body = """<div class="wrap page"><div class="prose">
+<h1>Update news</h1>
 <div id="wl-status" class="msg" role="status"></div>
-<p class="intro">ServMod is out: the free version is on the <a href="/download.html">download page</a>. Leave your email address and we will write to you only when a new version or an important change is released. Nothing else.</p>
-{wl_form("page")}
-<p class="hint" style="margin-top:14px">We first send a message to confirm that the address is yours. Unsubscribe with the link in any message from us. See the <a href="/privacy.html">privacy page</a>.</p>
-</div><div class="prose">
-<h2 style="margin-top:0">Prefer an account?</h2>
-<p>Create an account (it only needs your email address and a one-time code, no password) and tick <b>Email me when a new version is released</b> on the account page. It does the same thing, and the account also holds your licence.</p>
-<p><a class="btn ghost" href="/account/">Create an account or sign in</a></p>
-<h2>What you get</h2>
-<ul><li>One email when ServMod is released.</li><li>No newsletter, no ads, no sharing of your address.</li></ul>
-</div></div></div>"""
-    return page("", "Update news", "Get an email when a new version of ServMod is released. Rare, no marketing.", body, "/waitlist.html")
+<p class="intro">The update-news list is closed. ServMod is out: get the free version on the <a href="/download.html">download page</a>, and see <a href="/whats-new.html">what's new</a> for each release.</p>
+<p>If you were on the list and have an e-mail from us with an unsubscribe link, open it and your address is removed. You can also write to <a href="mailto:support@servmod.com">support@servmod.com</a>.</p>
+</div></div>"""
+    return page("", "Update news", "The ServMod update-news list is closed.", body, "/waitlist.html")
 
 def tested_links():
     return "".join(f'<li><a href="/equipment/{d["slug"]}.html">{d["name"]}</a></li>' for d in DEVICES if d.get("st") == "T")
@@ -283,7 +276,7 @@ def home():
     <h2>Start with the free version</h2>
     <p class="intro">The Free plan needs no account and no code. Pro, bought once, unlocks writing to a drive. It is one tap away in the app.</p>
   </div>
-  <div><p><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a></p><p class="hint" style="margin-top:10px">Android 7.0 or newer. Prefer an e-mail when a new version ships? <a href="/waitlist.html">Update news</a></p></div>
+  <div><p><a class="btn" data-dl href="/download.html"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download free for Android</a></p><p class="hint" style="margin-top:10px">Android 7.0 or newer.</p></div>
 </div></section>
 
 <section><div class="wrap split">
@@ -525,7 +518,7 @@ def download():
   <p id="dl-main" hidden><a class="btn" id="dl-btn" href="/servmod/latest.apk">__ICON__ Download free version</a></p>
   <p id="dl-meta" class="hint" hidden></p>
   <p class="hint">Chrome will warn that the file "might be harmful": tap <b>Download anyway</b>. <a href="#install">How to install</a></p>
-  <div id="dl-none" hidden><p>The first public version is being published. Leave your e-mail and we will tell you the day it is ready.</p><p><a class="btn ghost" href="/waitlist.html">Update news</a></p></div>
+  <div id="dl-none" hidden><p>The download is not available right now. Please try again later or write to <a href="mailto:support@servmod.com">support@servmod.com</a>.</p></div>
 </div>
 <h2 style="font-size:1.4rem;margin-top:34px">What the free version does</h2>
 <p>Reads and saves drive parameters, compares a backup with a drive, shows faults, and has the cable and wiring cheat sheets. Writing parameters back, restore and manual control are in Pro, which you buy inside the app. <a href="/pricing.html">Plans and prices</a>.</p>
@@ -588,20 +581,12 @@ def account():
   <div id="a-code-out" style="margin-top:16px"></div>
   <h2 style="font-size:1.5rem;margin:30px 0 10px">Your phones</h2>
   <div id="a-devs"></div>
-  <h2 style="font-size:1.5rem;margin:30px 0 10px">Release news</h2>
-  <p><label><input type="checkbox" id="a-wl"> Email me when a new version of ServMod is released (rarely, no marketing).</label></p>
   <h2 style="font-size:1.5rem;margin:30px 0 10px">Your data</h2>
   <p><a class="btn ghost" href="/api/me/export" download="servmod-account.json">Download my data</a> <button class="btn ghost" id="a-del" type="button">Delete my account</button></p>
 </section>
 <section id="a-admin" hidden>
   <h2 style="font-size:1.5rem;margin:40px 0 10px">Admin</h2>
   <form class="f" id="a-grant" style="max-width:560px" novalidate><div class="row"><div><label for="g-email">Grant a licence to</label><input id="g-email" type="email"></div><div><label for="g-seats">Phones</label><input id="g-seats" type="number" min="1" max="20" value="1"></div></div><div><button class="btn" type="submit">Grant</button></div></form>
-  <h3 style="margin:24px 0 8px">Waiting list</h3><div id="ad-w"></div>
-  <form class="f" id="ad-wf" style="max-width:560px;margin-top:10px" novalidate>
-    <div><label for="ad-ws-sub">Subject</label><input id="ad-ws-sub" maxlength="150"></div>
-    <div><label for="ad-ws-txt">Message (an unsubscribe link is added automatically)</label><textarea id="ad-ws-txt"></textarea></div>
-    <div class="actions"><button class="btn ghost" id="ad-wt" type="button">Send test to me</button> <button class="btn" id="ad-ws" type="button">Send to the waiting list</button></div>
-  </form>
   <h3 style="margin:24px 0 8px">Visits</h3><div id="ad-v"></div>
   <h3 style="margin:24px 0 8px">Requests</h3><div id="ad-r"></div>
   <h3 style="margin:24px 0 8px">Support messages</h3><div id="ad-t"></div>
@@ -669,7 +654,7 @@ DELETE_DATA = """<p>Last updated 20 November 2026. This page explains how to del
 <p>If you downloaded ServMod Box firmware, we kept a short record of the download (time and licence). Write to us to have it deleted.</p>
 <h2>The website and your orders</h2><ul>
 <li><strong>Account</strong>: sign in at <a href="/account/">your account page</a> and delete the account. This removes your login, licences and activation codes.</li>
-<li><strong>Waiting list</strong>: use the unsubscribe link in any message from us. This deletes the entry.</li>
+<li><strong>Old update-news list</strong> (closed): use the unsubscribe link in any message from us, or write to us, and the entry is deleted.</li>
 <li><strong>Support messages, requests and anything else</strong>: write to <a href="mailto:support@servmod.com">support@servmod.com</a> from the address you used and say what to delete. We reply within one month.</li>
 <li><strong>Website assistant</strong>: we do not store the conversations.</li>
 </ul>
@@ -798,7 +783,7 @@ def whatsnew():
 <li>Free plan: read, save and compare drive parameters, faults, cable and wiring cheat sheets</li>
 <li>Pro adds writing, restore and manual control (bought in the app); the yearly Subscription is an add-on for Pro owners</li>
 <li>Some drives and modules are not yet verified on hardware</li></ul></article></div>
-<p class="hint">Want an email when a new version comes out? <a href="/waitlist.html">Update news</a>. Something missing? <a href="/requests.html">Tell us</a>.</p>
+<p class="hint">Something missing? <a href="/requests.html">Tell us</a>.</p>
 </div></div>"""
     return page("", "What's new", "Release notes for every public version of the ServMod Android app: new drives, modules and fixes.", body, "/whats-new.html")
 
