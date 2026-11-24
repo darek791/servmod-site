@@ -5,7 +5,7 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.environ.get("OUT", os.path.join(HERE, "..", "site"))
 DOMAIN = "https://servmod.com"
-APP_VERSION = "0.99.52"
+APP_VERSION = "0.99.55"
 TODAY = datetime.date.today().isoformat()
 ICON_SVG = '<svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
@@ -186,11 +186,11 @@ JOB = """<section id="job"><div class="wrap split">
 </div></section>"""
 
 MODULES = [
- ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525, Danfoss FC 280 and VLT 2800, Lenze 8400 over CAN, and more: Omron MX2, Mitsubishi FR-D700 and FR-E800, Schneider ATV320, Siemens V20, Delta, INVT, ABB, Inovance and Yaskawa. Also Danfoss FC 302, Mitsubishi FR-E800 and Hitachi SJ200. Read, back up, compare, edit, restore, run the motor manually, and look up fault causes. The first six are tested on real drives; the others are new and not yet tried on a drive.", "test", "In field testing"),
+ ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525, Danfoss FC 280 and VLT 2800 (FC 51 in the next release), Lenze 8400 over CAN, and more: Omron MX2, Mitsubishi FR-D700 and FR-E800, Schneider ATV320, Siemens V20, Delta, INVT, ABB, Inovance and Yaskawa. Also Danfoss FC 302, Mitsubishi FR-E800 and Hitachi SJ200. Read, back up, compare, edit, restore, run the motor manually, and look up fault causes. The first six are tested on real drives; the others are new and not yet tried on a drive.", "test", "In field testing"),
  ("Thermocontrollers", "Read and set Omron E5CN temperature controllers over RS-485: present value, setpoint, alarms and parameters.", "draft", "Draft, bench only"),
  ("OBD2 Scanner", "Car diagnostics with an ELM327 adapter (Wi-Fi or Bluetooth): trouble codes with descriptions, freeze frame, live data with CSV recording, VIN and readiness monitors, raw terminal.", "draft", "Draft, bench only"),
  ("Printers", "Check the Ethernet port and test printing on Honeywell PM45 label printers. Cable check finds a corroded plug or damaged cable by counting link drops, lost replies and slow links. Fault guide for the PM45 included.", "test", "In field testing"),
- ("Setup", "Build a drive setup from the motor nameplate: choose motor, brand and drive, pick a layout (start/stop, 4-20 mA, 3 or 7 preset speeds, PID, Modbus and more) and get a backup file with the right parameters and warnings from the manual, ready to write through Restore. Includes a drive converter that turns a backup of an old drive into a setup for another brand.", "draft", "Draft"),
+ ("Setup", "Build a drive setup from the motor nameplate: choose motor, brand and drive, pick a layout (start/stop, 4-20 mA, 3 or 7 preset speeds, PID, Modbus and more) and get a backup file with the right parameters and warnings from the manual, ready to write through Restore. Includes a drive converter that turns a backup of an old drive into a setup for another brand. Next release: layouts for Danfoss VLT 2800 and FC 302 too, built from the manuals and not yet tried on a drive.", "draft", "Draft"),
  ("EzSQ programs", "Write, check, emulate and load the small programs inside Hitachi WL200 and WJ-C1 drives: step editor, ready-made programs, an on-phone emulator with inputs and outputs, read and clone from a drive.", "test", "In field testing"),
  ("Bilwinco boards", "Backup and restore of Bilwinco Q20 control boards (main program, PLC and product data) over a USB-RS232 adapter or the ServMod Box, with one folder per machine.", "test", "In field testing"),
  ("Tools", "Spirit level, magnet meter, tachometer, slow-motion study of fast machines, loupe, strobe, leak finder, ruler, picture measure, colour matcher, solar panel aiming and a sensor explorer, all from the phone's own sensors and camera. Also Nameplate: photograph a motor plate and an AI reads it (needs your own Google Gemini key).", "test", "In field testing"),
@@ -208,7 +208,7 @@ MODULES = [
  ("Calc", "Power, cable size (recommended and minimum), resistor colour code, wiring colours (UK) and Ethernet T568A/B.", "ready", "Ready"),
  ("Access", "Machine passwords in an encrypted vault, unlocked with the phone's screen lock.", "ready", "Ready"),
  ("Notes", "Service notes with photos and drawing on top of the photo.", "ready", "Ready"),
- ("Parts", "Search the warehouse list on the phone. Import CSV or XLSX files with automatic column matching.", "ready", "Ready"),
+ ("Parts", "Search the warehouse list on the phone. Import CSV or XLSX files with automatic column matching. Next release: find a part by taking a photo of it, matched on the phone (optionally with Google Gemini and your own key); not yet tried.", "ready", "Ready"),
  ("My Stuff", "Your manuals: PDFs you download and keep offline, opened from the phone or by an NFC tag or barcode.", "draft", "Draft, bench only"),
  ("ESP32 Loader", "Flash ESP32, ESP32-S3 and CYD boards over USB from .bin files, with checksum verification. Pro users can download the ServMod Box firmware straight into the loader.", "ready", "Ready"),
 ]
@@ -277,7 +277,7 @@ def home():
 
 def features():
     cards = [
-     ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525 (also through the ServMod Box), Danfoss FC 280 and VLT 2800 and Lenze 8400 are tested on real drives. Omron MX2, Mitsubishi FR-D700, Schneider ATV320, Siemens V20, Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500 and Yaskawa GA500 are new and not yet tried on a drive. Hitachi WL200, WJ-C1 and Danfoss FC 280 also work over their USB cable. Also Danfoss FC 302 (USB and RS-485), Mitsubishi FR-E800 and Hitachi SJ200 (RS-485).", [
+     ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525 (also through the ServMod Box), Danfoss FC 280 and VLT 2800 and Lenze 8400 are tested on real drives, and Danfoss FC 51 partly (read, backup, compare and write; in the next release). Omron MX2, Mitsubishi FR-D700, Schneider ATV320, Siemens V20, Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500 and Yaskawa GA500 are new and not yet tried on a drive. Hitachi WL200, WJ-C1 and Danfoss FC 280 also work over their USB cable. Also Danfoss FC 302 (USB and RS-485), Mitsubishi FR-E800 and Hitachi SJ200 (RS-485).", [
         "Read all parameters and keep the backup on the phone", "Restore a backup to the drive", "Compare a backup with the drive, or the drive with factory settings",
         "Edit a single parameter", "Run the motor manually from the Control screen", "Faults screen with causes and reset notes from the manual (Hitachi WJ200)"]),
      ("Setup and drive converter", "A guided way to set up a drive from the motor nameplate. Draft: not yet used on a production drive.", [
@@ -324,7 +324,8 @@ def equipment():
               ("Allen-Bradley PowerFlex 520 / 525", "USB-RS485 adapter on the DSI port, or the ServMod Box", T + " (525)"),
               ("Danfoss VLT FC 280", "USB cable, or USB-RS485 adapter on terminals 68 and 69", T),
               ("Danfoss VLT FC 302", "USB cable or USB-RS485 adapter; USB through the Box is being tested. Read and backup checked on a drive; restore and factory reset not yet.", "Partly tested"),
-              ("Danfoss VLT 2800", "USB-RS485 adapter on terminals 68 and 69", T),
+              ("Danfoss VLT Micro Drive FC 51", "Next release. USB-RS485 adapter on terminals 68 and 69 (RS-485 only). Read, backup, compare and write checked on a drive; start/stop, Setup and the ServMod Box not yet.", "Partly tested"),
+              ("Danfoss VLT 2800", "USB-RS485 adapter on terminals 68 and 69 or on the front DB9 (pins 8 and 9), also through the ServMod Box", T),
               ("Lenze 8400 StateLine C", "CAN through the ServMod Box. A USB-CAN adapter (slcan) is coming and is not yet tried.", T),
               ("Omron 3G3MX2 (MX2-V2)", "USB-RS485 adapter", N),
               ("Mitsubishi FR-D700", "RS-485 adapter", N),
@@ -601,7 +602,7 @@ PRIVACY = """<p>Last updated 20 November 2026. This page covers this website and
 <li><strong>Updates</strong> (version from servmod.com only): it downloads a small version file, and the update file itself when you choose to install it. The request carries the app version number but no personal identifier.</li>
 <li><strong>Buying and activation</strong>: only when you open the purchase or activation screen, the app sends the product, your Device ID and a one-time token to servmod.com. Payment itself is handled by Stripe or PayPal.</li>
 <li><strong>ServMod Box firmware</strong> (licence holders): when you download firmware for the Box, the app sends your licence key to servmod.com so that we can check it.</li>
-<li><strong>Nameplate, Drive ID and Easy AI</strong> (optional): when you tap "Read with AI" and have accepted the notice, the photo you took goes from your phone straight to the Google Gemini API with your own API key, which is stored only on your phone. It does not pass through us.</li>
+<li><strong>Nameplate, Drive ID, Easy AI and Parts photo search</strong> (optional): when you tap "Read with AI" (or use the optional online photo search in Parts) and have accepted the notice, the photo you took goes from your phone straight to the Google Gemini API with your own API key, which is stored only on your phone. It does not pass through us.</li>
 <li><strong>Local network tools</strong>: connections to an address that you type in (for example a PLC, an OBD adapter or the Box) stay on your local network.</li>
 </ul>
 <p>Text and barcode recognition run on the phone through Google Play services, which may download its own recognition model; that is done by Google, not by ServMod. The Backup module writes an encrypted copy to a folder you pick, for example in your own Google Drive, and that provider then holds the file under your account.</p>
@@ -617,7 +618,7 @@ APP_PRIVACY = """<p>Last updated 20 November 2026. This page describes the ServM
 <h2>In short</h2><p>The app has no accounts, no advertising, no analytics and no crash reporting. We do not sell or share your data. Your parameter backups, printer lists, notes, settings, measurements and logs stay on your phone.</p>
 <h2>What the app sends over the internet</h2><ul>
 <li><strong>ServMod Box firmware</strong> (only if you own a licence): when you choose to download firmware for the ServMod Box, the app sends your licence key to servmod.com to check it. We keep a short record of that download (time and the licence it belongs to) to protect the service.</li>
-<li><strong>Google Gemini</strong> (optional): when you tap "Read with AI" in Nameplate, Drive ID or Easy AI and have accepted the notice, the photo you took is sent from your phone to the Google Gemini API with your own API key, which is stored only on your phone. It does not pass through our server. Google processes it under its own terms.</li>
+<li><strong>Google Gemini</strong> (optional): when you tap "Read with AI" in Nameplate, Drive ID or Easy AI, or choose the online photo search in Parts, and have accepted the notice, the photo you took is sent from your phone to the Google Gemini API with your own API key, which is stored only on your phone. It does not pass through our server. Google processes it under its own terms.</li>
 <li><strong>Local network</strong>: connections to an address that you type in (for example a PLC, an OBD adapter or the ServMod Box) stay on your local network.</li>
 </ul>
 <p>This version of the app does not check for updates itself, because Google Play updates it. Text and barcode recognition run on the phone through Google Play services, which may download its own recognition model; that is done by Google, not by ServMod.</p>
@@ -663,7 +664,8 @@ WIRING = [
  ("hitachi-wj200", "Hitachi WJ200", "N", ["hitachi_wj200_1_usb_direct", "hitachi_wj200_2_box_usb", "hitachi_wj200_3_adapter_rs485", "hitachi_wj200_4_box_rs485"]),
  ("pf525", "Allen-Bradley PowerFlex 525", "T", ["pf525_1_adapter_rs485", "pf525_2_box_rs485"]),
  ("danfoss-fc280", "Danfoss VLT FC 280", "T", ["danfoss_fc280_1_usb_direct", "danfoss_fc280_2_adapter_rs485", "danfoss_fc280_3_box_rs485"]),
- ("danfoss-2800", "Danfoss VLT 2800", "T", ["danfoss_vlt2800_1_adapter_rs485", "danfoss_vlt2800_2_box_rs485"]),
+ ("danfoss-2800", "Danfoss VLT 2800", "T", ["danfoss_vlt2800_1_adapter_rs485", "danfoss_vlt2800_2_box_rs485", "danfoss_vlt2800_3_adapter_db9", "danfoss_vlt2800_4_box_db9"]),
+ ("danfoss-fc51", "Danfoss VLT Micro Drive FC 51", "T", ["danfoss_fc51_1_adapter_rs485", "danfoss_fc51_2_box_rs485"]),
  ("lenze8400", "Lenze 8400 (CAN)", "T", ["lenze8400_1_box_can"]),
  ("omron-mx2", "Omron MX2", "N", ["omron_mx2_1_adapter_rs485", "omron_mx2_2_box_rs485"]),
  ("mitsubishi", "Mitsubishi FR-D700", "N", ["mitsubishi_frd700_1_adapter_rs485", "mitsubishi_frd700_2_box_rs485"]),
