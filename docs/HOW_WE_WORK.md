@@ -23,6 +23,6 @@ The owner writes Polish, usually from a phone. Claude answers in Polish; **websi
 3. App work: read `ServMod\handoff\00_START_HERE.md` on the PC.
 
 ## Testing / checks
-- Backend tests: `cd backend && python3 -m pytest tests -q` (10 tests incl. waiting list).
+- Backend tests: `cd backend && python3 -m pytest tests -q` (10 tests).
 - Site: after build, grep generated pages for the change; check mobile width (nav collapses under 780 px).
 - Mail: support form message must be >=10 chars; delivery path form -> Resend -> support@servmod.com (Cloudflare Email Routing).
