@@ -888,3 +888,15 @@ Protokół PROD rozkodowany z przechwytu (RAM: head@0x500, free-block ptr@0x508,
 ## 2026-11-20 WWW: polityka prywatnosci i usuwanie danych pod Google Play
 - Dodane strony /app-privacy.html (wersja Play) i /delete-data.html; poprawiony /privacy.html (wersja ze strony). terms.html bez zmian do decyzji wlasciciela. Kontrakt bez zmian.
 - Czat na stronie: odpowiedzi tylko po angielsku (retry po CJK), fakty o APK, dluzsze odpowiedzi, endpoint rozgrzewki /api/chat/warm (nie jest czescia KONTRAKT).
+
+- 2026-11-20 APP: DECYZJA uzytkownika: testerzy Play zostaja na 0.99.67 (442) przez caly test. 0.99.70 (445; okna edycji + wifi required=false) wgrywamy dopiero przy nastepnej aktualizacji w produkcji. Przyciski Close/Write w tytule okna zaakceptowane (zrzut z telefonu).
+
+## 2026-11-24 (APP, decyzja uzytkownika): nowe marki i falowniki dodajemy jako profil JSON, jesli JSON jest lepszy niz Kotlin (Modbus RTU na wspolnych ekranach). Istniejacy kod Kotlin, ktory nie przeszkadza, zostaje bez zmian i nie jest przenoszony. Kotlin tylko gdy JSON nie wystarcza (CAN, USB HID, protokol FC Danfoss, FC0F, wlasne sumy kontrolne), z uzasadnieniem w STATUS. Cel: ujednolicenie kodu aplikacji, nie wygladu. Opis: claude/servmod-zasada-nowe-marki-json.md.
+
+## 2026-11-24 (APP, decyzja uzytkownika): USB Tools zostaje dla pendrive'ow i kart SD (FAT). Sterownik NTFS/exFAT nie powstaje, zakladka Disk (SMART) bez dalszych prac. Opis: claude/servmod-status-2026-11-24.md.
+
+## 2026-11-20 WWW: lista oczekujacych usunieta (decyzja uzytkownika)
+- Wlasciciel: nikogo nie ma na liscie, usunac calosc. Usuniete: strona /waitlist.html, formularze i linki, pole w koncie, blok wysylki w panelu admina, endpointy /api/waitlist* i /api/admin/waitlist/notify, tabela waitlist (DROP przy starcie). Kontrakt bez zmian (endpointy nie byly w KONTRAKT).
+
+## 2026-11-24 WWW: odswiezenie tresci strony (APP-027)
+- Strona opisuje aplikacje 0.99.55 (feed); nowsze pozycje (FC 51, Setup VLT 2800/FC 302, Parts FIND BY PHOTO) maja etykiete Next release i "not yet tried". Brakujace opisy zlecone w WWW-011. Zmian w kontrakcie: nie.

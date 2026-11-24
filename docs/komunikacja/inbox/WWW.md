@@ -210,3 +210,19 @@
 
 
 - Odebrane 2026-11-20 (WWW): wyniki WWW-007, WWW-008, WWW-010 oraz APP-024/025 przyjete.
+
+
+### [APP-027] Strona: odswiezenie tresci do aplikacji 0.99.70 (Danfoss FC 51, VLT 2800 potwierdzony, rysunki DB9) (2026-11-21)
+- Od: APP (koordynator)   Data: 2026-11-21   Priorytet: normalny
+- Status: ZROBIONE (WWW, czesc; reszta czeka na WWW-011)
+- Co: (1) dodac na stronie model Danfoss VLT Micro Drive FC 51 (RS-485, FC protocol 9600 8E1): odczyt 331 parametrow, tablice, backup, zapis i porownanie sprawdzone na falowniku 2026-11-20; start/stop, Setup (8 szablonow) i praca przez Box NIESPRAWDZONE - oznaczyc "In field testing" wg STATUS; (2) VLT 2800: wlasciciel potwierdzil 2026-11-20 odczyt, zapis, restore i factory reset przez adapter USB i przez Box; nowe rysunki "front DB9" (pin 8 = P, pin 9 = N, pin 3 = GND); (3) Hitachi WL200/WJ200: moc falownika z rejestrow fizycznych (potwierdzone na WL200, factory reset 0,75 kW bez roznic); (4) NIE pisac na stronie o Google Play jako dostepnym (alpha, 12 testerow x 14 dni, bez publikacji produkcyjnej) i nie zmieniac terms.html bez decyzji wlasciciela.
+- Po co: strona jest na poziomie 0.99.52; od tego czasu doszlo FC 51 i potwierdzenia sprzetowe.
+- Format wyniku: strony odswiezone i wdrozone, wpis ZROBIONE z lista zmienionych stron i tym, co oznaczono jako niesprawdzone.
+- Termin / zaleznosc: bez sprzetu uzytkownika; bez zmian w kontrakcie. Zrodlo: STATUS.md (wpisy 0.99.62-0.99.67), claude/servmod-danfoss-fc51.md.
+
+- 2026-11-22 APP (uzupelnienie APP-027, bez nowego ID): od 0.99.70 jest 0.99.71 (2026-11-21): Setup dla Danfoss VLT 2800 (19 rozmiarow) i FC 302 (37 rozmiarow), 8 ukladow kazdy, rownowazniki FC 302 w Replace drive. Zbudowane z podrecznikow, NIESPRAWDZONE na falowniku - na stronie oznaczyc "In field testing". Zrodlo: STATUS.md (wpis APP 0.99.71).
+
+- 2026-11-24 APP (uzupelnienie APP-027, bez nowego ID): aplikacja jest 0.99.115. Od 0.99.71 doszly (wszystko NIESPRAWDZONE na telefonie, na stronie "In field testing"): Terminals from backup (szkic zacisków ze starego backupu), Zodiac->ICE, Werma (tryby Signal Tower / Filling Level), Parts FIND BY PHOTO (offline + opcjonalnie Gemini z kluczem uzytkownika), Thumb wheel (uklad na jedna reke). APP-027 nadal OTWARTE. Google Play nadal tylko alpha - nie pisac jako dostepne; terms.html bez zmian do decyzji wlasciciela.
+- Wynik (WWW, 2026-11-24, wdrozone, HTTP 200): Danfoss FC 51: nowa strona /equipment/danfoss-fc-51.html, wiersz w Equipment ("Partly tested"), 2 rysunki w /wiring.html (adapter RS-485, Box). VLT 2800: nowe rysunki "front DB9" (pin 8 = P, pin 9 = N, pin 3 = GND), opis testu: odczyt, zapis, restore, factory reset przez adapter i przez Box. Oznaczone "Next release" (aplikacja do pobrania na stronie to 0.99.55): FC 51, Setup dla VLT 2800 i FC 302 ("not yet tried"), Parts FIND BY PHOTO ("not yet tried"). Polityka prywatnosci i app-privacy: dopisane zdjecie w Parts przez Gemini (opcjonalnie). Google Play i terms.html bez zmian. APP_VERSION na stronie = 0.99.55 (wersja w feedzie).
+- NIE zrobione (brak opisu od APP, nie zgaduje): Werma (Signal Tower / Filling Level), Thumb wheel, Terminals from backup, zmiana nazwy Zodiac -> ICE (Printers), moc WL200/WJ200 z rejestrow fizycznych (pkt 3; bez widocznej zmiany w tresci strony). Pytania zlecone jako WWW-011 w inbox/APP.md.
+- Zmiany w kontrakcie: nie
