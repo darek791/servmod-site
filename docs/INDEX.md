@@ -20,13 +20,13 @@ Static marketing site + small FastAPI backend for **ServMod** (Android toolbox f
 | `docs/` | This index + `HOW_WE_WORK.md`. |
 
 ## Pages (URL -> builder in build.py)
-`/` home · `/features.html` modules · `/equipment.html` · `/guides.html` connection guides · `/manuals/` fault codes · `/pricing.html` (no shop yet) · `/support.html` (form -> `/api/support`) · `/account/` (login by e-mail link/6-digit code, no passwords) · `/waitlist.html` (waiting list: join form, confirm/unsubscribe landing via `#confirm=`/`#unsub=` fragment), `/licence.html`, `/privacy.html`, `/terms.html`, `/refunds.html` · `404.html`. Header has an always-visible **Sign in / My account** button (`#acct-link`).
+`/` home · `/features.html` modules · `/equipment.html` · `/guides.html` connection guides · `/manuals/` fault codes · `/pricing.html` (no shop yet) · `/support.html` (form -> `/api/support`) · `/account/` (login by e-mail link/6-digit code, no passwords) · `/licence.html`, `/privacy.html`, `/terms.html`, `/refunds.html` · `404.html`. Header has an always-visible **Sign in / My account** button (`#acct-link`).
 
 ## Backend API (`/api/*`, proxied by nginx to 127.0.0.1:8100)
 Public: `GET /api/health`, `GET /api/latest.apk` (302 to newest APK in feed; 404 while none published), `POST /api/support` (valid e-mail, message 10-5000 chars, rate-limited, stored as ticket + mailed to SUPPORT_TO or first ADMIN_EMAIL).
 Auth: `POST /api/auth/request|verify|logout`. Account: `GET /api/me`, `POST /api/devices` (Device ID -> activation code), `POST /api/devices/release`, `GET /api/me/export`, `DELETE /api/me`.
-Waiting list: `POST /api/waitlist` (double opt-in: sends confirm mail), `POST /api/waitlist/confirm|unsubscribe` ({token}), `POST /api/waitlist/me` ({on}, signed in; also a checkbox on the account page). Admin (ADMIN_EMAILS only): `/api/admin/overview|grant|revoke|ticket`, `POST /api/admin/waitlist/notify` ({subject,text,test:true} sends only to the admin; a real send needs `confirm:true`, goes to confirmed rows not yet notified unless `again:true`, in a background thread 0.6 s apart). Admin UI is the Waiting list block on the account page.
-All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite tables: waitlist (email, confirmed, tok, source, notified), users, login_tokens, sessions, entitlements, licences, tickets, rate, audit.
+Waiting list: REMOVED 2026-11-20 (no endpoints, no page, table dropped at start). Admin (ADMIN_EMAILS only): `/api/admin/overview|grant|revoke|ticket|request`.
+All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite tables: users, login_tokens, sessions, entitlements, licences, tickets, rate, audit.
 
 ## Infrastructure
 - Domain servmod.com on Cloudflare DNS -> Hetzner server (167.233.108.235; the box formerly ran the trading bots – bot files still there, do not delete without asking). nginx + certbot TLS.
@@ -181,3 +181,11 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - `/app-privacy.html`: app installed from Google Play only. No accounts/ads/analytics; network = Box firmware download (licence key), optional Gemini photo with the user's own key, local network. No prices, purchases, Pro or Device ID wording. Permissions explained (camera, microphone, location/Bluetooth/Wi-Fi, NFC, USB, files). Use this URL in Play Console.
 - `/delete-data.html`: app data lives on the phone (clear data/uninstall); account deletion on /account/, waiting-list unsubscribe, e-mail to support@servmod.com; orders kept as long as accounting rules require. Use this URL for the Play data-deletion field.
 - Footer Legal list has both new links. Controller shown as "DG, United Kingdom" (owner has postponed the full name). `terms.html` NOT changed: still marked Draft and still describes selling on the site; owner decision pending. All three pages await owner approval. Closed APP-024 and APP-025 in inbox/WWW.md.
+
+## Waiting list removed (2026-11-20)
+- Owner: nobody was on the list, remove everything. Gone: `/waitlist.html`, forms and links, account checkbox, admin send block, `/api/waitlist*`, `/api/admin/waitlist/notify`, table `waitlist` (`DROP TABLE IF EXISTS` in `core.py`). 21 backend tests pass.
+
+## Content refresh APP-027 (2026-11-24)
+- `APP_VERSION` = 0.99.55 (the version in the feed; the old 0.99.52 was already stale). Items newer than the download carry "Next release" and "not yet tried": Danfoss FC 51 (device page `/equipment/danfoss-fc-51.html`, Equipment row "Partly tested", 2 drawings), Setup layouts for VLT 2800 and FC 302, Parts FIND BY PHOTO. VLT 2800: 2 new front-DB9 drawings (pin 8 = P, 9 = N, 3 = GND) and test wording (read, write, restore, factory reset, adapter and Box). Wiring page now has 50 drawings.
+- Privacy and app-privacy mention the optional Gemini photo search in Parts.
+- Not added (no description from APP, asked in WWW-011): Werma, Thumb wheel, Terminals from backup, Zodiac -> ICE rename, WL200/WJ200 power from physical registers.
