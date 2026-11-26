@@ -900,3 +900,25 @@ Protokół PROD rozkodowany z przechwytu (RAM: head@0x500, free-block ptr@0x508,
 
 ## 2026-11-24 WWW: odswiezenie tresci strony (APP-027)
 - Strona opisuje aplikacje 0.99.55 (feed); nowsze pozycje (FC 51, Setup VLT 2800/FC 302, Parts FIND BY PHOTO) maja etykiete Next release i "not yet tried". Brakujace opisy zlecone w WWW-011. Zmian w kontrakcie: nie.
+
+## 2026-11-25 APP: zmiana zasady jezyka
+UI aplikacji moze byc tlumaczone (start: polski, mechanizm assets/i18n/<jezyk>.json + tr()). Opisy parametrow w JSON zostaja po angielsku. Strona WWW bez zmian.
+
+## 2026-11-26 APP: Google Play Billing (kontrakt 1.8, PROJEKT)
+- Ceny bez zmian (Pro GBP 40 jednorazowo, Subscription GBP 20/rok), ten sam kod WL1 i licencja offline. Wariant `play` kupuje przez Google Play Billing; wariant `web` bez zmian (Stripe/PayPal).
+- Zadnych uploadow do Google przed uzyskaniem dostepu do produkcji (nie zaklocamy trwajacego testu zamknietego). Kod i serwer przygotowane lokalnie; testy platnosci na sciezce Internal testing po dostepie do produkcji.
+- Serwer servmod.com weryfikuje token zakupu i wydaje kod (APP-031 w inbox WWW). Wymaga konta serwisowego Google i konta platnika w Play Console (dzialanie wlasciciela).
+
+## 2026-11-26 APP: Play Billing, zmiana zasady urzadzen
+Zakup w Google Play jest przypisany do konta Google i mozna go przywrocic na innym telefonie (jak w innych aplikacjach). Zamiast "jeden zakup = jedno urzadzenie": ten sam zakup daje kod na kazdy telefon z tym kontem Google (limit proponowany 5). Kontrakt 1.8 i APP-031 poprawione.
+
+## 2026-11-26 APP: limit urzadzen Play
+Limit 3 urzadzenia na zakup Google Play; wiecej tylko przez support (decyzja uzytkownika). KONTRAKT 1.8 i APP-031 poprawione.
+
+## 2026-11-26 APP: licencja Play offline
+Licencja zawsze dziala offline (kod WL1 sprawdzany lokalnie). Brak odpytywania Google przy starcie w celu zdjecia licencji po zwrocie. Google/serwer tylko przy zakupie, przywracaniu, odnowieniu subskrypcji.
+
+## 2026-11-26 WWW: FC 302 przez Box, APP-027 domkniete, APP-031 (Play redeem) lokalnie
+- Wlasciciel potwierdzil: Danfoss FC 302 przez Box dziala. Strona i firmware.json poprawione (BOX musi poprawic wlasny wiersz w STATUS).
+- APP-027 zamkniete (Werma, Charger, Appearance, Terminals, ICE, Setup photo w prywatnosci).
+- APP-031: endpoint /api/shop/play/redeem napisany wg KONTRAKT 1.8 na galezi play-billing (nie na main), bez klucza dziala jako dry-run 503. Wdrozenie dopiero na zgode wlasciciela i po kluczu konta serwisowego Google. Zmian w kontrakcie: nie.
