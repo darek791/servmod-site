@@ -335,3 +335,72 @@ def test_chat_off_by_default_and_on_with_fake_llm(c, monkeypatch):
     monkeypatch.setattr(chat.httpx, "AsyncClient", Bad)
     r = c.post("/api/chat", json={"messages": [{"role": "user", "content": "hello"}]}, headers=H)
     assert r.json().get("offline") is True and "Support" in r.json()["reply"]
+
+
+# ---------- Google Play redeem (fake Google, nothing leaves the machine)
+class FakeGoogle:
+    def __init__(self): self.acked = []; self.prod = {"purchaseState": 0, "acknowledgementState": 0, "purchaseType": 0}; self.sub = None; self.fail_ack = False; self.voided_list = []
+    def get_product(self, sku, token):
+        from servmod_api import playbilling as pb
+        if sku != "servmod_pro" or token.startswith("BADBADBADBADBADBADBAD"): raise pb.GoogleError(404)
+        return dict(self.prod)
+    def ack_product(self, sku, token):
+        from servmod_api import playbilling as pb
+        if self.fail_ack: raise pb.GoogleError(500)
+        self.acked.append(token)
+    def get_sub(self, token):
+        return self.sub
+    def ack_sub(self, sku, token): self.acked.append(token)
+    def voided(self, start): return self.voided_list
+
+def _play(c, monkeypatch):
+    from servmod_api import playbilling as pb
+    g = FakeGoogle(); monkeypatch.setattr(pb, "google", lambda: g); return g, pb
+
+def _redeem(c, dev="AAAA-BBBB-CCCC-DDDD", product="pro", token="T" * 40, pkg="com.servmod.app"):
+    return c.post("/api/shop/play/redeem", json={"device_id": dev, "product": product, "purchase_token": token, "package": pkg}, headers=H)
+
+def test_play_dry_run_without_key(c):
+    assert _redeem(c).status_code == 503
+
+def test_play_pro_ack_before_code_and_limit(c, monkeypatch):
+    g, pb = _play(c, monkeypatch)
+    from servmod_api import licence
+    g.fail_ack = True
+    assert _redeem(c).status_code == 503 and g.acked == []  # no code when acknowledge fails
+    g.fail_ack = False
+    r = _redeem(c); assert r.status_code == 200 and r.json()["status"] == "ready"
+    code = r.json()["code"]; assert licence.code_features(code) == "PRO" and g.acked == ["T" * 40]
+    assert _redeem(c).json()["code"] == code  # idempotent for the same device
+    assert _redeem(c, dev="AAAA-BBBB-CCCC-0002").status_code == 200
+    assert _redeem(c, dev="AAAA-BBBB-CCCC-0003").status_code == 200
+    r4 = _redeem(c, dev="AAAA-BBBB-CCCC-0004"); assert r4.status_code == 409 and "support" in r4.json()["detail"]
+
+def test_play_rejects_wrong_package_token_and_state(c, monkeypatch):
+    g, pb = _play(c, monkeypatch)
+    assert _redeem(c, pkg="com.evil.app").status_code == 400
+    assert _redeem(c, token="short").status_code == 400
+    assert _redeem(c, token="BADBADBADBADBADBADBAD" + "x" * 5).status_code == 400
+    g.prod["purchaseState"] = 2; assert _redeem(c).json() == {"status": "pending"}
+    g.prod["purchaseState"] = 1; assert _redeem(c).status_code == 400
+
+def test_play_subscription_period_chain_and_voided(c, monkeypatch):
+    import time, datetime
+    from servmod_api import licence, core
+    g, pb = _play(c, monkeypatch)
+    exp = (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365)).isoformat()
+    g.sub = {"subscriptionState": "SUBSCRIPTION_STATE_ACTIVE", "acknowledgementState": "ACKNOWLEDGEMENT_STATE_PENDING",
+             "lineItems": [{"productId": "servmod_sub", "expiryTime": exp}]}
+    r = _redeem(c, product="sub", token="S" * 40); assert r.status_code == 200
+    f = licence.code_features(r.json()["code"]); assert f.startswith("SUB:") and len(f) == 12
+    g.sub["subscriptionState"] = "SUBSCRIPTION_STATE_ON_HOLD"
+    assert _redeem(c, product="sub", token="S" * 40).status_code == 400
+    g.sub["subscriptionState"] = "SUBSCRIPTION_STATE_ACTIVE"; g.sub["linkedPurchaseToken"] = "S" * 40  # resubscribe = same chain, same 3 seats
+    assert _redeem(c, product="sub", token="N" * 40, dev="AAAA-BBBB-CCCC-0002").status_code == 200
+    assert len(core.q("SELECT 1 FROM entitlements WHERE source='play'").fetchall()) == 1
+    g.sub["lineItems"][0]["productId"] = "servmod_other"
+    assert _redeem(c, product="sub", token="M" * 40).status_code == 400  # wrong product from Google
+    g.voided_list = [{"purchaseToken": "S" * 40}]
+    assert pb.run_voided_check(g) == 1
+    assert _redeem(c, product="sub", token="S" * 40).status_code == 400
+    assert core.q("SELECT revoked FROM entitlements WHERE source='play'").fetchone()[0] == 1

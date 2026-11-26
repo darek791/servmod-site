@@ -2,7 +2,7 @@ import os, json, logging, secrets, threading, time, re
 from urllib.parse import urlparse
 from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
-from . import core, mail, licence, issuing, shop, box, chat
+from . import core, mail, licence, issuing, shop, box, chat, playbilling
 
 log = logging.getLogger("servmod")
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
@@ -290,3 +290,7 @@ async def request_status(req: Request):
 app.include_router(shop.router)
 app.include_router(box.router)
 app.include_router(chat.router)
+app.include_router(playbilling.router)
+
+@app.on_event("startup")
+def _play_worker(): playbilling.start_worker()
