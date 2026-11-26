@@ -277,7 +277,7 @@ def home():
 
 def features():
     cards = [
-     ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525 (also through the ServMod Box), Danfoss FC 280 and VLT 2800 and Lenze 8400 are tested on real drives, and Danfoss FC 51 partly (read, backup, compare and write; in the next release). Omron MX2, Mitsubishi FR-D700, Schneider ATV320, Siemens V20, Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500 and Yaskawa GA500 are new and not yet tried on a drive. Hitachi WL200, WJ-C1 and Danfoss FC 280 also work over their USB cable. Also Danfoss FC 302 (USB and RS-485), Mitsubishi FR-E800 and Hitachi SJ200 (RS-485).", [
+     ("Inverters", "Hitachi WL200, WJ200 and WJ-C1, Allen-Bradley PowerFlex 520 and 525 (also through the ServMod Box), Danfoss FC 280 and VLT 2800 and Lenze 8400 are tested on real drives, and Danfoss FC 51 partly (read, backup, compare and write; in the next release). Omron MX2, Mitsubishi FR-D700, Schneider ATV320, Siemens V20, Delta MS300, INVT GD200A, ABB ACS355, Inovance MD500 and Yaskawa GA500 are new and not yet tried on a drive. Hitachi WL200, WJ-C1 and Danfoss FC 280 also work over their USB cable. Also Danfoss FC 302 (USB, RS-485 and the ServMod Box), Mitsubishi FR-E800 and Hitachi SJ200 (RS-485).", [
         "Read all parameters and keep the backup on the phone", "Restore a backup to the drive", "Compare a backup with the drive, or the drive with factory settings",
         "Edit a single parameter", "Run the motor manually from the Control screen", "Faults screen with causes and reset notes from the manual (Hitachi WJ200)"]),
      ("Setup and drive converter", "A guided way to set up a drive from the motor nameplate. Draft: not yet used on a production drive.", [
@@ -323,7 +323,7 @@ def equipment():
               ("Hitachi SJ200", "RS-485: USB-RS485 adapter or the ServMod Box. Register map from the manual.", N),
               ("Allen-Bradley PowerFlex 520 / 525", "USB-RS485 adapter on the DSI port, or the ServMod Box", T + " (525)"),
               ("Danfoss VLT FC 280", "USB cable, or USB-RS485 adapter on terminals 68 and 69", T),
-              ("Danfoss VLT FC 302", "USB cable or USB-RS485 adapter; USB through the Box is being tested. Read and backup checked on a drive; restore and factory reset not yet.", "Partly tested"),
+              ("Danfoss VLT FC 302", "USB cable, USB-RS485 adapter, or the ServMod Box (its USB host port). Confirmed working through the Box on a real drive (firmware 0.9.2). Read and backup checked on a drive; restore and factory reset not yet.", "Partly tested"),
               ("Danfoss VLT Micro Drive FC 51", "Next release. USB-RS485 adapter on terminals 68 and 69 (RS-485 only). Read, backup, compare and write checked on a drive; start/stop, Setup and the ServMod Box not yet.", "Partly tested"),
               ("Danfoss VLT 2800", "USB-RS485 adapter on terminals 68 and 69 or on the front DB9 (pins 8 and 9), also through the ServMod Box", T),
               ("Lenze 8400 StateLine C", "CAN through the ServMod Box. A USB-CAN adapter (slcan) is coming and is not yet tried.", T),
