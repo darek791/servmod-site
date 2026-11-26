@@ -189,3 +189,11 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - `APP_VERSION` = 0.99.55 (the version in the feed; the old 0.99.52 was already stale). Items newer than the download carry "Next release" and "not yet tried": Danfoss FC 51 (device page `/equipment/danfoss-fc-51.html`, Equipment row "Partly tested", 2 drawings), Setup layouts for VLT 2800 and FC 302, Parts FIND BY PHOTO. VLT 2800: 2 new front-DB9 drawings (pin 8 = P, 9 = N, 3 = GND) and test wording (read, write, restore, factory reset, adapter and Box). Wiring page now has 50 drawings.
 - Privacy and app-privacy mention the optional Gemini photo search in Parts.
 - Not added (no description from APP, asked in WWW-011): Werma, Thumb wheel, Terminals from backup, Zodiac -> ICE rename, WL200/WJ200 power from physical registers.
+
+## Content refresh finished, FC 302 (2026-11-26)
+- APP-027 closed: new module rows Werma, Charger, Appearance (thumb wheel + language) and "ICE printers (Zodiac)" (all Draft, "Next release"); Terminals sketch sentence in Inverters; privacy lists Setup photo next to Nameplate/Parts. Danfoss FC 302 through the Box confirmed by the owner (Equipment row; `firmware.json` in handoff updated, needs `publish_box_firmware.cmd` again).
+
+## Google Play Billing redeem (2026-11-26, APP-031, NOT DEPLOYED)
+- Code is on branch `play-billing` (commit ced9c30), not on `main`, so the server does not run it. `backend/servmod_api/playbilling.py` + table `play_purchases`; 25 tests pass with a fake Google. `POST /api/shop/play/redeem` per KONTRAKT 1.8: Google answers decide product/package/state, acknowledge before the code, 3 devices per purchase chain (linkedPurchaseToken), rate limits, daily Voided Purchases check (revokes). Without `PLAY_KEY_FILE` it answers 503 (dry run).
+- Codes come from `issuing.issue()`: one entitlement (source `play`, 3 seats) per purchase chain on a synthetic user `play-<hash>@play.invalid`, so the Box firmware Pro check and revoking work as for shop licences.
+- To go live (owner): Google Cloud service account + link in Play Console, key file on the server only (`PLAY_KEY_FILE` in `/etc/servmod/pay.env`), then merge `play-billing` into `main`. Open points for APP: 3-day subscription grace vs "no extra days" in the contract text, a device can get two codes (PRO and SUB), IN_GRACE_PERIOD treated as inactive.
