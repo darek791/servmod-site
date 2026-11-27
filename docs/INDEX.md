@@ -1,6 +1,6 @@
 # ServMod website – project index (read this first)
 
-Last updated: 2026-11-20. Keep this file current: when something is added/changed/learned, update it in the same commit.
+Last updated: 2026-11-27. Keep this file current: when something is added/changed/learned, update it in the same commit.
 Mirror on the PC: `C:\Users\grabo\Desktop\Arduino\ServMod\handoff\website\` (copy of `docs/`). Master copy = this repo.
 
 ## What it is
@@ -32,12 +32,12 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Domain servmod.com on Cloudflare DNS -> Hetzner server (167.233.108.235; the box formerly ran the trading bots – bot files still there, do not delete without asking). nginx + certbot TLS.
 - Server paths: site `/var/www/servmod/`, **update feed** `/var/www/servmod/servmod/` (never touched by sync), backend `/opt/servmod-app`, data `/var/lib/servmod` (SQLite), licence signing key `/etc/servmod/license_private.key`, repo checkout `/var/lib/servmod-repo`, sync log `/var/log/servmod-sync.log`.
 - Mail: Resend (MAIL_MODE=resend, key in server env, never in repo); inbound support@servmod.com via Cloudflare Email Routing (delivery confirmed 2026-10-11).
-- Update feed: `/servmod/version.json`, `/servmod/beta/version.json`, `/servmod/history.json`, `/servmod/releases/*.apk`. **APK download is open (unlocked 2026-10-26); published stable is 0.99.52 (versionCode 427).**
+- Update feed: `/servmod/version.json`, `/servmod/beta/version.json`, `/servmod/history.json`, `/servmod/releases/*.apk`. **APK download is open (unlocked 2026-10-26); published stable is 0.99.55 (versionCode 430, feed version.json).**
 
 ## Current status / open items
 - 2026-10-15 content refresh to app 0.55: `APP_VERSION` 0.55, `MODULES` list now 17 tools (added Tools, USB Tools, NFC & Barcode, Zodiac Printers, ServMod Box, Steppers, My Stuff; Danfoss FC 280 in Inverters; Printers cable check), features/equipment/guides updated (Hitachi: WL200 USB ok, WJ200 via RS-485 only). When the app gets new modules, edit `MODULES`, the `features()` cards and `equipment()`/`guides()` in src/build.py.
 - Done: full static site, manuals search, account login, support form (works), licence activation codes, visible Sign-in button.
-- Waiting list built 2026-10-12: send the release e-mail from the account page (admin) when the first public version is published.
+- (Waiting list was removed 2026-11-20.)
 - Not done: shop/cart/payments (Stripe + PayPal, reuse engine from qubivibe.com – waiting for the owner to show those files), automatic licence e-mail after purchase. (APK is published and downloadable.)
 - Known gotcha: do not reuse DOM id `acct` (account page uses it) – header link is `acct-link`.
 
@@ -197,3 +197,8 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Code is on branch `play-billing` (commit ced9c30), not on `main`, so the server does not run it. `backend/servmod_api/playbilling.py` + table `play_purchases`; 25 tests pass with a fake Google. `POST /api/shop/play/redeem` per KONTRAKT 1.8: Google answers decide product/package/state, acknowledge before the code, 3 devices per purchase chain (linkedPurchaseToken), rate limits, daily Voided Purchases check (revokes). Without `PLAY_KEY_FILE` it answers 503 (dry run).
 - Codes come from `issuing.issue()`: one entitlement (source `play`, 3 seats) per purchase chain on a synthetic user `play-<hash>@play.invalid`, so the Box firmware Pro check and revoking work as for shop licences.
 - To go live (owner): Google Cloud service account + link in Play Console, key file on the server only (`PLAY_KEY_FILE` in `/etc/servmod/pay.env`), then merge `play-billing` into `main`. Open points for APP: 3-day subscription grace vs "no extra days" in the contract text, a device can get two codes (PRO and SUB), IN_GRACE_PERIOD treated as inactive.
+
+## Play Billing, deployment prepared (2026-11-27, APP-032, NOT DEPLOYED)
+- Branch `play-billing` (head c0b4790) now also has `tools/install_play_key.cmd/.ps1`: copies the service-account JSON from the PC to `/etc/servmod/play-key.json` (root:servmod, 640; the unit runs as `servmod` with `/etc/servmod` read-only), sets `PLAY_KEY_FILE` in `/etc/servmod/pay.env`, restarts `servmod-api` (needed: the Voided Purchases thread starts only when a key exists) and smoke-tests redeem (400 = Google answered, 503 = key not usable).
+- Play Console data: package `com.servmod.app`, `servmod_pro` (one-time, option `buy`), `servmod_sub` (base plan `yearly`). Code reads sub from subscriptionsv2 by token and picks the lineItem with productId `servmod_sub`; basePlanId is not used. Grace stays 3 days.
+- Go-live order (owner decides): service account + Play Console link -> "merge play" -> I merge `play-billing` into `main` -> run `install_play_key.cmd`. Test steps (License tester, Internal testing, audit/log checks) and rollback are in `inbox/WWW.md` (Wynik APP-032).
