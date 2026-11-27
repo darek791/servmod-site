@@ -1,6 +1,6 @@
 # ServMod website – project index (read this first)
 
-Last updated: 2026-11-27. Keep this file current: when something is added/changed/learned, update it in the same commit.
+Last updated: 2026-11-28. Keep this file current: when something is added/changed/learned, update it in the same commit.
 Mirror on the PC: `C:\Users\grabo\Desktop\Arduino\ServMod\handoff\website\` (copy of `docs/`). Master copy = this repo.
 
 ## What it is
@@ -204,3 +204,8 @@ All POST/DELETE need header `X-Requested-With: servmod` and same-origin. SQLite 
 - Go-live order (owner decides): service account + Play Console link -> "merge play" -> I merge `play-billing` into `main` -> run `install_play_key.cmd`. Test steps (License tester, Internal testing, audit/log checks) and rollback are in `inbox/WWW.md` (Wynik APP-032).
 - 2026-11-27: owner said "merge play"; `play-billing` merged into `main` (6ae77fa), 25 tests pass, deployed. Checked live: `POST /api/shop/play/redeem` answers 503 "not configured" (dry run), `/api/health` 200. Nothing is issued until `PLAY_KEY_FILE` exists: next step is the owner's Google service account + `tools\install_play_key.cmd`.
 - APP-033 review (automatic licence codes) is in `inbox/WWW.md`: fixes 1-4 (Reply-To, code e-mail from /api/devices, re-issue on subscription renewal, admin alert on mail failure) wait for the owner's go.
+
+## Admin panel reorganised (2026-11-28)
+- `/account/` admin is now tabs: Licences, Requests (new count), Support (open count), Visits, Grant. Licences are folders (chips with counts): All, Web shop, Google Play, Granted, Revoked, No licence; 25 per page + "Show more"; search box matches e-mail, Device ID, phone label, Google Play id (`play-...`), first characters of a Play purchase hash (as in the audit log), order id or licence number (`#12`). Google does not give us the buyer's e-mail or Google account id, so the `play-<id>` is the only Play identity.
+- Backend: `GET /api/admin/licences?q=&group=&offset=&limit=` and `POST /api/admin/purge` (removes a REVOKED licence with its phones, or an account with no licence; never an admin or yourself; orders stay; audit line written). `/api/admin/overview` no longer returns users or entitlements. 26 tests pass; checked in a real browser at phone width against a seeded database.
+

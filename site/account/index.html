@@ -17,7 +17,7 @@
 <meta name="robots" content="noindex">
 <link rel="preload" href="/fonts/saira-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/style.css?v=0c231c02"><script src="/account.js?v=aecd8c67" defer></script>
+<link rel="stylesheet" href="/style.css?v=6236adf8"><script src="/account.js?v=1918ef92" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -62,11 +62,20 @@
 </section>
 <section id="a-admin" hidden>
   <h2 style="font-size:1.5rem;margin:40px 0 10px">Admin</h2>
+  <div class="adchips" style="margin:0 0 14px"><button type="button" class="chip on" data-tab="lic">Licences</button> <button type="button" class="chip" data-tab="req">Requests</button> <button type="button" class="chip" data-tab="sup">Support</button> <button type="button" class="chip" data-tab="vis">Visits</button> <button type="button" class="chip" data-tab="grant">Grant</button></div>
+  <div id="ad-p-lic">
+    <label for="ad-q" class="hint">Search by e-mail, Device ID, Google Play id (play-...), order id or licence number</label>
+    <input id="ad-q" type="search" placeholder="e.g. john@, play-7d8b, ABCD-1234, #12" autocomplete="off" style="width:100%;max-width:560px">
+    <div id="ad-lf" class="adchips" style="margin:12px 0"></div>
+    <div id="ad-lr"></div>
+    <p><button class="btn ghost" id="ad-lm" type="button" style="display:none">Show more</button></p>
+  </div>
+  <div id="ad-p-req" hidden><div id="ad-r"></div></div>
+  <div id="ad-p-sup" hidden><div id="ad-t"></div></div>
+  <div id="ad-p-vis" hidden><div id="ad-v"></div></div>
+  <div id="ad-p-grant" hidden>
   <form class="f" id="a-grant" style="max-width:560px" novalidate><div class="row"><div><label for="g-email">Grant a licence to</label><input id="g-email" type="email"></div><div><label for="g-seats">Phones</label><input id="g-seats" type="number" min="1" max="20" value="1"></div></div><div><button class="btn" type="submit">Grant</button></div></form>
-  <h3 style="margin:24px 0 8px">Visits</h3><div id="ad-v"></div>
-  <h3 style="margin:24px 0 8px">Requests</h3><div id="ad-r"></div>
-  <h3 style="margin:24px 0 8px">Support messages</h3><div id="ad-t"></div>
-  <h3 style="margin:24px 0 8px">Users and licences</h3><div id="ad-u"></div>
+  </div>
 </section></div>
 </main>
 <footer><div class="wrap">

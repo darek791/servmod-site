@@ -250,10 +250,76 @@ def visit_stats():
 @app.get("/api/admin/overview")
 def overview(req: Request):
     admin(req)
-    return {"visits": visit_stats(), "users": [dict(r) for r in core.q("SELECT id,email,created,last_login FROM users ORDER BY id DESC LIMIT 200")],
+    return {"visits": visit_stats(),
             "tickets": [dict(r) for r in core.q("SELECT * FROM tickets ORDER BY id DESC LIMIT 200")],
-            "requests": [dict(r) for r in core.q("SELECT * FROM requests ORDER BY id DESC LIMIT 300")],
-            "entitlements": [dict(r) for r in core.q("SELECT e.*,u.email FROM entitlements e JOIN users u ON u.id=e.user_id ORDER BY e.id DESC LIMIT 200")]}
+            "requests": [dict(r) for r in core.q("SELECT * FROM requests ORDER BY id DESC LIMIT 300")]}
+
+# Licence groups (folders) in the admin panel. Search matches: e-mail, play-<id> (the Google Play purchase id), Device ID, phone label,
+# the first characters of a Play purchase hash (as shown in the audit log), an order id, or the licence number.
+_GROUPS = {"all": "1=1", "shop": "e.source='shop' AND e.revoked=0", "play": "e.source='play' AND e.revoked=0",
+           "admin": "e.source LIKE 'admin:%' AND e.revoked=0", "revoked": "e.revoked=1"}
+
+def _ent_search(q):
+    if not q: return "1=1", []
+    like = "%" + q + "%"
+    return ("(lower(u.email) LIKE ? OR EXISTS(SELECT 1 FROM licences l WHERE l.entitlement_id=e.id AND (lower(l.device_id) LIKE ? OR lower(COALESCE(l.label,'')) LIKE ?))"
+            " OR EXISTS(SELECT 1 FROM play_purchases p WHERE lower(p.token_hash) LIKE ? AND u.email='play-'||substr(p.chain,1,24)||'@play.invalid')"
+            " OR EXISTS(SELECT 1 FROM orders o WHERE lower(o.email)=lower(u.email) AND lower(o.ext_id) LIKE ?)"
+            " OR CAST(e.id AS TEXT)=?)", [like, like, like, q + "%", like, q.lstrip("#")])
+
+@app.get("/api/admin/licences")
+def admin_licences(req: Request, q: str = "", group: str = "all", offset: int = 0, limit: int = 25):
+    admin(req)
+    q = re.sub(r"[%_\\]", "", q.strip().lower())[:100]
+    limit = max(1, min(limit, 50)); offset = max(0, offset)
+    sc, sp = _ent_search(q)
+    cr = core.q(f"SELECT COALESCE(SUM(e.source='shop' AND e.revoked=0),0) shop, COALESCE(SUM(e.source='play' AND e.revoked=0),0) play, "
+                f"COALESCE(SUM(e.source LIKE 'admin:%' AND e.revoked=0),0) admin, COALESCE(SUM(e.revoked=1),0) revoked, COUNT(*) \"all\" "
+                f"FROM entitlements e JOIN users u ON u.id=e.user_id WHERE {sc}", sp).fetchone()
+    nolic = "NOT EXISTS(SELECT 1 FROM entitlements e WHERE e.user_id=u.id)"
+    acc_where, acc_p = (nolic + " AND lower(u.email) LIKE ?", ["%" + q + "%"]) if q else (nolic, [])
+    counts = dict(cr); counts["accounts"] = core.q(f"SELECT COUNT(*) c FROM users u WHERE {acc_where}", acc_p).fetchone()["c"]
+    if group == "accounts":
+        rows = core.q(f"SELECT u.id,u.email,u.created,u.last_login FROM users u WHERE {acc_where} ORDER BY u.id DESC LIMIT ? OFFSET ?", acc_p + [limit + 1, offset]).fetchall()
+        return {"counts": counts, "items": [dict(r, kind="account", protected=r["email"] in core.ADMIN_EMAILS) for r in rows[:limit]], "more": len(rows) > limit}
+    if group not in _GROUPS: group = "all"
+    rows = core.q(f"SELECT e.id,e.features,e.seats,e.source,e.created,e.revoked,u.email FROM entitlements e JOIN users u ON u.id=e.user_id "
+                  f"WHERE {_GROUPS[group]} AND {sc} ORDER BY e.id DESC LIMIT ? OFFSET ?", sp + [limit + 1, offset]).fetchall()
+    items = []
+    for r in rows[:limit]:
+        it = dict(r, kind="licence")
+        it["devices"] = [dict(x) for x in core.q("SELECT device_id,label,created,released FROM licences WHERE entitlement_id=? ORDER BY id", (r["id"],)).fetchall()]
+        it["orders"] = [dict(x) for x in core.q("SELECT provider,product,pence,created FROM orders WHERE lower(email)=lower(?) ORDER BY id", (r["email"],)).fetchall()] if r["source"] == "shop" else []
+        it["test"] = r["email"].lower().endswith("@example.com") or "@personal.example.com" in r["email"].lower()
+        items.append(it)
+    return {"counts": counts, "items": items, "more": len(rows) > limit}
+
+def _drop_user_if_empty(uid, me):
+    u = core.q("SELECT * FROM users WHERE id=?", (uid,)).fetchone()
+    if not u or u["email"] in core.ADMIN_EMAILS or u["id"] == me["id"]: return False
+    if core.q("SELECT 1 FROM entitlements WHERE user_id=?", (uid,)).fetchone(): return False
+    core.q("DELETE FROM sessions WHERE user_id=?", (uid,)); core.q("DELETE FROM login_tokens WHERE email=?", (u["email"],))
+    core.q("DELETE FROM users WHERE id=?", (uid,))
+    return True
+
+@app.post("/api/admin/purge")
+async def purge(req: Request):
+    """Removes junk from the panel. Only a REVOKED licence (with its phones) or an account that has no licence can be removed.
+    Orders stay in the database (accounting); the audit log keeps a line."""
+    a = admin(req); d = await body(req)
+    if d.get("id") is not None:
+        e = core.q("SELECT * FROM entitlements WHERE id=?", (d.get("id"),)).fetchone()
+        if not e: raise HTTPException(404, "no such licence")
+        if not e["revoked"]: raise HTTPException(409, "revoke it first")
+        core.q("DELETE FROM licences WHERE entitlement_id=?", (e["id"],)); core.q("DELETE FROM entitlements WHERE id=?", (e["id"],))
+        core.audit(a["email"], "purge-licence", str(e["id"]))
+        _drop_user_if_empty(e["user_id"], a)
+        return {"ok": True}
+    try: uid = int(d.get("user_id"))
+    except (TypeError, ValueError): raise HTTPException(400, "bad request")
+    if not _drop_user_if_empty(uid, a): raise HTTPException(409, "this account cannot be removed (it has a licence, or it is yours or an admin)")
+    core.audit(a["email"], "purge-account", str(uid))
+    return {"ok": True}
 
 @app.post("/api/admin/grant")
 async def grant(req: Request):

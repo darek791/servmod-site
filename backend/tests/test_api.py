@@ -404,3 +404,46 @@ def test_play_subscription_period_chain_and_voided(c, monkeypatch):
     assert pb.run_voided_check(g) == 1
     assert _redeem(c, product="sub", token="S" * 40).status_code == 400
     assert core.q("SELECT revoked FROM entitlements WHERE source='play'").fetchone()[0] == 1
+
+
+def test_admin_licence_folders_search_and_purge(c):
+    from servmod_api import core
+    tok, _ = login(c, "boss@x.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    now = core.now()
+    def ent(email, source, feats="PRO", revoked=0, seats=1):
+        u = core._user_for(email)
+        core.q("INSERT INTO entitlements(user_id,product,features,seats,source,created,revoked) VALUES(?,?,?,?,?,?,?)", (u["id"], "servmod", feats, seats, source, now, revoked))
+        return core.q("SELECT MAX(id) m FROM entitlements").fetchone()["m"]
+    e_shop = ent("buyer@x.com", "shop"); e_play = ent("play-7d8b1aa781ca889ea6204dc3@play.invalid", "play", seats=3)
+    e_adm = ent("friend@x.com", "admin:boss@x.com"); e_rev = ent("sb-1@personal.example.com", "shop", revoked=1)
+    core.q("INSERT INTO licences(entitlement_id,device_id,label,code,created) VALUES(?,?,?,?,?)", (e_shop, "DEV-ABC123", "Phone A", "WL1.x.y", now))
+    core.q("INSERT INTO play_purchases(token_hash,chain,product,created,voided) VALUES(?,?,?,?,0)", ("feedbeef" * 8, "7d8b1aa781ca889ea6204dc3" + "0" * 40, "pro", now))
+    core._user_for("nobody@x.com")
+    r = c.get("/api/admin/licences").json()
+    assert r["counts"]["shop"] == 1 and r["counts"]["play"] == 1 and r["counts"]["admin"] == 1 and r["counts"]["revoked"] == 1 and r["counts"]["all"] == 4
+    assert r["counts"]["accounts"] >= 1 and len(r["items"]) == 4
+    assert [i["email"] for i in c.get("/api/admin/licences?group=play").json()["items"]] == ["play-7d8b1aa781ca889ea6204dc3@play.invalid"]
+    rv = c.get("/api/admin/licences?group=revoked").json()["items"]
+    assert len(rv) == 1 and rv[0]["test"] is True
+    # search: e-mail, device id, play id, purchase hash prefix, licence number; a wildcard is not a wildcard
+    assert [i["email"] for i in c.get("/api/admin/licences?q=BUYER").json()["items"]] == ["buyer@x.com"]
+    assert [i["email"] for i in c.get("/api/admin/licences?q=dev-abc").json()["items"]] == ["buyer@x.com"]
+    assert len(c.get("/api/admin/licences?q=7d8b1aa7").json()["items"]) == 1
+    assert len(c.get("/api/admin/licences?q=feedbeef").json()["items"]) == 1
+    assert [i["id"] for i in c.get(f"/api/admin/licences?q=%23{e_adm}").json()["items"]] == [e_adm]
+    assert c.get("/api/admin/licences?q=b%25r").json()["items"] == []  # would match "buyer" if % were a wildcard
+    assert c.get("/api/admin/licences?group=accounts&q=nobody").json()["items"][0]["email"] == "nobody@x.com"
+    assert len(c.get("/api/admin/licences?limit=2").json()["items"]) == 2 and c.get("/api/admin/licences?limit=2").json()["more"] is True
+    # purge: only revoked licences and licence-less accounts
+    assert c.post("/api/admin/purge", json={"id": e_shop}, headers=H).status_code == 409
+    assert c.post("/api/admin/purge", json={"id": e_rev}, headers=H).status_code == 200
+    assert core.q("SELECT 1 FROM users WHERE email='sb-1@personal.example.com'").fetchone() is None
+    nid = core.q("SELECT id FROM users WHERE email='nobody@x.com'").fetchone()["id"]
+    assert c.post("/api/admin/purge", json={"user_id": nid}, headers=H).status_code == 200
+    bid = core.q("SELECT id FROM users WHERE email='buyer@x.com'").fetchone()["id"]
+    assert c.post("/api/admin/purge", json={"user_id": bid}, headers=H).status_code == 409
+    me = core.q("SELECT id FROM users WHERE email='boss@x.com'").fetchone()["id"]
+    assert c.post("/api/admin/purge", json={"user_id": me}, headers=H).status_code == 409
+    # not for normal users
+    c.cookies.clear(); tok, _ = login(c, "a@b.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
+    assert c.get("/api/admin/licences").status_code == 403 and c.post("/api/admin/purge", json={"id": e_shop}, headers=H).status_code == 403

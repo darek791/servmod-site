@@ -297,3 +297,5 @@ li.istep figure.instshot figcaption{text-align:center}
  .chatx{padding:4px 10px;font-size:30px}
  .chatnote{flex:none}
 }
+
+.adchips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid var(--line,#2a2a2a);background:transparent;color:inherit;border-radius:999px;padding:6px 14px;font:inherit;font-size:.9rem;text-decoration:none;cursor:pointer}.chip:hover{border-color:#eb8a00}.chip.on{background:#eb8a00;border-color:#eb8a00;color:#000}.chip span{opacity:.7;margin-left:4px}
