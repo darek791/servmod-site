@@ -926,3 +926,12 @@ Licencja zawsze dziala offline (kod WL1 sprawdzany lokalnie). Brak odpytywania G
 ## 2026-11-27 WWW: APP-032 (Play Billing, przygotowanie wdrozenia)
 - Potwierdzone z APP: produkty servmod_pro (buy) i servmod_sub (yearly), sub czytany z subscriptionsv2 po tokenie bez basePlanId; 3 dni zapasu zostaja; dwa kody (PRO i SUB) OK; IN_GRACE_PERIOD = nieaktywna.
 - Galaz play-billing dostala tools/install_play_key.cmd (klucz JSON konta serwisowego -> /etc/servmod/play-key.json, chmod 640 root:servmod, PLAY_KEY_FILE w pay.env, restart uslugi, test 400/503). Instrukcja testowa i wycofania w inbox/WWW.md (Wynik APP-032). NIE zmergowane do main, produkcja nietknieta; merge dopiero na zgode wlasciciela po zalozeniu konta serwisowego. Zmian w kontrakcie: nie.
+
+## 2026-11-27 (APP): Play Billing, doprecyzowanie KONTRAKT 1.8 po APP-032
+- Subskrypcja Play: kod WL1 SUB:RRRRMMDD z końca okresu PLUS 3 dni zapasu offline (wymagania bezpieczeństwa pkt 7 mają pierwszeństwo przed zdaniem "bez dodatkowych dni" w opisie endpointu; PLAY_SUB_GRACE_DAYS=3). Brak zmiany interfejsu, tylko poprawka opisu.
+- Play Console 2026-11-27: aktywne `servmod_pro` (UK £40.00 z VAT) i `servmod_sub` (plan `yearly`, UK £20.00 z VAT); poza UK Play dolicza lokalny podatek (decyzja właściciela: zostaje). Aplikacja 0.99.184 (Billing Library 8.0.0) na Internal testing.
+- Wdrożenie serwera (gałąź `play-billing`, commit c0b4790) dopiero na "merge play" właściciela, po założeniu konta serwisowego. Klucz wgrywa właściciel przez tools\install_play_key.cmd (po merge).
+
+## 2026-11-27 WWW: merge play-billing do main (zgoda wlasciciela: "merge play")
+- Galaz play-billing zmergowana do main (commit 6ae77fa), 25 testow przechodzi, push zrobiony. Serwer pobral zmiany: POST /api/shop/play/redeem odpowiada 503 "not configured" (dry-run), /api/health 200. Brak klucza Google = nic sie nie wydaje.
+- Zostaje po stronie wlasciciela: konto serwisowe Google + powiazanie w Play Console, potem tools\install_play_key.cmd. Zmian w kontrakcie: nie.
