@@ -922,3 +922,7 @@ Licencja zawsze dziala offline (kod WL1 sprawdzany lokalnie). Brak odpytywania G
 - Wlasciciel potwierdzil: Danfoss FC 302 przez Box dziala. Strona i firmware.json poprawione (BOX musi poprawic wlasny wiersz w STATUS).
 - APP-027 zamkniete (Werma, Charger, Appearance, Terminals, ICE, Setup photo w prywatnosci).
 - APP-031: endpoint /api/shop/play/redeem napisany wg KONTRAKT 1.8 na galezi play-billing (nie na main), bez klucza dziala jako dry-run 503. Wdrozenie dopiero na zgode wlasciciela i po kluczu konta serwisowego Google. Zmian w kontrakcie: nie.
+
+## 2026-11-27 WWW: APP-032 (Play Billing, przygotowanie wdrozenia)
+- Potwierdzone z APP: produkty servmod_pro (buy) i servmod_sub (yearly), sub czytany z subscriptionsv2 po tokenie bez basePlanId; 3 dni zapasu zostaja; dwa kody (PRO i SUB) OK; IN_GRACE_PERIOD = nieaktywna.
+- Galaz play-billing dostala tools/install_play_key.cmd (klucz JSON konta serwisowego -> /etc/servmod/play-key.json, chmod 640 root:servmod, PLAY_KEY_FILE w pay.env, restart uslugi, test 400/503). Instrukcja testowa i wycofania w inbox/WWW.md (Wynik APP-032). NIE zmergowane do main, produkcja nietknieta; merge dopiero na zgode wlasciciela po zalozeniu konta serwisowego. Zmian w kontrakcie: nie.
