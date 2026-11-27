@@ -935,3 +935,9 @@ Licencja zawsze dziala offline (kod WL1 sprawdzany lokalnie). Brak odpytywania G
 ## 2026-11-27 WWW: merge play-billing do main (zgoda wlasciciela: "merge play")
 - Galaz play-billing zmergowana do main (commit 6ae77fa), 25 testow przechodzi, push zrobiony. Serwer pobral zmiany: POST /api/shop/play/redeem odpowiada 503 "not configured" (dry-run), /api/health 200. Brak klucza Google = nic sie nie wydaje.
 - Zostaje po stronie wlasciciela: konto serwisowe Google + powiazanie w Play Console, potem tools\install_play_key.cmd. Zmian w kontrakcie: nie.
+
+## 2026-11-27 WWW: install_play_key na PC
+- Wlasciciel poprosil o kopie skryptu: install_play_key.cmd i .ps1 skopiowane do ServMod\web\install_backend\ i ServMod\web\tools\ (wzor: install_paypal_keys). Klon repo WWW lezy w kontenerze Claude (/home/claude/servmod-site, galaz main, 6ae77fa), nie na PC; na PC jest tylko katalog web\ z kopiami skryptow. Zadania APP-034 w inbox/WWW.md nie znaleziono (ostatnie to APP-033).
+
+## 2026-11-28 WWW: panel admina na stronie uporzadkowany (prosba wlasciciela)
+- /account/ (admin): zakladki Licences, Requests, Support, Visits, Grant; licencje w folderach (Web shop, Google Play, Granted, Revoked, No licence) po 25 + "Show more"; wyszukiwarka po e-mailu, Device ID, id Google Play (play-...), skrocie zakupu Play, numerze zamowienia lub numerze licencji (#12). Usuwanie: tylko odwolane licencje i konta bez licencji (zamowienia zostaja, wpis w audycie). Nowe endpointy tylko dla admina, KONTRAKT bez zmian (nie dotyczy aplikacji).
