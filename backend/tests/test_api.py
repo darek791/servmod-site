@@ -447,3 +447,31 @@ def test_admin_licence_folders_search_and_purge(c):
     # not for normal users
     c.cookies.clear(); tok, _ = login(c, "a@b.com"); c.post("/api/auth/verify", json={"token": tok}, headers=H)
     assert c.get("/api/admin/licences").status_code == 403 and c.post("/api/admin/purge", json={"id": e_shop}, headers=H).status_code == 403
+
+def test_app033_reply_to_device_mail_and_failed_receipt_alert(c, monkeypatch):
+    import re
+    from servmod_api import mail, shop
+    # 1: every mail gets a Reply-To (support@ by default)
+    seen = {}
+    monkeypatch.setenv("MAIL_MODE", "resend"); monkeypatch.setenv("RESEND_API_KEY", "k")
+    class R:
+        def raise_for_status(self): pass
+    monkeypatch.setattr(mail.httpx, "post", lambda url, json=None, **kw: (seen.update(json), R())[1])
+    assert mail.send("a@b.com", "s", "t") and seen["reply_to"] == "support@servmod.com"
+    monkeypatch.setenv("MAIL_MODE", "log")
+    # 2: adding a Device ID on the account page e-mails the code too
+    tok, _ = login(c, "own@x.com")
+    assert c.post("/api/auth/verify", json={"token": tok}, headers=H).status_code == 200
+    from servmod_api import core
+    core.q("INSERT INTO entitlements(user_id,product,features,seats,source,created) VALUES((SELECT id FROM users WHERE email='own@x.com'),'servmod','PRO',1,'admin:t',?)", (core.now(),))
+    mail.OUTBOX.clear()
+    r = c.post("/api/devices", json={"device_id": "MAILDEV-0001"}, headers=H)
+    code = r.json()["code"]
+    assert mail.OUTBOX and mail.OUTBOX[-1][0] == "own@x.com" and code in mail.OUTBOX[-1][2]
+    # 4: a failed receipt mail alerts the admin
+    sent = []
+    def fake(to, subject, text, reply_to=None):
+        sent.append((to, subject)); return to != "buyer@x.com"
+    monkeypatch.setattr(shop.mail, "send", fake)
+    shop._receipt("buyer@x.com", "pro", 4000, "PRO", "", "")
+    assert any(t == "boss@x.com" and "NOT delivered" in s for t, s in sent)

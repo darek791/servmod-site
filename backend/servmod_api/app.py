@@ -133,7 +133,11 @@ async def add_device(req: Request):
     label = str(d.get("label", ""))[:60]
     if not core.DEVICE_RE.match(dev): raise HTTPException(400, "invalid Device ID")
     if not core.rate_ok("dev:" + str(u["id"]), 20, 3600): raise HTTPException(429, "too many requests")
-    return {"code": issuing.issue(u, dev, label), "device_id": dev}
+    code = issuing.issue(u, dev, label)
+    if not u["email"].endswith("@play.invalid"):  # the page promises the code is e-mailed too
+        mail.send(u["email"], "Your ServMod code", f"Your activation code for Device ID {dev}:\n\n{code}\n\n"
+                  "In the app open Settings > Subscription, paste the code and tap Activate.\n\nQuestions: reply to this e-mail.\n\nServMod")
+    return {"code": code, "device_id": dev}
 
 @app.post("/api/devices/release")
 async def release_device(req: Request):

@@ -8,6 +8,7 @@ OUTBOX = []  # used by tests / log mode
 def send(to: str, subject: str, text: str, reply_to: str | None = None) -> bool:
     mode = os.environ.get("MAIL_MODE", "log")
     sender = os.environ.get("MAIL_FROM", "ServMod <no-reply@servmod.com>")
+    reply_to = reply_to or os.environ.get("MAIL_REPLY_TO", "support@servmod.com")  # replies must reach a real mailbox
     try:
         if mode == "resend":
             body = {"from": sender, "to": [to], "subject": subject, "text": text}
