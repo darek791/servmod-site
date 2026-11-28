@@ -95,7 +95,11 @@ def _receipt(email, product, pence, feats, dev, code):
     if "SUB:" in feats and product == "sub":
         lines += ["If you already activated this phone, open your account page and tap Get code again to refresh it.", ""]
     lines += ["Questions: reply to this e-mail or write to support@servmod.com.", "", "ServMod"]
-    mail.send(email, f"Your ServMod {'code' if code else 'licence'}", "\n".join(lines))
+    ok = mail.send(email, f"Your ServMod {'code' if code else 'licence'}", "\n".join(lines))
+    if not ok:  # the buyer is paid but got no mail: tell the admin so the code can be sent by hand
+        log.error("receipt mail failed for %s", email)
+        for a in core.ADMIN_EMAILS:
+            mail.send(a, "ServMod: receipt e-mail NOT delivered", f"Buyer {email} ({what}) paid but the receipt e-mail failed. Check the order in the account admin panel and contact the buyer.")
 
 def _claim_hash(token):
     """The app sends a random secret per purchase; only its hash is stored."""
