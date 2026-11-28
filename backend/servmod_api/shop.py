@@ -79,10 +79,15 @@ def fulfil(provider, ext_id, email, product, pence, currency="gbp", device_id=""
     if dev:
         try: code = issuing.issue(u, dev, "bought")
         except Exception as e: log.error("auto-issue failed for %s: %s", email, getattr(e, "detail", e))
-    _receipt(email, product, pence, feats, dev, code)
+    others = []  # phones already activated on this licence get their refreshed code in the same mail
+    for r in core.q("SELECT l.device_id FROM licences l JOIN entitlements e ON e.id=l.entitlement_id WHERE e.user_id=? AND e.source='shop' AND e.revoked=0 AND l.released IS NULL ORDER BY l.id", (u["id"],)).fetchall():
+        if r["device_id"] == dev: continue
+        try: others.append((r["device_id"], issuing.issue(u, r["device_id"])))
+        except Exception as e: log.error("re-issue failed for %s %s: %s", email, r["device_id"], getattr(e, "detail", e))
+    _receipt(email, product, pence, feats, dev, code, others)
     return "new"
 
-def _receipt(email, product, pence, feats, dev, code):
+def _receipt(email, product, pence, feats, dev, code, others=()):
     what = products()[product]["name"]
     lines = [f"Thank you for buying {what} ({_fmt(pence)}).", ""]
     if code:
@@ -92,7 +97,10 @@ def _receipt(email, product, pence, feats, dev, code):
         lines += ["To get your activation code:", f"1. Open the app, Settings > Subscription, and copy the Device ID.",
                   f"2. Sign in at {core.SITE_URL}/account/ with this e-mail address ({email}).",
                   "3. Paste the Device ID, and the code appears on the page.", ""]
-    if "SUB:" in feats and product == "sub":
+    if others:
+        lines += ["Your other phones need the refreshed code too (Settings > Subscription, paste, Activate):", ""]
+        for d, c in others: lines += [f"Device ID {d}:", c, ""]
+    elif "SUB:" in feats and product == "sub":
         lines += ["If you already activated this phone, open your account page and tap Get code again to refresh it.", ""]
     lines += ["Questions: reply to this e-mail or write to support@servmod.com.", "", "ServMod"]
     ok = mail.send(email, f"Your ServMod {'code' if code else 'licence'}", "\n".join(lines))

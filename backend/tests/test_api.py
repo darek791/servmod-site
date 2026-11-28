@@ -475,3 +475,22 @@ def test_app033_reply_to_device_mail_and_failed_receipt_alert(c, monkeypatch):
     monkeypatch.setattr(shop.mail, "send", fake)
     shop._receipt("buyer@x.com", "pro", 4000, "PRO", "", "")
     assert any(t == "boss@x.com" and "NOT delivered" in s for t, s in sent)
+
+def test_app033_renewal_reissues_codes_for_all_phones(c, monkeypatch):
+    from servmod_api import mail, licence
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "sk_test_x"); monkeypatch.setenv("STRIPE_WEBHOOK_SECRET", "whsec_x")
+    def pay(i, prod, dev=None):
+        obj = {"id": i, "payment_status": "paid", "amount_total": 2000, "currency": "gbp", "metadata": {"product": prod},
+               "customer_details": {"email": "multi@x.com"}, "custom_fields": [{"key": "device_id", "text": {"value": dev}}] if dev else []}
+        raw, h = _stripe_event("whsec_x", obj); return c.post("/api/pay/stripe", content=raw, headers=h).json()["result"]
+    assert pay("cs_m1", "pro", "PHONEA-0001") == "new"
+    from servmod_api import core, issuing
+    u = core._user_for("multi@x.com")
+    core.q("UPDATE entitlements SET seats=3 WHERE user_id=?", (u["id"],))
+    issuing.issue(u, "PHONEB-0002")
+    mail.OUTBOX.clear()
+    assert pay("cs_m2", "sub") == "new"   # renewal without a Device ID
+    txt = mail.OUTBOX[-1][2]
+    codes = re.findall(r"(WL1\.\S+)", txt)
+    assert len(codes) == 2 and all(licence.code_features(x).startswith("PRO,SUB:") for x in codes)
+    assert "PHONEA-0001" in txt and "PHONEB-0002" in txt
